@@ -1,0 +1,156 @@
+<div class="jumbotron">
+  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ol class="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+          <li class="breadcrumb-item active">My Profile</li>
+        </ol>
+      </ol>
+      <!-- END BREADCRUMB -->
+    </div>
+    <h4 class="page-title sm-p-l-20">
+      My Profile
+    </h4>
+  </div>
+</div>
+<!-- START CONTAINER FLUID -->
+<div class=" container-fluid   container-fixed-lg">
+  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+  <form class="" role="form">
+    <div class="card card-default">
+      <div class="card-header">
+        <h5>
+          Update Profile
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required " pgFormGroupDefault>
+              <label>Frist Name</label>
+              <input type="text" class="form-control" required="">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required">
+              <label>Middle Name</label>
+              <input type="text" class="form-control" required="">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default">
+              <label>Last name</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required">
+              <label>Address Line 1*</label>
+              <input type="text" class="form-control" required="">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  form-group-default required">
+              <label>Address Line 2*</label>
+              <input type="text" class="form-control" required="">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required ">
+              <label>Zip/Postal Code</label>
+              <input type="text" class="form-control" required="">
+            </div>
+          </div>
+          <div class="col-sm-4">
+
+            <div pgFormGroupDefault class="form-group form-group-default required typehead">
+              <label>Countries</label>
+              <input class=" form-control" type="text" placeholder="Select Country" [(ngModel)]="selecteCountryThree"
+                [typeahead]="countries" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default form-group-default-select2 required">
+              <label class="">Timezone</label>
+              <pg-select style="width: 100%;" [Mode]="'multiple'" [PlaceHolder]="'Select Timezone'" [NotFoundContent]="'Not found'">
+                <pg-option *ngFor="let option of timezone" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required">
+              <label>Mobile No.</label>
+              <input type="text" class="form-control" required="">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required">
+              <label>Telephone No.</label>
+              <input type="text" class="form-control" required="">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default input-group">
+              <div class="form-input-group">
+                <label>Date of Birth</label>
+                <pg-datepicker></pg-datepicker>
+              </div>
+              <div class="input-group-append ">
+                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required">
+              <label>Email</label>
+              <input type="email" class="form-control" required="" placeholder="example@example.com">
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary m-t-30">Update Profile</button>
+      </div>
+    </div>
+    <div class="card card-default">
+      <div class="card-header">
+        <h5>
+          Update Password
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required ">
+              <label>Current Password</label>
+              <input type="password" class="form-control" required="" placeholder="*********">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required">
+              <label>New Password</label>
+              <input type="password" class="form-control" required="" placeholder="*********">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default">
+              <label>Repeat New Password</label>
+              <input type="password" class="form-control" placeholder="*********">
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary m-t-30">Update Password</button>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- END PLACE PAGE CONTENT HERE -->

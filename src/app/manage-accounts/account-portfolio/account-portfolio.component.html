@@ -1,0 +1,137 @@
+<div class="jumbotron">
+  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item active">Own Account Transfer</li>
+      </ol>
+      <!-- END BREADCRUMB -->
+    </div>
+    <h4 class="page-title sm-p-l-20">
+      Account portfolio
+    </h4>
+  </div>
+</div>
+<!-- START CONTAINER FLUID -->
+<div class=" container-fluid   container-fixed-lg">
+  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+  <form class="" role="form">
+    <div class="card card-default">
+      <div class="card-header search-bg">
+        <h5>
+          Search & Filter
+        </h5>
+        <div class="row">
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group form-group-default required ">
+              <label>Account No</label>
+              <input type="text" class="form-control" required="" placeholder="Type Account Number">
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group form-group form-group-default form-group-default-select2 required">
+              <label class="">Type</label>
+              <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
+                ShowSearch>
+                <pg-option *ngFor="let option of type" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group form-group form-group-default form-group-default-select2 required">
+              <label class="">Currency</label>
+              <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
+                ShowSearch>
+                <pg-option *ngFor="let option of currency" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group form-group form-group-default form-group-default-select2 required">
+              <label class="">Viev Currency</label>
+              <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
+                ShowSearch>
+                <pg-option *ngFor="let option of viewcurrency" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover" id="basicTable">
+            <thead>
+              <tr>
+                <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user
+    										Comman Practice Followed
+    										-->
+                <th style="width:1%" class="text-center">
+                  No
+                </th>
+                <th style="width:20%">Account No</th>
+                <th style="width:24%">VIBAN</th>
+                <th style="width:10%">Type</th>
+                <th style="width:15%">Available Balance Currency</th>
+                <th style="width:10%">FX Rate</th>
+                <th style="width:15%">Available Balance in EUR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="v-align-middle">
+                  1
+                </td>
+                <td class="v-align-middle ">
+                  12000000010135
+                </td>
+                <td class="v-align-middle">
+                  NZ105TMC12000000010136EUR
+                </td>
+                <td class="v-align-middle">
+                  Transaction
+                </td>
+                <td class="v-align-middle">
+                  1000EUR
+                </td>
+                <td class="v-align-middle">
+                  1
+                </td>
+                <td class="v-align-middle">
+                  1000EUR
+                </td>
+              </tr>
+              <tr>
+                <td class="v-align-middle">
+                  1
+                </td>
+                <td class="v-align-middle ">
+                  12000000010135
+                </td>
+                <td class="v-align-middle">
+                  NZ105TMC12000000010136EUR
+                </td>
+                <td class="v-align-middle">
+                  Transaction
+                </td>
+                <td class="v-align-middle">
+                  1000EUR
+                </td>
+                <td class="v-align-middle">
+                  1
+                </td>
+                <td class="v-align-middle">
+                  1000EUR
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- END PLACE PAGE CONTENT HERE -->

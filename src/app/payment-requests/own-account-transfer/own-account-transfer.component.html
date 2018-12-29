@@ -1,0 +1,94 @@
+<div class="jumbotron">
+  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item active">Own Account Transfer</li>
+      </ol>
+      <!-- END BREADCRUMB -->
+    </div>
+
+    <h4 class="page-title sm-p-l-20">
+      Own Account Transfer
+    </h4>
+  </div>
+</div>
+
+<!-- START CONTAINER FLUID -->
+<div class=" container-fluid   container-fixed-lg">
+  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+  <form class="" role="form">
+    <div class="card card-default">
+      <div class="card-header">
+        <h4>Choose Account</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default form-group-default-select2">
+              <label>From Account</label>
+              <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
+                <pg-option *ngFor="let option of fromaccount" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default form-group-default-select2">
+              <!-- <label>From Account</label> -->
+              <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
+                <pg-option *ngFor="let option of fromaccount" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default form-group-default-select2">
+              <label>To Account</label>
+              <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
+                <pg-option *ngFor="let option of toaccount" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+          <div class="col-sm-6"></div>
+        </div>
+      </div>
+      <div class="card-body payment-det">
+        <h4>Payment Details</h4>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default  required">
+              <label>Amount (Balance 1048.00 EUR)</label>
+              <input type="number" class="form-control" required="" placeholder="0">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default input-group">
+              <div class="form-input-group">
+                <label>Payment Date</label>
+                <pg-datepicker></pg-datepicker>
+              </div>
+              <div class="input-group-append ">
+                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default  required">
+              <label>Remarks</label>
+              <input type="text" class="form-control" required="" placeholder="0">
+            </div>
+          </div>
+          <div class="col-sm-6"></div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- END PLACE PAGE CONTENT HERE -->

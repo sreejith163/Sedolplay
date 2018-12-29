@@ -1,0 +1,64 @@
+@import 'core.scss';
+
+.social-card-img {
+    background-image: url(/assets/img/dashboard/social_new.jpg);
+}
+
+.widget-11-2 .widget-11-2-table {
+    height: 273px;
+}
+
+:host /deep/ .widget-8 {
+    [echarts]>div {
+        &>svg>path {
+            &[d='M 1 0 A 1 1 0 1 0 1 0.0001'] {
+                fill: $color-warning !important;
+            }
+        }
+    }
+}
+
+.q-link {
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    background: #e2e2e2;
+    margin: 10px;
+    cursor: pointer;
+    transition: all .3s;
+
+    &:first-child {
+        margin-left: 0px;
+    }
+
+    i {
+        font-size: 90px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        color: #c1c1c1;
+    }
+
+    p {
+        color: #c30e6a;
+        line-height: 15px;
+    }
+
+    &:hover {
+        background: #c30e6a;
+
+        i {
+            color: #fff;
+            opacity: .7;
+        }
+
+        p {
+            color: #fff;
+        }
+    }
+
+    @media (max-width: 768px) {
+        &:first-child {
+            margin: 10px;
+        }
+    }
+}

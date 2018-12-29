@@ -1,0 +1,36 @@
+// Theme overrides
+.icon-thumbnail {
+    background-color: transparent !important;
+}
+
+.page-sidebar .sidebar-menu .menu-items>li ul.sub-menu>li .icon-thumbnail {
+    background: transparent;
+}
+
+.btn-secondary {
+    &:active {
+        &:focus {
+            outline: 0;
+            box-shadow: none;
+        }
+    }
+
+}
+
+
+.helpalert {
+    padding: 5px 10px 10px;
+    background-color: #c1186a;
+    color: #ffffff;
+    border-radius: 10px;
+
+
+    a {
+        color: #ffffff;
+        cursor: pointer;
+
+        &:hover {
+            color: $color-warning !important;
+        }
+    }
+}

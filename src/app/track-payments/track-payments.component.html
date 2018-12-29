@@ -1,0 +1,130 @@
+<div class="jumbotron">
+  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item active">Track payments</li>
+      </ol>
+      <!-- END BREADCRUMB -->
+    </div>
+
+    <h4 class="page-title sm-p-l-20">
+      Track Payments
+    </h4>
+  </div>
+</div>
+<!-- START CONTAINER FLUID -->
+<div class=" container-fluid   container-fixed-lg">
+  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+  <div class="card card-default">
+    <div class="card-header search-bg">
+      <h5>
+        Filter
+      </h5>
+      <div class="row">
+        <div class="col-md-2 col-sm-4">
+          <div class="form-group form-group-default form-group-default-select2 required">
+            <label class="">Account No</label>
+
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
+              <pg-option *ngFor="let option of accountno" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+              </pg-option>
+            </pg-select>
+
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+          <div class="form-group form-group-default required ">
+            <label>Reference</label>
+            <input type="text" class="form-control" required="" placeholder="Type Reference">
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+          <div class="form-group form-group-default form-group-default-select2 required">
+            <label class="">Beneficiary</label>
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
+              <pg-option *ngFor="let option of beneficiary" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+              </pg-option>
+            </pg-select>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-8">
+          <div class="form-group form-group-default input-group ">
+            <div class="form-input-group">
+              <label>From</label>
+              <pg-datepicker (ngModelChange)="_startDate=$event;_startValueChange()" Placeholder="Start Date" [ngModel]="_startDate"
+                [DisabledDate]="_disabledStartDate" [Format]="'YYYY-MM-DD'"></pg-datepicker>
+            </div>
+            <div class="form-input-group">
+              <label>To</label>
+              <pg-datepicker (ngModelChange)="_endDate=$event;_endValueChange()" Placeholder="End Date" [ngModel]="_endDate"
+                [DisabledDate]="_disabledEndDate" [Format]="'YYYY-MM-DD'"></pg-datepicker>
+              <div class="input-group-append">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-4">
+          <button class="btn btn-primary btn-lg btn-block">Search</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover" id="basicTable">
+          <thead>
+            <tr>
+              <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user
+    										Comman Practice Followed
+    										-->
+              <th style="width:1%" class="text-center">
+                No
+              </th>
+              <th style="width:10%">Timestamp</th>
+              <th style="width:10%">Reference</th>
+              <th style="width:10%">My Account</th>
+              <th style="width:10%">Benf. Name</th>
+              <th style="width:10%">Benf. Account</th>
+              <th style="width:10%">Current Balance</th>
+              <th style="width:10%">Amount Currency</th>
+              <th style="width:10%">Status</th>
+              <th style="width:19%">Comments</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="No" class="ng-binding">1</td>
+              <td data-label="Timestamp" class="ng-binding">10312018</td>
+              <td data-label="Reference" class="ng-binding">WR000040</td>
+              <td data-label="My Account" class="ng-binding">1200000010137</td>
+              <td data-label="Benef. Name" class="ng-binding">Benjamin Doe</td>
+              <td data-label="Benef. Account #" class="ng-binding">1200000010136</td>
+              <td data-label="Amount" class="tar ng-binding">800</td>
+              <td data-label="Currency" class="ng-binding">USD</td>
+              <td data-label="Status" class="ng-binding">TRANSMITTED</td>
+              <td data-label="Comments" class="ng-binding"></td>
+            </tr>
+            <tr>
+              <td data-label="No" class="ng-binding">2</td>
+              <td data-label="Timestamp" class="ng-binding">10222018</td>
+              <td data-label="Reference" class="ng-binding">WR000039</td>
+              <td data-label="My Account" class="ng-binding">1200000010137</td>
+              <td data-label="Benef. Name" class="ng-binding">Benjamin Button</td>
+              <td data-label="Benef. Account #" class="ng-binding">1200000010136</td>
+              <td data-label="Amount" class="tar ng-binding">100</td>
+              <td data-label="Currency" class="ng-binding">USD</td>
+              <td data-label="Status" class="ng-binding">TRANSMITTED</td>
+              <td data-label="Comments" class="ng-binding"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<!-- END PLACE PAGE CONTENT HERE -->

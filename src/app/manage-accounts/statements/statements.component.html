@@ -1,0 +1,136 @@
+<div class="jumbotron">
+  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+
+
+
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item active">Statements</li>
+      </ol>
+      <!-- END BREADCRUMB -->
+    </div>
+
+    <h4 class="page-title sm-p-l-20">
+      Statements
+    </h4>
+  </div>
+</div>
+<!-- START CONTAINER FLUID -->
+<div class=" container-fluid   container-fixed-lg">
+  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+  <div class="card card-default">
+    <div class="card-header search-bg">
+      <h5>
+        Search & Filter
+      </h5>
+      <div class="row">
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group form-group-default required ">
+            <label>Account No</label>
+            <input type="text" class="form-control" required="" placeholder="Type Account Number">
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group form-group form-group-default form-group-default-select2 required">
+            <label class="">Country</label>
+            <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
+              ShowSearch>
+              <pg-option *ngFor="let option of countries" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+              </pg-option>
+            </pg-select>
+          </div>
+
+        </div>
+        <div class="col-md-4 col-sm-8">
+          <div class="form-group form-group-default input-group ">
+            <div class="form-input-group">
+              <label>From</label>
+              <pg-datepicker (ngModelChange)="_startDate=$event;_startValueChange()" Placeholder="Start Date" [ngModel]="_startDate"
+                [DisabledDate]="_disabledStartDate" [Format]="'YYYY-MM-DD'"></pg-datepicker>
+            </div>
+            <div class="form-input-group">
+              <label>To</label>
+              <pg-datepicker (ngModelChange)="_endDate=$event;_endValueChange()" Placeholder="End Date" [ngModel]="_endDate"
+                [DisabledDate]="_disabledEndDate" [Format]="'YYYY-MM-DD'"></pg-datepicker>
+              <div class="input-group-append">
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-2 col-sm-4">
+          <button class="btn btn-primary btn-lg btn-block">Search</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover" id="basicTable">
+          <thead>
+            <tr>
+              <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user
+    										Comman Practice Followed
+    										-->
+              <th style="width:1%" class="text-center">
+                No
+              </th>
+              <th style="width:20%">Account No</th>
+              <th style="width:29%">VIBAN</th>
+              <th style="width:15%">Type</th>
+              <th style="width:15%">Current Balance</th>
+              <th style="width:20%">Available Balance Currency</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="v-align-middle">
+                1
+              </td>
+              <td class="v-align-middle ">
+                12000000010135
+              </td>
+              <td class="v-align-middle">
+                NZ105TMC12000000010136EUR
+              </td>
+              <td class="v-align-middle">
+                Transaction
+              </td>
+              <td class="v-align-middle">
+                1000
+              </td>
+              <td class="v-align-middle">
+                1000EUR
+              </td>
+            </tr>
+            <tr>
+              <td class="v-align-middle">
+                1
+              </td>
+              <td class="v-align-middle ">
+                12000000010135
+              </td>
+              <td class="v-align-middle">
+                NZ105TMC12000000010136EUR
+              </td>
+              <td class="v-align-middle">
+                Transaction
+              </td>
+              <td class="v-align-middle">
+                1000
+              </td>
+              <td class="v-align-middle">
+                1000USD
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+  <!-- END PLACE PAGE CONTENT HERE -->

@@ -1,0 +1,152 @@
+<div class="jumbotron">
+  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item active">External Transfer</li>
+      </ol>
+      <!-- END BREADCRUMB -->
+    </div>
+
+    <h4 class="page-title sm-p-l-20">
+      External Transfer
+    </h4>
+  </div>
+</div>
+
+<!-- START CONTAINER FLUID -->
+<div class=" container-fluid   container-fixed-lg">
+  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+
+  <div class="card card-default">
+    <div class="card-header">
+      <h4>General</h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group form-group-default form-group-default-select2">
+            <label>Payment Type</label>
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Type'">
+              <pg-option *ngFor="let option of paymenttype" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+              </pg-option>
+            </pg-select>
+          </div>
+        </div>
+        <div class="col-sm-6"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group form-group-default form-group-default-select2">
+            <label>From Account</label>
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
+              <pg-option *ngFor="let option of fromaccount" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+              </pg-option>
+            </pg-select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body">
+      <h4>Beneficiary</h4>
+      <div class="row">
+        <div class="col-md-4 col-sm-6">
+          <div class="form-group form-group-default required ">
+            <label>Name</label>
+            <input type="text" class="form-control" required="" placeholder="Enter Name">
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="form-group form-group-default  required">
+            <label>Account No</label>
+            <input type="text" class="form-control" required="" placeholder="Enter Account Number">
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+          <div class="form-group form-group-default form-group-default-select2">
+            <label>Type</label>
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Type'" [NotFoundContent]="'Not found'">
+              <pg-option *ngFor="let option of type" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+              </pg-option>
+            </pg-select>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-9">
+          <div class="form-group form-group-default  required">
+            <label>Address</label>
+            <input type="text" class="form-control" required="" placeholder="Enter Account Number">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div pgFormGroupDefault class="form-group form-group-default required typehead">
+            <label>Country</label>
+            <input class=" form-control" type="text" placeholder="Select Country" [(ngModel)]="selecteCountryThree"
+              [typeahead]="countries" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group form-group-default  required">
+            <label>Bank SWIFT</label>
+            <input type="text" class="form-control" required="" placeholder="Enter Bank SWIFT BIC">
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="form-group form-group-default  required">
+            <label>Bank Routing Code</label>
+            <input type="text" class="form-control" required="" placeholder="Enter Bank Routing Code">
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-6">
+          <div class="form-group form-group-default  required">
+            <label>Bank Name </label>
+            <input type="text" class="form-control" required="" placeholder="Enter Bank Name">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card-body payment-det">
+      <h4>Payment Details</h4>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group form-group-default  required">
+            <label>Amount (Balance 1048.00 EUR)</label>
+            <input type="number" class="form-control" required="" placeholder="0">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group form-group-default input-group">
+            <div class="form-input-group">
+              <label>Payment Date</label>
+              <input type="email" class="form-control" placeholder="Pick a date" id="datepicker-component2">
+            </div>
+            <div class="input-group-append ">
+              <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group form-group-default  required">
+            <label>Remarks</label>
+            <input type="text" class="form-control" required="" placeholder="0">
+          </div>
+        </div>
+        <div class="col-sm-6"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END PLACE PAGE CONTENT HERE -->
