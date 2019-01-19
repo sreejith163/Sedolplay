@@ -27,9 +27,8 @@
         <div class="col-md-2 col-sm-4">
           <div class="form-group form-group-default form-group-default-select2 required">
             <label class="">Account No</label>
-
-            <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
-              <pg-option *ngFor="let option of accountno" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" [(ngModel)]="selectedAcNo" (OpenChange)="filter()">
+              <pg-option *ngFor="let option of accounts" [Label]="option" [Value]="option" [Disabled]="option.disabled">
               </pg-option>
             </pg-select>
 
@@ -38,14 +37,14 @@
         <div class="col-md-2 col-sm-4">
           <div class="form-group form-group-default required ">
             <label>Reference</label>
-            <input type="text" class="form-control" required="" placeholder="Type Reference">
+            <input type="text" class="form-control" required="" [(ngModel)]="selectedRef" placeholder="Type Reference" (input)="filter()">
           </div>
         </div>
         <div class="col-md-2 col-sm-4">
           <div class="form-group form-group-default form-group-default-select2 required">
             <label class="">Beneficiary</label>
-            <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'">
-              <pg-option *ngFor="let option of beneficiary" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" [(ngModel)]="selectedBenef" (OpenChange)="filter()">
+              <pg-option *ngFor="let option of beneficiary" [Label]="option" [Value]="option" [Disabled]="option.disabled">
               </pg-option>
             </pg-select>
           </div>
@@ -67,7 +66,7 @@
           </div>
         </div>
         <div class="col-md-2 col-sm-4">
-          <button class="btn btn-primary btn-lg btn-block">Search</button>
+          <button class="btn btn-primary btn-lg btn-block" (click)="search()">Search</button>
         </div>
       </div>
     </div>
@@ -82,42 +81,31 @@
               <th style="width:1%" class="text-center">
                 No
               </th>
-              <th style="width:10%">Timestamp</th>
+              <th style="width:20%">Timestamp</th>
+              <th style="width:5%">Payment Date</th>
               <th style="width:10%">Reference</th>
               <th style="width:10%">My Account</th>
               <th style="width:10%">Benf. Name</th>
               <th style="width:10%">Benf. Account</th>
-              <th style="width:10%">Current Balance</th>
-              <th style="width:10%">Amount Currency</th>
-              <th style="width:10%">Status</th>
-              <th style="width:19%">Comments</th>
-
+              <th style="width:5%">Current Balance</th>
+              <th style="width:5%">Amount Currency</th>
+              <th style="width:5%">Status</th>
+              <th style="width:15%">Comments</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td data-label="No" class="ng-binding">1</td>
-              <td data-label="Timestamp" class="ng-binding">10312018</td>
-              <td data-label="Reference" class="ng-binding">WR000040</td>
-              <td data-label="My Account" class="ng-binding">1200000010137</td>
-              <td data-label="Benef. Name" class="ng-binding">Benjamin Doe</td>
-              <td data-label="Benef. Account #" class="ng-binding">1200000010136</td>
-              <td data-label="Amount" class="tar ng-binding">800</td>
-              <td data-label="Currency" class="ng-binding">USD</td>
-              <td data-label="Status" class="ng-binding">TRANSMITTED</td>
-              <td data-label="Comments" class="ng-binding"></td>
-            </tr>
-            <tr>
-              <td data-label="No" class="ng-binding">2</td>
-              <td data-label="Timestamp" class="ng-binding">10222018</td>
-              <td data-label="Reference" class="ng-binding">WR000039</td>
-              <td data-label="My Account" class="ng-binding">1200000010137</td>
-              <td data-label="Benef. Name" class="ng-binding">Benjamin Button</td>
-              <td data-label="Benef. Account #" class="ng-binding">1200000010136</td>
-              <td data-label="Amount" class="tar ng-binding">100</td>
-              <td data-label="Currency" class="ng-binding">USD</td>
-              <td data-label="Status" class="ng-binding">TRANSMITTED</td>
-              <td data-label="Comments" class="ng-binding"></td>
+            <tr *ngFor="let transfer of transfers; let i = index">
+              <td class="v-align-middle">{{ i + 1 }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.timestamp }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.payDate }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.transRef }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.orderCustomer.accNo }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.benef.name }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.benef.accNo }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.payAmt }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.payCur }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.status }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ transfer.comments }}</td>
             </tr>
           </tbody>
         </table>

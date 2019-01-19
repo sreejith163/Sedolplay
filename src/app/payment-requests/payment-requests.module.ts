@@ -20,6 +20,7 @@ import { ExternalTransferComponent } from './external-transfer/external-transfer
 import { PayFromCardComponent } from './pay-from-card/pay-from-card.component';
 
 import { PaymentRequestsRoutes } from './payment-requests.routing';
+import { PaymentRequestService } from './shared/services/payment-request.service';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { PaymentRequestsRoutes } from './payment-requests.routing';
     pgDatePickerModule,
     TypeaheadModule
   ],
-  declarations: [OwnAccountTransferComponent, InternalTransferComponent, ExternalTransferComponent, PayFromCardComponent]
+  declarations: [OwnAccountTransferComponent, InternalTransferComponent, ExternalTransferComponent, PayFromCardComponent],
+  providers: [PaymentRequestService]
 })
 export class PaymentRequestsModule { }

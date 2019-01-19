@@ -1,7 +1,7 @@
 export { RootLayout } from './root/root.component';
 export { BlankComponent } from './blank/blank.component';
 export { CondensedComponent } from './condensed/condensed.component';
-export { CorporateLayout } from './corporate/corporate.component';
+export { CorporateLayoutComponent } from './corporate/corporate.component';
 export { SimplyWhiteLayout } from './simplywhite/simplywhite.component';
 export { ExecutiveLayout } from './executive/executive.component';
 export { CasualLayout } from './casual/casual.component';

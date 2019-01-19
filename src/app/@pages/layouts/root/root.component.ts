@@ -9,7 +9,7 @@ import {
 import { Component, OnInit, OnDestroy, ViewChild, Input, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { pagesToggleService } from '../../services/toggler.service';
-import { Router, Event, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import { Router, Event, NavigationEnd } from '@angular/router';
 declare var pg: any;
 
 @Component({
@@ -49,7 +49,7 @@ export class RootLayout implements OnInit, OnDestroy {
   @Input()
   public footer: boolean = true;
 
-  constructor(public toggler: pagesToggleService, private router: Router) {
+  constructor(public toggler: pagesToggleService, public router: Router) {
     if (this.layoutState) {
       pg.addClass(document.body, this.layoutState);
     }

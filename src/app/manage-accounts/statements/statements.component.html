@@ -1,26 +1,17 @@
 <div class="jumbotron">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
-
-
-
     <div class="inner">
-      <!-- START BREADCRUMB -->
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
         <li class="breadcrumb-item active">Statements</li>
       </ol>
-      <!-- END BREADCRUMB -->
     </div>
-
     <h4 class="page-title sm-p-l-20">
       Statements
     </h4>
   </div>
 </div>
-<!-- START CONTAINER FLUID -->
 <div class=" container-fluid   container-fixed-lg">
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
-
   <div class="card card-default">
     <div class="card-header search-bg">
       <h5>
@@ -30,19 +21,17 @@
         <div class="col-md-3 col-sm-6">
           <div class="form-group form-group-default required ">
             <label>Account No</label>
-            <input type="text" class="form-control" required="" placeholder="Type Account Number">
+            <input type="text" class="form-control" (input)="filter($event.target.value)" required="" placeholder="Type Account Number">
           </div>
         </div>
         <div class="col-md-3 col-sm-6">
           <div class="form-group form-group form-group-default form-group-default-select2 required">
             <label class="">Country</label>
-            <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
-              ShowSearch>
-              <pg-option *ngFor="let option of countries" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+            <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'">
+              <pg-option *ngFor="let option of countries" [Label]="option" [Value]="option" [Disabled]="option.disabled">
               </pg-option>
             </pg-select>
           </div>
-
         </div>
         <div class="col-md-4 col-sm-8">
           <div class="form-group form-group-default input-group ">
@@ -59,22 +48,17 @@
               </div>
             </div>
           </div>
-
         </div>
         <div class="col-md-2 col-sm-4">
-          <button class="btn btn-primary btn-lg btn-block">Search</button>
+          <button class="btn btn-primary btn-lg btn-block" (click)="search()">Search</button>
         </div>
       </div>
-
     </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-hover" id="basicTable">
-          <thead>
+          <thead style="background-color: #F5F6FA;">
             <tr>
-              <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user
-    										Comman Practice Followed
-    										-->
               <th style="width:1%" class="text-center">
                 No
               </th>
@@ -83,54 +67,87 @@
               <th style="width:15%">Type</th>
               <th style="width:15%">Current Balance</th>
               <th style="width:20%">Available Balance Currency</th>
-
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr [ngClass]="{'selected': account.accNo === selectedAccount }" *ngFor="let account of accounts; let i = index"
+              (click)="onAccountClicked(account)">
               <td class="v-align-middle">
-                1
+                {{ i + 1 }}
               </td>
-              <td class="v-align-middle ">
-                12000000010135
+              <td class="v-align-middle" style="padding-left: .75rem;">
+                <a class="cursor-pointer"><u>{{ account.accNo }}</u></a>
               </td>
-              <td class="v-align-middle">
-                NZ105TMC12000000010136EUR
+              <td class="v-align-middle" style="padding-left: .75rem;">
+                {{ account.viban }}
               </td>
-              <td class="v-align-middle">
-                Transaction
+              <td class="v-align-middle" style="padding-left: .75rem;">
+                {{ account.type }}
               </td>
-              <td class="v-align-middle">
-                1000
+              <td class="v-align-middle" style="padding-left: .75rem;">
+                {{ account.curbalance }}
               </td>
-              <td class="v-align-middle">
-                1000EUR
-              </td>
-            </tr>
-            <tr>
-              <td class="v-align-middle">
-                1
-              </td>
-              <td class="v-align-middle ">
-                12000000010135
-              </td>
-              <td class="v-align-middle">
-                NZ105TMC12000000010136EUR
-              </td>
-              <td class="v-align-middle">
-                Transaction
-              </td>
-              <td class="v-align-middle">
-                1000
-              </td>
-              <td class="v-align-middle">
-                1000USD
+              <td class="v-align-middle" style="padding-left: .75rem;">
+                {{ account.availbalance }}{{ account.cur }}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
-  <!-- END PLACE PAGE CONTENT HERE -->
+  <div id="statementElement">
+    <ng-container *ngFor="let account of accounts">
+      <ng-container *ngIf="account.accNo === selectedAccount">
+        <div class="card-body" *ngIf="statements.length">
+          <h6>
+            Account No. {{ selectedAccount }}
+          </h6>
+          <div class="table-responsive">
+            <table class="table" id="basicTable">
+              <thead style="background-color: #F5F6FA;">
+                <tr>
+                  <th style="width:1%" class="text-center">No</th>
+                  <th style="width:25%">Timestamp</th>
+                  <th style="width:34%">Description</th>
+                  <th style="width:10%">Type</th>
+                  <th style="width:15%">Amount</th>
+                  <th style="width:15%">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let statement of statements; let i = index">
+                  <td class="v-align-middle">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="v-align-middle" style="padding-left: .75rem;">
+                    {{ statement.timestamp }}
+                  </td>
+                  <td class="v-align-middle" style="padding-left: .75rem;">
+                    {{ statement.descr }}
+                  </td>
+                  <td class="v-align-middle" style="padding-left: .75rem;">
+                    {{ statement.crdr === 'C' ? 'CREDIT' : 'DEBIT' }}
+                  </td>
+                  <ng-container *ngIf="statement.crdr === 'C'; else debit">
+                    <td class="v-align-middle" style="padding-left: .75rem;color: green; font-weight: 500">
+                      +{{ statement.amt }}
+                    </td>
+                  </ng-container>
+                  <ng-template #debit>
+                    <td class="v-align-middle" style="padding-left: .75rem;color: red; font-weight: 500">
+                      -{{ statement.amt }}
+                    </td>
+                  </ng-template>
+                  <td class="v-align-middle" style="padding-left: .75rem;">
+                    {{ statement.bal }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

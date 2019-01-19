@@ -1,0 +1,75 @@
+.required-field {
+    color: rgb(221, 44, 0);
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+}
+
+.padding-top-10 {
+    padding-top: 10px !important;
+}
+
+.custom-alert-danger {
+    font-size: 14px;
+    background-color: #fddddd;
+    color: #933432;
+    border-color: #933432;
+}
+
+.custom-alert-success {
+    font-size: 14px;
+    background-color: #cff5f2;
+    color: #0a7c71;
+    border-color: #0a7c71;
+}
+
+.custom-alert-danger {
+    font-size: 14px;
+    background-color: #fddddd;
+    color: #933432;
+    border-color: #933432;
+}
+
+.custom-alert-info {
+    font-size: 15px;
+    background-color: #daeffd;
+    color: #2b6a94;
+    border-color: #2b6a94;
+}
+
+.custom-alert-success a {
+    color: #0a7c71;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.float-right {
+    float: right;
+}
+
+.fr {
+    padding: 10px 40px 0 0 !important;
+    text-align: right !important;
+    float: right !important;
+}
+
+.fr p {
+    font-size: 12px !important;
+    padding-right: 43px !important;
+}
+
+.fr h6 {
+    font-weight: bold;
+    margin-top: -10px;
+}
+
+.logout-button {
+    font-size: 11px !important;
+    color: #be206a !important;
+    margin-left: 0 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;    
+    padding-left: 4px!important;
+}

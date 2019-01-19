@@ -1,23 +1,25 @@
 <div class="jumbotron" data-pages="parallax">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
-
     <div class="inner">
-      <!-- START BREADCRUMB -->
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
         <li class="breadcrumb-item active">Contact Us</li>
       </ol>
-      <!-- END BREADCRUMB -->
     </div>
     <h4 class="page-title sm-p-l-20">
       Contact Us
     </h4>
-
   </div>
 </div>
-
 <div class="container-fluid container-fixed-lg">
-
+  <div class="row">
+    <div class="col-md-12 padding-top-10" *ngIf="isSent">
+      <div class="alert custom-alert-success alert-dismissible">
+        <a (click)="closeAlertWindow()" class="close">&times;</a>
+        <b>An email has been sent to the administrator, someone will get in touch with you shortly.</b>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-6">
       <h2>How can we assist you?</h2>
@@ -25,36 +27,36 @@
         <p>Send us your enquiries or message and one of our client service representatives will contact you
           shortly.</p>
         <br>
-        <br>
         <p class="semi-bold no-margin">Fill up this form to contact us if you have any futher questions</p>
-        <form role="form" class="m-t-15">
+        <form [formGroup]="validationForm" novalidate class="m-t-15">
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group form-group-default">
                 <label>First name</label>
-                <input type="text" class="form-control">
+                <input type="text" placeholder="Type the first name" class="form-control" formControlName="firstName">
               </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group form-group-default">
                 <label>Last name</label>
-                <input type="text" class="form-control">
+                <input type="text " placeholder="Type the last name" class="form-control" formControlName="lastName">
               </div>
             </div>
           </div>
-          <div class="form-group form-group-default">
+          <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('email')">
             <label>Email</label>
-            <input type="email" placeholder="This can be changed later" class="form-control">
+            <input type="email" placeholder="This can be changed later" class="form-control" formControlName="email">
           </div>
-          <div class="form-group form-group-default">
+          <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('message')">
             <label>Message</label>
-            <textarea placeholder="Type the message you wish to send" style="height:100px" class="form-control"></textarea>
+            <textarea placeholder="Type the message you wish to send" style="height:100px" class="form-control"
+              formControlName="message"></textarea>
           </div>
           <div class="sm-p-t-10 clearfix">
             <p class="pull-left small hint-text m-t-5 font-arial">I hereby certify that the information above
               is true and
               accurate. </p>
-            <button class="btn btn-primary font-montserrat all-caps fs-12 pull-right xs-pull-left">Submit</button>
+            <button class="btn btn-primary float-right" (click)="submitMail()" [disabled]="validationForm.invalid">Submit</button>
           </div>
           <div class="clearfix"></div>
         </form>

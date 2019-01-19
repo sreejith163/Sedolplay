@@ -1,203 +1,252 @@
 <div class="jumbotron">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
-
     <div class="inner">
-      <!-- START BREADCRUMB -->
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item">
+          <a href="home.html">Sedolpay</a>
+        </li>
         <li class="breadcrumb-item active">Manage Beneficiaries</li>
       </ol>
-      <!-- END BREADCRUMB -->
     </div>
-
     <h4 class="page-title sm-p-l-20">
       Manage Beneficiaries
     </h4>
   </div>
 </div>
-<!-- START CONTAINER FLUID -->
-<div class=" container-fluid   container-fixed-lg">
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+<div class="container-fluid container-fixed-lg">
   <div class="card card-default">
+    <div class="col-md-12 padding-top-10" *ngIf="isSaved">
+      <div class="alert custom-alert-success alert-dismissible">
+        <a (click)="closeAlertWindow()" class="close">&times;</a>
+        <b>Your request was processed successfully. Please
+          <a href="javascript:window.location.href=window.location.href">
+            reload
+          </a> this page to see the changes.</b>
+      </div>
+    </div>
+    <div class="col-md-12 padding-top-10" *ngIf="isFailed">
+      <div class="alert custom-alert-danger alert-dismissible">
+        <a (click)="closeAlertWindow()" class="close">&times;</a>
+        <b>Internal account updation failed due to missing account details</b>
+      </div>
+    </div>
     <div class="card-header search-bg">
       <h5 class="pull-left">
         Search & Filter
       </h5>
-      <button class="btn btn-primary pull-right" (click)="onSelect()" [hidden]="!IsHidden">Add Beneficiary</button>
-
+      <button class="btn btn-primary pull-right" (click)="onAddSelect()" [hidden]="!isHidden">Add Beneficiary</button>
       <div class="clearfix">
       </div>
       <div class="row">
         <div class="col-md-2 col-sm-6">
-          <div class="form-group form-group-default  ">
+          <div class="form-group form-group-default">
             <label>Name</label>
-            <input type="text" class="form-control" required="" placeholder="Enter Name">
+            <input type="text" class="form-control" required="" placeholder="Enter Name" (input)="filter()" [(ngModel)]="selectedName">
           </div>
         </div>
         <div class="col-md-2 col-sm-6">
           <div class="form-group form-group-default form-group-default-select2">
             <label>Type</label>
-            <pg-select style="width: 100%;" [PlaceHolder]="'SelectType'">
-              <pg-option *ngFor="let option of type" [Label]="option.label" [Value]="option.value">
+            <pg-select style="width: 100%;" [PlaceHolder]="'SelectType'" (OpenChange)="filter()" [(ngModel)]="selectedType">
+              <pg-option *ngFor="let option of type" [Label]="option" [Value]="option">
               </pg-option>
             </pg-select>
           </div>
-
         </div>
         <div class="col-md-2 col-sm-6">
-          <div class="form-group form-group-default  ">
+          <div class="form-group form-group-default ">
             <label>Account No</label>
-            <input type="text" class="form-control" required="" placeholder="Enter Account Number">
+            <input type="text" class="form-control" required="" placeholder="Enter Account Number" (input)="filter()"
+              [(ngModel)]="selectedAcNo">
           </div>
         </div>
         <div class="col-md-2 col-sm-6">
-          <div pgFormGroupDefault class="form-group form-group-default required typehead">
+          <div class="form-group form-group form-group-default form-group-default-select2">
             <label>Country</label>
-            <input class=" form-control" type="text" placeholder="Select Country" [(ngModel)]="selecteCountryThree"
-              [typeahead]="countries" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5">
+            <pg-select style="width: 100%;" [(ngModel)]="selecteCountry" [PlaceHolder]="'Select Option'" (OpenChange)="filter()">
+              <pg-option *ngFor="let option of countries" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+              </pg-option>
+            </pg-select>
           </div>
         </div>
         <div class="col-md-4 col-sm-12">
           <div class="form-group form-group-default  ">
             <label>Bank</label>
-            <input type="text" class="form-control" required="" placeholder="Enter Bank Name">
+            <input type="text" class="form-control" required="" placeholder="Enter Bank Name" (input)="filter()"
+              [(ngModel)]="selectedBank">
           </div>
         </div>
       </div>
     </div>
-
-    <div class="card-body">
-      <div class="add-beneficiary" [hidden]="IsHidden">
-        <div class="ab-header">
-          <h5>Add Beneficairy</h5>
-        </div>
-        <div class="ab-body">
-          <div class="row">
-            <div class="col-md-4 col-sm-6">
-              <div class="form-group form-group-default required ">
-                <label>Name</label>
-                <input type="text" class="form-control" required="" placeholder="Enter Name">
+    <div id="benefElement" class="card-body">
+      <form [formGroup]="validationForm" novalidate>
+        <div class="add-beneficiary" [hidden]="isHidden">
+          <div class="ab-header">
+            <h5>{{ mode }} Beneficiary</h5>
+          </div>
+          <div class="ab-body">
+            <div class="row">
+              <div class="col-md-4 col-sm-6">
+                <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('name')">
+                  <label>Name</label>
+                  <input type="text" class="form-control" formControlName="name" placeholder="Enter Name">
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('acNo')">
+                  <label>Account No</label>
+                  <input type="text" class="form-control" formControlName="acNo" placeholder="Enter Account Number">
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('bankType')">
+                  <label>Type</label>
+                  <pg-select style="width: 100%;" formControlName="bankType" [PlaceHolder]="'SelectType'">
+                    <pg-option *ngFor="let option of type" [Label]="option" [Value]="option">
+                    </pg-option>
+                  </pg-select>
+                </div>
               </div>
             </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="form-group form-group-default  required">
-                <label>Account No</label>
-                <input type="text" class="form-control" required="" placeholder="Enter Account Number">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('addr')">
+                  <label>Address</label>
+                  <input type="text" class="form-control" formControlName="addr" placeholder="Enter Address">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
+                  <label>Country</label>
+                  <pg-select style="width: 100%;" formControlName="country" [PlaceHolder]="'Select Option'">
+                    <pg-option *ngFor="let option of countries" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+                    </pg-option>
+                  </pg-select>
+                </div>
               </div>
             </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="form-group form-group-default form-group-default-select2">
-                <label>Type</label>
-                <pg-select style="width: 100%;" [PlaceHolder]="'SelectType'">
-                  <pg-option *ngFor="let option of type" [Label]="option.label" [Value]="option.value">
-                  </pg-option>
-                </pg-select>
+            <div class="row">
+              <div class="col-md-3 col-sm-6">
+                <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('bankSwift')">
+                  <label>Bank SWIFT BIC</label>
+                  <input type="text" class="form-control" formControlName="bankSwift" placeholder="Enter Bank SWIFT BIC">
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('bankCode')">
+                  <label>Bank Routing Code</label>
+                  <input type="text" class="form-control" formControlName="bankCode" placeholder="Enter Bank Routing Code">
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('bankName')">
+                  <label>Bank Name </label>
+                  <input type="text" class="form-control" formControlName="bankName" placeholder="Enter Bank Name">
+                </div>
+              </div>
+              <div class="col-md-2 col-sm-6">
+                <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('curr')">
+                  <label>Currency</label>
+                  <pg-select style="width: 100%;" formControlName="curr" [PlaceHolder]="'Select Currency'">
+                    <pg-option *ngFor="let option of currency" [Label]="option" [Value]="option">
+                    </pg-option>
+                  </pg-select>
+                </div>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-9">
-              <div class="form-group form-group-default  required">
-                <label>Address</label>
-                <input type="text" class="form-control" required="" placeholder="Enter Account Number">
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div pgFormGroupDefault class="form-group form-group-default required typehead">
-                <label>Country</label>
-                <input class=" form-control" type="text" placeholder="Select Country" [(ngModel)]="selecteCountryThree1"
-                  [typeahead]="countries" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-3 col-sm-6">
-              <div class="form-group form-group-default  required">
-                <label>Bank SWIFT BIC</label>
-                <input type="text" class="form-control" required="" placeholder="Enter Bank SWIFT BIC">
-              </div>
-            </div>
-            <div class="col-md-2 col-sm-6">
-              <div class="form-group form-group-default  required">
-                <label>Bank Routing Code</label>
-                <input type="text" class="form-control" required="" placeholder="Enter Bank Routing Code">
-              </div>
-            </div>
-            <div class="col-md-5 col-sm-6">
-              <div class="form-group form-group-default  required">
-                <label>Bank Name </label>
-                <input type="text" class="form-control" required="" placeholder="Enter Bank Name">
-              </div>
-            </div>
-            <div class="col-md-2 col-sm-6">
-              <div class="form-group form-group-default form-group-default-select2">
-                <label>Currency</label>
-                <pg-select style="width: 100%;" [PlaceHolder]="'Select Currency'">
-                  <pg-option *ngFor="let option of currency" [Label]="option.label" [Value]="option.value">
-                  </pg-option>
-                </pg-select>
-              </div>
-            </div>
+          <div class="ab-footer">
+            <ng-container *ngIf="mode === 'Add'; else update">
+              <button class="btn btn-primary mr-3" (click)="addbeneficiary()" [disabled]="validationForm.invalid">Add
+                Beneficiary
+              </button>
+            </ng-container>
+            <ng-template #update>
+              <button class="btn btn-primary mr-3" (click)="updatebeneficiary()" [disabled]="validationForm.invalid">Update
+                Beneficiary
+              </button>
+            </ng-template>
+            <button class="btn btn-secondary" (click)=" onCancel()">Cancel</button>
           </div>
         </div>
-        <div class="ab-footer">
-          <button class="btn btn-primary mr-3">Add Beneficiary</button>
-          <button class="btn btn-secondary" (click)=" onSelect()">Cancel</button>
-        </div>
-      </div>
-      <div class="table-responsive">
+      </form>
+      <div class="table-responsive" [ngStyle]="{'pointer-events': !isHidden ? 'none' : 'auto'}">
         <table class="table table-hover" id="basicTable">
           <thead>
             <tr>
-              <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user
-    										Comman Practice Followed
-    										-->
               <th style="width:1%" class="text-center">
                 No
               </th>
-              <th style="width:15%">Account No</th>
-              <th style="width:24%">VIBAN</th>
-              <th style="width:10%">Type</th>
-              <th style="width:15%">Available Balance Currency</th>
-              <th style="width:10%">FX Rate</th>
-              <th style="width:15%">Available Balance in EUR</th>
-              <th style="width:10%">Actions</th>
+              <th style="width:12%">Name</th>
+              <th style="width:8%">Type</th>
+              <th style="width:11%">Account No</th>
+              <th style="width:26%">Address</th>
+              <th style="width:5%">Country</th>
+              <th style="width:8%">Bank SWIFT Code</th>
+              <th style="width:8%">Bank Routing</th>
+              <th style="width:10%">Bank Name</th>
+              <th style="width:12%">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr *ngFor="let benef of availableBeneficiaries; let i = index">
+              <td class="v-align-middle">{{ i + 1}}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.name }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.accType }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.accNo }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.address }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.country }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.bankSWIFTBIC }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.bankRoutingCode }}</td>
+              <td class="v-align-middle" style="padding-left: .75rem;">{{ benef.bankName }}</td>
               <td class="v-align-middle">
-                1
-              </td>
-              <td class="v-align-middle ">
-                12000000010135
-              </td>
-              <td class="v-align-middle">
-                NZ105TMC12000000010136EUR
-              </td>
-              <td class="v-align-middle">
-                Transaction
-              </td>
-              <td class="v-align-middle">
-                1000EUR
-              </td>
-              <td class="v-align-middle">
-                1
-              </td>
-              <td class="v-align-middle">
-                1000EUR
-              </td>
-              <td class="v-align-middle">
-                <span><i class="fa fa-trash  mr-2"></i></span>
-                <span><i class="fa fa-edit"></i></span>
+                <button type="button" style="background: none; border: none;" [disabled]="true">
+                  <span>
+                    <i class="fa fa-trash  mr-2" (click)="open(deleteBenef, benef.benefId)"></i>
+                  </span>
+                  <span>
+                    <i class="fa fa-edit" (click)="onUpdateSelect(benef)"></i>
+                  </span>
+                </button>
               </td>
             </tr>
-
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
 </div>
-<!-- END PLACE PAGE CONTENT HERE -->
+
+<!-- Modal popup for benef delete confirmation -->
+<ng-template #deleteBenef let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Beneficiary deletion</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Please confirm that you want to delete <span class="text-primary">"{{ getBenefName() }}"</span> from
+        your
+        beneficiary list. This action can not be undone.</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="d('Cancel click')">Cancel</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="deleteBeneficiary(benefDeleted)">Ok</button>
+  </div>
+</ng-template>
+<!-- Modal popup for benef deleted messgae -->
+<ng-template #benefDeleted let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Beneficiary deletion</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Beneficiary was successfully deleted</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="c('Ok click')">Ok</button>
+  </div>
+</ng-template>

@@ -1,25 +1,33 @@
 <div class="jumbotron">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
-      <!-- START BREADCRUMB -->
       <ol class="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
           <li class="breadcrumb-item active">My Profile</li>
         </ol>
       </ol>
-      <!-- END BREADCRUMB -->
     </div>
     <h4 class="page-title sm-p-l-20">
       My Profile
     </h4>
   </div>
 </div>
-<!-- START CONTAINER FLUID -->
 <div class=" container-fluid   container-fixed-lg">
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
-  <form class="" role="form">
+  <form [formGroup]="validationForm" novalidate>
     <div class="card card-default">
+      <div class="col-md-12 padding-top-10" *ngIf="isUpdated">
+        <div class="alert custom-alert-success alert-dismissible">
+          <a (click)="closeAlertWindow()" class="close">&times;</a>
+          <b>Your profile was successfully updated.</b>
+        </div>
+      </div>
+      <div class="col-md-12 padding-top-10" *ngIf="isFailed">
+        <div class="alert custom-alert-danger alert-dismissible">
+          <a (click)="closeAlertWindow()" class="close">&times;</a>
+          <b>Internal account updation failed due to missing account details</b>
+        </div>
+      </div>
       <div class="card-header">
         <h5>
           Update Profile
@@ -28,57 +36,57 @@
       <div class="card-body">
         <div class="row">
           <div class="col-sm-4">
-            <div class="form-group form-group-default required " pgFormGroupDefault>
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('firstName')">
               <label>Frist Name</label>
-              <input type="text" class="form-control" required="">
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="form-group form-group-default required">
-              <label>Middle Name</label>
-              <input type="text" class="form-control" required="">
+              <input type="text" class="form-control" formControlName="firstName">
             </div>
           </div>
           <div class="col-sm-4">
             <div class="form-group form-group-default">
+              <label>Middle Name</label>
+              <input type="text" class="form-control" formControlName="middleName">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('lastName')">
               <label>Last name</label>
-              <input type="text" class="form-control">
+              <input type="text" class="form-control" formControlName="lastName">
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <div class="form-group form-group-default required">
-              <label>Address Line 1*</label>
-              <input type="text" class="form-control" required="">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('address1')">
+              <label>Address Line 1</label>
+              <input type="text" class="form-control" formControlName="address1">
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-group  form-group-default required">
-              <label>Address Line 2*</label>
-              <input type="text" class="form-control" required="">
+            <div class="form-group  form-group-default required" [ngStyle]="getControlBorderColour('address2')">
+              <label>Address Line 2</label>
+              <input type="text" class="form-control" formControlName="address2">
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-4">
-            <div class="form-group form-group-default required ">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('zip')">
               <label>Zip/Postal Code</label>
-              <input type="text" class="form-control" required="">
+              <input type="text" class="form-control" formControlName="zip">
             </div>
           </div>
           <div class="col-sm-4">
-
-            <div pgFormGroupDefault class="form-group form-group-default required typehead">
+            <div class="form-group form-group-default required typehead" [ngStyle]="getControlBorderColour('country')">
               <label>Countries</label>
-              <input class=" form-control" type="text" placeholder="Select Country" [(ngModel)]="selecteCountryThree"
-                [typeahead]="countries" [typeaheadScrollable]="true" [typeaheadOptionsInScrollableView]="5">
+              <input class=" form-control" type="text" formControlName="country" placeholder="Select Country"
+                [(ngModel)]="selecteCountryThree" [typeahead]="countries" [typeaheadScrollable]="true"
+                [typeaheadOptionsInScrollableView]="5">
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="form-group form-group-default form-group-default-select2 required">
+            <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('timezone')">
               <label class="">Timezone</label>
-              <pg-select style="width: 100%;" [Mode]="'multiple'" [PlaceHolder]="'Select Timezone'" [NotFoundContent]="'Not found'">
+              <pg-select style="width: 100%;" formControlName="timezone" [PlaceHolder]="'Select Timezone'">
                 <pg-option *ngFor="let option of timezone" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
                 </pg-option>
               </pg-select>
@@ -87,24 +95,24 @@
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <div class="form-group form-group-default required">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('mobile')">
               <label>Mobile No.</label>
-              <input type="text" class="form-control" required="">
+              <input type="text" class="form-control" formControlName="mobile">
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-group form-group-default required">
+            <div class="form-group form-group-default">
               <label>Telephone No.</label>
-              <input type="text" class="form-control" required="">
+              <input type="text" class="form-control" formControlName="telephone">
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-6">
-            <div class="form-group form-group-default input-group">
+            <div class="form-group form-group-default input-group required" [ngStyle]="getControlBorderColour('dob')">
               <div class="form-input-group">
                 <label>Date of Birth</label>
-                <pg-datepicker></pg-datepicker>
+                <pg-datepicker Placeholder="Date of Birth" formControlName="dob" [Format]="'YYYY-MM-DD'"></pg-datepicker>
               </div>
               <div class="input-group-append ">
                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -112,15 +120,18 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="form-group form-group-default required">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('email')">
               <label>Email</label>
-              <input type="email" class="form-control" required="" placeholder="example@example.com">
+              <input type="email" class="form-control" formControlName="email" placeholder="example@example.com">
             </div>
           </div>
         </div>
-        <button class="btn btn-primary m-t-30">Update Profile</button>
+        <button class="btn btn-primary m-t-30" [disabled]="validationForm.invalid" (click)="updateProfile()">Update
+          Profile</button>
       </div>
     </div>
+  </form>
+  <form [formGroup]="passwordValidationForm" novalidate>
     <div class="card card-default">
       <div class="card-header">
         <h5>
@@ -130,27 +141,27 @@
       <div class="card-body">
         <div class="row">
           <div class="col-sm-4">
-            <div class="form-group form-group-default required ">
+            <div class="form-group form-group-default required" [ngStyle]="getPasswordControlBorderColour('oldPass')">
               <label>Current Password</label>
-              <input type="password" class="form-control" required="" placeholder="*********">
+              <input type="password" class="form-control" formControlName="oldPass" placeholder="*********">
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="form-group form-group-default required">
+            <div class="form-group form-group-default required" [ngStyle]="getPasswordControlBorderColour('newPass')">
               <label>New Password</label>
-              <input type="password" class="form-control" required="" placeholder="*********">
+              <input type="password" class="form-control" formControlName="newPass" placeholder="*********">
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="form-group form-group-default">
+            <div class="form-group form-group-default" [ngStyle]="getPasswordControlBorderColour('newPassConfirm')">
               <label>Repeat New Password</label>
-              <input type="password" class="form-control" placeholder="*********">
+              <input type="password" class="form-control" formControlName="newPassConfirm" placeholder="*********">
             </div>
           </div>
         </div>
-        <button class="btn btn-primary m-t-30">Update Password</button>
+        <button class="btn btn-primary m-t-30" [disabled]="passwordValidationForm.invalid" (click)="updatePassword()">Update
+          Password</button>
       </div>
     </div>
   </form>
 </div>
-<!-- END PLACE PAGE CONTENT HERE -->

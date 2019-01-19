@@ -73,7 +73,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ListViewContainerComponent,
   pgRetinaDirective
   ],
-  providers:[QuickviewService,
+  providers: [ QuickviewService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

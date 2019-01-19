@@ -1,39 +1,43 @@
 import { Routes } from '@angular/router';
-//Layouts
-import {
-  CorporateLayout,
-  BlankCorporateComponent
-} from './@pages/layouts';
-
-//Sample Pages
-
+import {  CorporateLayoutComponent, BlankCorporateComponent } from './@pages/layouts';
 import { CorporateDashboardComponent } from './dashboard/dashboard.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { ManageBeneficiariesComponent } from './manage-beneficiaries/manage-beneficiaries.component';
 import { TrackPaymentsComponent } from './track-payments/track-payments.component';
+import { AuthGuard } from './shared/guards/auth.guard';
+
 export const AppRoutes: Routes = [
 
+  {
+    path: '',
+    data: {
+      breadcrumb: 'Home'
+    },
+    component: BlankCorporateComponent,
+    loadChildren: './session/session.module#SessionModule',
+  },
   {
     path: 'corporate',
     data: {
       breadcrumb: 'Home'
     },
-    component: BlankCorporateComponent
+    component: BlankCorporateComponent,
+    canActivate: [AuthGuard]
   },
-
-  // //Corporate Layout Styles and Routing
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
     children: [{
       path: 'dashboard',
-      component: CorporateDashboardComponent
+      component: CorporateDashboardComponent,
+      canActivate: [AuthGuard]
     }],
   },
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'my-profile',
       component: MyProfileComponent
@@ -41,7 +45,8 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'manage-accounts',
       loadChildren: './manage-accounts/manage-accounts.module#ManageAccountsModule'
@@ -49,7 +54,8 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'manage-beneficiaries',
       component: ManageBeneficiariesComponent
@@ -57,7 +63,8 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'payment-requests',
       loadChildren: './payment-requests/payment-requests.module#PaymentRequestsModule'
@@ -65,7 +72,8 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'track-payments',
       component: TrackPaymentsComponent
@@ -73,7 +81,8 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'reports',
       loadChildren: './reports/reports.module#ReportsModule'
@@ -81,19 +90,20 @@ export const AppRoutes: Routes = [
   },
   {
     path: 'corporate',
-    component: CorporateLayout,
+    component: CorporateLayoutComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'contact-us',
-      component: ContactUsComponent
+      component: ContactUsComponent,
     }],
   },
   {
     path: 'corporate',
     component: BlankCorporateComponent,
+    canActivate: [AuthGuard],
     children: [{
       path: 'session',
       loadChildren: './session/session.module#SessionModule'
     }]
   }
-
 ];

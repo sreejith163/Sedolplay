@@ -26,15 +26,16 @@
           <div class="col-md-3 col-sm-6">
             <div class="form-group form-group-default required ">
               <label>Account No</label>
-              <input type="text" class="form-control" required="" placeholder="Type Account Number">
+              <input type="text" class="form-control" (input)="filter()" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}"
+                required="" placeholder="Type Account Number">
             </div>
           </div>
           <div class="col-md-3 col-sm-6">
             <div class="form-group form-group form-group-default form-group-default-select2 required">
               <label class="">Type</label>
-              <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
-                ShowSearch>
-                <pg-option *ngFor="let option of type" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+              <pg-select style="width: 100%;" [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}"
+                (OpenChange)="filter()" [PlaceHolder]="'Select Option'">
+                <pg-option *ngFor="let option of type" [Label]="option" [Value]="option" [Disabled]="option.disabled">
                 </pg-option>
               </pg-select>
             </div>
@@ -42,19 +43,21 @@
           <div class="col-md-3 col-sm-6">
             <div class="form-group form-group form-group-default form-group-default-select2 required">
               <label class="">Currency</label>
-              <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
-                ShowSearch>
-                <pg-option *ngFor="let option of currency" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+              <pg-select style="width: 100%;" [(ngModel)]="selectedCurrency" [ngModelOptions]="{standalone: true}"
+                (OpenChange)="filter()" [PlaceHolder]="'Select Option'">
+                <pg-option [Label]="'All'" [Value]="'All'">
+                </pg-option>
+                <pg-option *ngFor="let option of viewcurrency" [Label]="option" [Value]="option" [Disabled]="option.disabled">
                 </pg-option>
               </pg-select>
             </div>
           </div>
           <div class="col-md-3 col-sm-6">
             <div class="form-group form-group form-group-default form-group-default-select2 required">
-              <label class="">Viev Currency</label>
-              <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'" AllowClear
-                ShowSearch>
-                <pg-option *ngFor="let option of viewcurrency" [Label]="option.label" [Value]="option" [Disabled]="option.disabled">
+              <label class="">View Currency</label>
+              <pg-select style="width: 100%;" [(ngModel)]="selectedViewcurrency" [ngModelOptions]="{standalone: true}"
+                [PlaceHolder]="'Select Option'">
+                <pg-option *ngFor="let option of viewcurrency" [Label]="option" [Value]="option" [Disabled]="option.disabled">
                 </pg-option>
               </pg-select>
             </div>
@@ -81,50 +84,27 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr *ngFor="let account of accounts; let i = index">
                 <td class="v-align-middle">
-                  1
+                  {{ i + 1 }}
                 </td>
-                <td class="v-align-middle ">
-                  12000000010135
+                <td class="v-align-middle" style="padding-left: .75rem;">
+                  {{ account.accNo }}
                 </td>
-                <td class="v-align-middle">
-                  NZ105TMC12000000010136EUR
+                <td class="v-align-middle" style="padding-left: .75rem;">
+                  {{ account.viban }}
                 </td>
-                <td class="v-align-middle">
-                  Transaction
+                <td class="v-align-middle" style="padding-left: .75rem;">
+                  {{ account.type }}
                 </td>
-                <td class="v-align-middle">
-                  1000EUR
+                <td class="v-align-middle" style="padding-left: .75rem;">
+                  {{ account.availbalance }}{{account.cur}}
                 </td>
-                <td class="v-align-middle">
-                  1
+                <td class="v-align-middle" style="padding-left: .75rem;">
+                  {{ getFixRate(account) }}
                 </td>
-                <td class="v-align-middle">
-                  1000EUR
-                </td>
-              </tr>
-              <tr>
-                <td class="v-align-middle">
-                  1
-                </td>
-                <td class="v-align-middle ">
-                  12000000010135
-                </td>
-                <td class="v-align-middle">
-                  NZ105TMC12000000010136EUR
-                </td>
-                <td class="v-align-middle">
-                  Transaction
-                </td>
-                <td class="v-align-middle">
-                  1000EUR
-                </td>
-                <td class="v-align-middle">
-                  1
-                </td>
-                <td class="v-align-middle">
-                  1000EUR
+                <td class="v-align-middle" style="padding-left: .75rem;">
+                  {{ getFixAmount(account) }}
                 </td>
               </tr>
             </tbody>

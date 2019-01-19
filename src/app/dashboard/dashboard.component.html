@@ -57,32 +57,24 @@ pg pg-close fs-14"></i>
           <div class="col-md-4 m-t-10 sm-m-t-10">
             <button type="submit" id="submitContact" class="btn btn-primary btn-block m-t-5">Send Message</button>
             <img class="image-responsive-height demo-mw-50 hide" id="contactLoader" src="/assets/img/demo/progress.svg"
-              alt="Progress" style="">
+              alt="Progress">
           </div>
         </div>
       </form>
     </div>
   </div>
-
 </ng-template>
-
-
 <div class="jumbotron page-cover" data-pages="parallax">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
-
     <div class="inner">
-      <!-- START BREADCRUMB -->
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
         <li class="breadcrumb-item active">Dashboard</li>
       </ol>
-      <!-- END BREADCRUMB -->
     </div>
-
     <h4 class="page-title sm-p-l-20">
       Dashboard
     </h4>
-    <!-- END BREADCRUMB -->
     <div class="container-md-height m-b-20">
       <div class="row m-lg-0">
         <div class="col-xl-7 col-lg-6 p-0 image-responsive-height">
@@ -93,7 +85,6 @@ pg pg-close fs-14"></i>
 
         </div>
         <div class="col-xl-5 col-lg-6">
-          <!-- START card -->
           <div class="card card-transparent">
             <div class="card-header ">
               <div class="card-title">Welcome Ike
@@ -121,17 +112,12 @@ pg pg-close fs-14"></i>
               </div>
             </div>
           </div>
-          <!-- END card -->
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
-<!-- START CONTAINER FLUID -->
 <div class=" container-fluid  container-fixed-lg">
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
   <form class="" role="form">
     <div class="card card-default">
       <div class="card-body">
@@ -140,14 +126,12 @@ pg pg-close fs-14"></i>
             <h5 class="page-title sm-p-l-20">
               Account Summary
             </h5>
-
             <div class="form-group form-group-default form-group-default-select2 required">
               <label class="">Account Number</label>
               <pg-select style="width: 100%;" [Mode]="'multiple'" [PlaceHolder]="'Select Account'" [NotFoundContent]="'Not found'">
                 <pg-option *ngFor="let option of accountno" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
                 </pg-option>
               </pg-select>
-
             </div>
             <div class="form-group form-group-default">
               <label class="">Current Balance</label>
@@ -165,16 +149,15 @@ pg pg-close fs-14"></i>
           Quick Links
         </h5>
         <div class="row m-t-20">
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/my-profile')" class="q-link">
             <i class="fa fa-user"></i>
-
             <p><br>My Profile</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/manage-beneficiaries')" class="q-link">
             <i class="fa fa-users"></i>
             <p>Manage<br>Beneficiaries</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/track-payments')" class="q-link">
             <i class="fas fa-search-dollar"></i>
             <p>Track<br>Payments</p>
           </a>
@@ -183,15 +166,15 @@ pg pg-close fs-14"></i>
           Manage Accounts
         </h5>
         <div class="row m-t-20">
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/manage-accounts/account-portfolio')" class="q-link">
             <i class="far fa-briefcase"></i>
             <p>Account<br>Portfolio</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/manage-accounts/statements')" class="q-link">
             <i class="fas fa-list-ul"></i>
             <p>Account<br>Statements</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a class="q-link">
             <i class="fas fa-plus-circle"></i>
             <p>Create<br>Account</p>
           </a>
@@ -200,19 +183,19 @@ pg pg-close fs-14"></i>
           Payment Requests
         </h5>
         <div class="row m-t-20">
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/payment-requests/own-account-transfer')" class="q-link">
             <i class="fas fa-sitemap"></i>
             <p>Own Account<br>Transfer</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/payment-requests/internal-transfer')" class="q-link">
             <i class="fas fa-exchange-alt"></i>
             <p>Internal<br>Transfer</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/payment-requests/external-transfer')" class="q-link">
             <i class="fas fa-directions"></i>
             <p>External<br>Transfer</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a class="q-link">
             <i class="far fa-credit-card"></i>
             <p>Pay from<br>Card</p>
           </a>
@@ -221,11 +204,11 @@ pg pg-close fs-14"></i>
           Reports
         </h5>
         <div class="row m-t-20">
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/reports/payment-status')" class="q-link">
             <i class="far fa-list-alt"></i>
             <p>Payment<br>Status</p>
           </a>
-          <a href="my-profile.html" class="q-link">
+          <a (click)="routeToSelectedSection('corporate/reports/transaction-history')" class="q-link">
             <i class="fas fa-history"></i>
             <p>History<br>Transaction</p>
           </a>

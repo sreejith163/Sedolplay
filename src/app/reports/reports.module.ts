@@ -19,6 +19,7 @@ import { PaymentStatusComponent } from './payment-status/payment-status.componen
 import { TransactionHistoryComponent } from './transaction-history/transaction-history.component';
 
 import { ReportsRoutes } from './reports.routing';
+import { ReportService } from './shared/services/report.service';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { ReportsRoutes } from './reports.routing';
     pgSelectfx,
     pgDatePickerModule
   ],
-  declarations: [PaymentStatusComponent, TransactionHistoryComponent]
+  declarations: [PaymentStatusComponent, TransactionHistoryComponent],
+  providers: [ReportService]
 })
 export class ReportsModule { }

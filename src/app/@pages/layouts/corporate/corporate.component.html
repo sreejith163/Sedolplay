@@ -1,12 +1,9 @@
-<!-- WRAP LAYOUT IF BOXED -->
 <div class="container" *ngIf="_boxed; else basicLayoutBlock">
   <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
 </div>
 <ng-template #basicLayoutBlock>
   <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
 </ng-template>
-
-<!-- YOUR LAYOUT CONTENT GOES INSIDE HERE -->
 <ng-template #contentTpl>
   <pg-sidebar>
     <ng-template #sideBarOverlay>
@@ -50,39 +47,27 @@
 
   <page-container>
     <pg-header [boxed]="_boxed">
-      <!-- START MOBILE SIDEBAR TOGGLE -->
       <a href="javascript:void(0);" class="btn-link toggle-sidebar d-lg-none pg pg-menu" (click)="toggleMobileSidebar()"></a>
-      <!-- END MOBILE SIDEBAR TOGGLE -->
       <div class="">
-        <!-- START EMAIL MOBILE TOGGLE -->
         <a href="javascript:void(0);" class="toggle-secondary-sidebar" (click)="toggleSecondarySideBar()" *ngIf="_layoutOption === 'email'">Inbox
           <span class="text-info">(12)</span> <span class="caret"></span></a>
-        <!-- END EMAIL MOBILE TOGGLE -->
-
         <div class="brand inline m-l-10" [class.d-none]="_layoutOption === 'email'">
           <img src="assets/img/logo.png" alt="logo" pgRetina src1x="assets/img/logo.png" src2x="assets/img/logo.png"
             width="150">
         </div>
       </div>
-      <div class="d-flex align-items-center">
-        <!-- START User Info-->
-        <div class="pull-left p-r-10 fs-14 font-heading d-lg-block d-none">
-          <span class="semi-bold">David Nest</span>
-        </div>
-        <div class="pull-right d-lg-block d-none" dropdown>
-
-
-        </div>
+      <div class="fr">
+        <p>Welcome,</p>
+        <h6>
+          <span id="name">Allen Joseph</span> 
+          <a (click)="logout()" class="cursor-pointer logout-button">[Logout]</a></h6>
       </div>
     </pg-header>
     <div class="page-content-wrapper {{_pageContainerClass}}">
-      <!-- START PAGE CONTENT -->
       <div class="content {{_contentClass}}">
         <router-outlet></router-outlet>
       </div>
-      <!-- END PAGE CONTENT -->
       <ng-template [ngIf]="_footer">
-        <!-- START COPYRIGHT -->
         <div class=" container-fluid container-fixed-lg footer">
           <div class="copyright sm-text-center">
             <p class="small no-margin sm-pull-reset">
@@ -91,10 +76,8 @@
                 rights
                 reserved.</span>
             </p>
-
           </div>
         </div>
-        <!-- END COPYRIGHT -->
       </ng-template>
     </div>
   </page-container>

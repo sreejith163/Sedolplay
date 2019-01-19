@@ -5,7 +5,7 @@ import { ProgressModule } from '../progress/progress.module';
 @NgModule({
   declarations: [pgCard],
   exports     : [pgCard],
-  imports     : [ CommonModule,ProgressModule ]
+  imports     : [CommonModule, ProgressModule]
 })
 
 export class pgCardModule {

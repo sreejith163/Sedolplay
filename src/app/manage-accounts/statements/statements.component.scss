@@ -1,0 +1,9 @@
+.table tbody tr.selected td {
+    background: #e7eaf5;
+    border-bottom: 1px solid #e7eaf5;
+    border-top: 1px solid transparent;
+}
+
+.table.table-hover tbody tr.selected:hover td {
+    background: none !important;
+}
