@@ -210,7 +210,7 @@ export class MyProfileComponent implements OnInit {
       timezone: ['', Validators.required],
       mobile: ['', Validators.required],
       telephone: [''],
-      dob: [new Date(), Validators.required],
+      dob: ['', Validators.required],
       email: ['', Validators.compose([Validators.email, Validators.required])],
     });
   }

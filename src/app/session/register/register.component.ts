@@ -154,7 +154,7 @@ export class RegisterPageComponent implements OnInit {
       timezone: ['', Validators.required],
       mobile: ['', Validators.required],
       telephone: [''],
-      dob: [undefined, Validators.required],
+      dob: ['', Validators.required],
       email: ['', Validators.compose([Validators.email, Validators.required])],
       pass: ['', Validators.required],
       passConfirm: ['', Validators.compose([Validators.required, matchOtherValidator('pass')])],
