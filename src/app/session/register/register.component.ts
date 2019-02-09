@@ -198,8 +198,7 @@ export class RegisterPageComponent implements OnInit {
     emailRequest.template_params.subject = 'SedolPay Account Activation';
     emailRequest.template_params.content = this.getEmailContent(userName);
     emailRequest.template_params.heading = 'Dear ' + this.validationForm.controls['firstName'].value;
-    // emailRequest.template_params.reply_email = this.validationForm.controls['regEmail'].value;
-    emailRequest.template_params.reply_email = 'sreejith.jith09@gmail.com';
+    emailRequest.template_params.reply_email = this.validationForm.controls['regEmail'].value;
     return emailRequest;
   }
 
