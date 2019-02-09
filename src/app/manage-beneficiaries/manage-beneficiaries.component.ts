@@ -60,9 +60,13 @@ export class ManageBeneficiariesComponent implements OnInit {
     this.loadBeneficiaryDetails();
   }
 
-  open(deleteBenef, benefId: string) {
+  openModal(deleteBenef, benefId: string) {
     this.benefId = benefId;
     this.modalService.open(deleteBenef);
+  }
+
+  dismissModal(option) {
+    this.modalService.dismissAll(option);
   }
 
   onAddSelect() {
@@ -88,7 +92,7 @@ export class ManageBeneficiariesComponent implements OnInit {
     this.isLoading = true;
     const immRequest = this.getImsRequestFormat('BENEF', 'UPDATE');
     this.beneficiaryService.addBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'SUCCESS') {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.availableBeneficiaries.push(this.benef);
         this.resetValidationForm();
         this.isHidden = !this.isHidden;
@@ -109,7 +113,7 @@ export class ManageBeneficiariesComponent implements OnInit {
     this.isLoading = true;
     const immRequest = this.getImsRequestFormat('BENEF', 'UPDATE');
     this.beneficiaryService.updateBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'SUCCESS') {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.isHidden = !this.isHidden;
         const index = this.availableBeneficiaries.findIndex(x => x.benefId === this.benefId);
         if (index !== -1) {
@@ -131,16 +135,16 @@ export class ManageBeneficiariesComponent implements OnInit {
     this.isLoading = true;
     const immRequest = this.getImsRequestFormat('BENEF', 'DELETE', this.benefId);
     this.beneficiaryService.deleteBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'Successfully Deleted') {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'Successfully Deleted') {
         const index = this.availableBeneficiaries.findIndex(x => x.benefId === this.benefId);
         if (index !== -1) {
           this.availableBeneficiaries.splice(index, 1);
         }
         this.benefId = '';
-        this.modalService.dismissAll();
         this.toastr.successToastr('Beneficiary was successfully deleted', 'Beneficiary delete success');
       }
     }, () => { }, () => this.isLoading = false);
+    this.modalService.dismissAll();
   }
 
   filter() {

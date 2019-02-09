@@ -55,7 +55,7 @@ export class MyProfileComponent implements OnInit {
     this.loading = true;
     const request = this.getImsRequestFormatForProfile('PROFILE', 'UPDATE');
     this.profileService.updateProfileDetails(request).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'SUCCESS') {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.toastr.successToastr('Your profile was successfully updated.', 'Profile updation success!');
       } else {
         this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Profile updation failed!');
@@ -69,7 +69,7 @@ export class MyProfileComponent implements OnInit {
     this.loading = true;
     const request = this.getImsRequestFormatForPasswordUpdate();
     this.profileService.updatePassword(request).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'SUCCESS') {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.toastr.successToastr('Your profile was successfully updated.', 'Profile updation success!');
         this.passwordValidationForm.reset();
       } else {
@@ -154,8 +154,8 @@ export class MyProfileComponent implements OnInit {
     this.validationForm.controls['mobile'].updateValueAndValidity();
     this.validationForm.controls['telephone'].setValue(profile.telephone);
     this.validationForm.controls['telephone'].updateValueAndValidity();
-    this.validationForm.controls['dob'].setValue(profile.dob);
-    this.validationForm.controls['dob'].updateValueAndValidity();
+    // this.validationForm.controls['dob'].setValue(profile.dob);
+    // this.validationForm.controls['dob'].updateValueAndValidity();
     this.validationForm.controls['timezone'].setValue(response.header.usertimezone);
     this.validationForm.controls['timezone'].updateValueAndValidity();
     this.validationForm.controls['email'].setValue(profile.email);

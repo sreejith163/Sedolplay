@@ -68,10 +68,12 @@ export class AccountPortfolioComponent implements OnInit {
     imsRequest.ims = request;
 
     this.accountService.getAccountPortfolio(imsRequest).subscribe((data: Ims) => {
-      this.viewcurrency = data.ims.content.data.viewCur;
-      this.selectedViewcurrency = this.viewcurrency[0];
-      this.accounts = data.ims.content.data.accounts;
-      this.allAccounts = Object.assign(this.allAccounts, this.accounts);
+      if (data.ims !== undefined) {
+        this.viewcurrency = data.ims.content.data.viewCur;
+        this.selectedViewcurrency = this.viewcurrency[0];
+        this.accounts = data.ims.content.data.accounts;
+        this.allAccounts = Object.assign(this.allAccounts, this.accounts);
+      }
     });
   }
 }

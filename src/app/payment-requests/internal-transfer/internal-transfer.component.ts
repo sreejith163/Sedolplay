@@ -109,7 +109,7 @@ export class InternalTransferComponent implements OnInit {
     this.imsRequest.ims.content.data.transfer.push(transfer);
 
     this.paymentRequestService.transferPayment(this.imsRequest).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'IN QUEUE. Reference: ' + transfer.transRef) {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'IN QUEUE. Reference: ' + transfer.transRef) {
         this.transRef = transfer.transRef;
        this.toastr.successToastr('Your payment request is posted and the last known status is IN QUEUE. Reference: ' + transfer.transRef,
                                   'Payemnet Transfer Success.', { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
@@ -179,8 +179,10 @@ export class InternalTransferComponent implements OnInit {
   private loadDetails() {
     this.imsRequest = this.getImsRequestFormat();
     this.paymentRequestService.getPaymentViews(this.imsRequest).subscribe((data: Ims) => {
-      this.accounts = data.ims.content.data.accounts;
-      this.benefAccounts = data.ims.content.data.benef;
+      if (data.ims !== undefined) {
+        this.accounts = data.ims.content.data.accounts;
+        this.benefAccounts = data.ims.content.data.benef;
+      }
     });
   }
 

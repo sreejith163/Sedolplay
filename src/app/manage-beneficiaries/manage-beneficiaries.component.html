@@ -187,7 +187,7 @@
               <td class="v-align-middle">
                 <button type="button" style="background: none; border: none;" [disabled]="true">
                   <span>
-                    <i class="fa fa-trash  mr-2" (click)="open(deleteBenef, benef.benefId)"></i>
+                    <i class="fa fa-trash  mr-2" (click)="openModal(deleteBenef, benef.benefId)"></i>
                   </span>
                   <span>
                     <i class="fa fa-edit" (click)="onUpdateSelect(benef)"></i>
@@ -206,7 +206,7 @@
 <ng-template #deleteBenef let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">Beneficiary deletion</h4>
-    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="d('Cross click')">
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="dismissModal('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -216,7 +216,7 @@
         beneficiary list. This action can not be undone.</strong></p>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="d('Cancel click')">Cancel</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="dismissModal('Cancel click')">Cancel</button>
     <button type="button" ngbAutofocus class="btn btn-danger" (click)="deleteBeneficiary()">Ok</button>
   </div>
 </ng-template>

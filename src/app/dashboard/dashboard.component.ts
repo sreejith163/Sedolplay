@@ -51,7 +51,9 @@ export class CorporateDashboardComponent implements OnInit {
     imsRequest.ims = request;
 
     this.accountService.getAccountPortfolio(imsRequest).subscribe((data: Ims) => {
-      this.accounts = data.ims.content.data.accounts;
+      if (data.ims !== undefined) {
+        this.accounts = data.ims.content.data.accounts;
+      }
     });
   }
 }

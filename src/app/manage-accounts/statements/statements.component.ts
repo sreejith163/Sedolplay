@@ -121,7 +121,9 @@ export class StatementsComponent implements OnInit {
     this.imsRequest.ims.content.dataheader.fromDate = fromDate !== null ? fromDate : '';
     this.imsRequest.ims.content.dataheader.toDate = toDate !== null ? toDate : '';
     this.accountService.getStatements(this.imsRequest).subscribe((data: Ims) => {
-      this.accounts = data.ims.content.data.accounts;
+      if (data.ims !== undefined) {
+        this.accounts = data.ims.content.data.accounts;
+      }
     });
   }
 

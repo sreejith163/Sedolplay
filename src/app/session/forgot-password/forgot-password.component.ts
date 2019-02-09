@@ -64,7 +64,7 @@ export class ForgotPasswordComponent implements OnInit {
   validateUser() {
     const request = this.getImsRequestFormatForEmailValidation();
     this.userService.validateEmail(request).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'VALID') {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'VALID') {
         this.custId = data.ims.content.dataheader.custId;
         this.sendResetPasswordMail();
       } else {
@@ -77,7 +77,7 @@ export class ForgotPasswordComponent implements OnInit {
     const request = this.getImsRequestFormatForPasswordReset();
     this.userService.resetPassword(request).subscribe((data: Ims) => {
       if (data !== undefined) {
-        if (data.ims.content.dataheader.status === 'SUCCESS') {
+        if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
           this.toastr.successToastr('Password has been updated', 'Password update success!');
         } else {
           this.toastr.errorToastr('Something went wrong while updating the password', 'Password update failed!');

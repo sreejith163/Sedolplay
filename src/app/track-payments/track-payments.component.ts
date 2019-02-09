@@ -134,19 +134,23 @@ export class TrackPaymentsComponent implements OnInit {
     this.imsRequest.ims.content.dataheader.fromDate = fromDate !== null ? fromDate : '';
     this.imsRequest.ims.content.dataheader.toDate = toDate !== null ? toDate : '';
     this.trackPaymentService.getPaymentTracks(this.imsRequest).subscribe((data: Ims) => {
-      this.transfers = data.ims.content.data.transfer;
-      this.allTransfers = Object.assign(this.allTransfers, this.transfers);
-      this.setAccountsAndBeneficiary(this.transfers);
-      this.resetSelectedValues();
+      if (data.ims !== undefined) {
+        this.transfers = data.ims.content.data.transfer;
+        this.allTransfers = Object.assign(this.allTransfers, this.transfers);
+        this.setAccountsAndBeneficiary(this.transfers);
+        this.resetSelectedValues();
+      }
     });
   }
 
   private loadPayments() {
     this.imsRequest = this.getImsRequestFormat();
     this.trackPaymentService.getPaymentTracks(this.imsRequest).subscribe((data: Ims) => {
-      this.transfers = data.ims.content.data.transfer;
-      this.allTransfers = Object.assign(this.allTransfers, this.transfers);
-      this.setAccountsAndBeneficiary(this.transfers);
+      if (data.ims !== undefined) {
+        this.transfers = data.ims.content.data.transfer;
+        this.allTransfers = Object.assign(this.allTransfers, this.transfers);
+        this.setAccountsAndBeneficiary(this.transfers);
+      }
     });
   }
 

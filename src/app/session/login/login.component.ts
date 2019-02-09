@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
   login() {
     const request = this.getImsRequestFormat();
     this.userService.login(request).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'SUCCESS') {
+      if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.authService.setloginCookies(data.ims.header.token.toString(), data.ims.header.userId.toString(),
                                          data.ims.content.dataheader.custId);
         this.toastr.successToastr('Login Successfull');

@@ -150,10 +150,12 @@ export class TransactionHistoryComponent implements OnInit {
     this.imsRequest.ims.content.dataheader.fromDate = fromDate !== null ? fromDate : '';
     this.imsRequest.ims.content.dataheader.toDate = toDate !== null ? toDate : '';
     this.reportService.getPaymentTransactionReport(this.imsRequest).subscribe((data: Ims) => {
-      this.transfers = data.ims.content.data.transfer;
-      this.allTransfers = Object.assign(this.allTransfers, this.transfers);
-      this.setAccountsAndBeneficiaryAndStatus(this.transfers);
-      this.resetSelectedValues();
+      if (data.ims !== undefined) {
+        this.transfers = data.ims.content.data.transfer;
+        this.allTransfers = Object.assign(this.allTransfers, this.transfers);
+        this.setAccountsAndBeneficiaryAndStatus(this.transfers);
+        this.resetSelectedValues();
+      }
     });
   }
 
@@ -207,10 +209,12 @@ export class TransactionHistoryComponent implements OnInit {
   private loadPayments() {
     this.imsRequest = this.getImsRequestFormat();
     this.reportService.getPaymentTransactionReport(this.imsRequest).subscribe((data: Ims) => {
-      this.transfers = data.ims.content.data.transfer;
-      this.allTransfers = Object.assign(this.allTransfers, this.transfers);
-      this.setAccountsAndBeneficiaryAndStatus(this.transfers);
-      this.loadImageDetails();
+      if (data.ims !== undefined) {
+        this.transfers = data.ims.content.data.transfer;
+        this.allTransfers = Object.assign(this.allTransfers, this.transfers);
+        this.setAccountsAndBeneficiaryAndStatus(this.transfers);
+        this.loadImageDetails();
+      }
     });
   }
 
