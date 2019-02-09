@@ -24,7 +24,8 @@ export class AccountPortfolioComponent implements OnInit {
   selectedType: any;
   selectedViewcurrency: any;
 
-  constructor(private accountService: AccountService) { }
+  constructor(
+    private accountService: AccountService) { }
 
   ngOnInit() {
     this.loadCustomerAccounts();

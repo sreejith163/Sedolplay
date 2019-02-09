@@ -1,8 +1,8 @@
 <div class="jumbotron">
-  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+  <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a>Sedolpay</a></li>
+        <li class="breadcrumb-item"><a routerLink="/corporate/dashboard">Sedolpay</a></li>
         <li class="breadcrumb-item active">Own Account Transfer</li>
       </ol>
     </div>
@@ -86,7 +86,8 @@
         </div>
         <div class="row">
           <div class="col-md-3 col-sm-4">
-            <button class="btn btn-primary btn-lg short btn-block" [disabled]="validationForm.invalid || loading" (click)="transferPayment()">SEND
+            <button class="btn btn-primary btn-lg short btn-block" [disabled]="validationForm.invalid || loading"
+              (click)="transferPayment()">SEND
               PAYMENT REQUEST</button>
           </div>
         </div>

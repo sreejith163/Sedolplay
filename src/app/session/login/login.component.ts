@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../shared/services/authentication.serv
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { ProfileInfo } from '../../models/profile/profile-info.model';
+import { EncrDecrService } from '../../shared/services/encr-decr.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,6 @@ import { ProfileInfo } from '../../models/profile/profile-info.model';
 export class LoginComponent implements OnInit {
 
   validationForm: FormGroup;
-  isFailed: boolean;
 
   requiredBorder = {
     'border-color': 'red',
@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private authService: AuthenticationService,
+    private encrDecrService: EncrDecrService,
     private toastr: ToastrManager,
     private route: ActivatedRoute,
     private router: Router) { }
@@ -44,12 +45,10 @@ export class LoginComponent implements OnInit {
     this.createValidationForm();
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['key'] !== undefined) {
-        const key = data['key'];
-
-        const req = this.getImsRequestFormatForActivation();
-        this.userService.register(req).subscribe((data1: Ims) => {
-          console.log(data1);
-          this.toastr.successToastr('Email verification has been completed. You can login.', 'Email  verification completed');
+        const userName = this.encrDecrService.decrypt( data['key']);
+        const request = this.getImsRequestFormatForActivation(userName);
+        this.userService.register(request).subscribe((data1: Ims) => {
+          this.toastr.successToastr('Email verification has been completed. You can login.', 'Email verification completed');
         });
       }
     });
@@ -61,11 +60,12 @@ export class LoginComponent implements OnInit {
       if (data.ims.content.dataheader.status === 'SUCCESS') {
         this.authService.setloginCookies(data.ims.header.token.toString(), data.ims.header.userId.toString(),
                                          data.ims.content.dataheader.custId);
+        this.toastr.successToastr('Login Successfull');
         this.router.navigate(['corporate/dashboard']);
       } else {
-        this.isFailed = true;
+        this.toastr.errorToastr('Login Failed!');
       }}, error => {
-        this.isFailed = true;
+        this.toastr.errorToastr('Login Failed!');
       });
   }
 
@@ -87,9 +87,7 @@ export class LoginComponent implements OnInit {
     const header = new Header('2', 'USER', 'AUTH', '');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
-    dataContent.acc = new ProfileCurr('USD');
-    dataContent.credential = this.getCredential();
-    dataContent.docs = [];
+    dataContent.credential = this.getCredentialForLogin();
 
     const content = new Content(dataHeader, dataContent);
     const request = new RequestResponse(header, content);
@@ -98,14 +96,12 @@ export class LoginComponent implements OnInit {
     return imsRequest;
   }
 
-  private getImsRequestFormatForActivation() {
+  private getImsRequestFormatForActivation(userName: string) {
     const imsRequest = new Ims();
     const header = new Header('2', 'USER', 'SIGNUP', '');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
-    dataContent.acc = new ProfileCurr('USD');
-    dataContent.credential = this.getCredential();
-    dataContent.docs = [];
+    dataContent.credential = this.getCredentialForActivation(userName);
     dataContent.info = this.getProfileInfo();
 
     const content = new Content(dataHeader, dataContent);
@@ -122,10 +118,17 @@ export class LoginComponent implements OnInit {
     return profile;
   }
 
-  private getCredential(): ProfileCredential {
+  private getCredentialForLogin(): ProfileCredential {
     const credential = new ProfileCredential();
     credential.userName = this.validationForm.controls['userName'].value;
-    credential.password = this.validationForm.controls['password'].value;
+    credential.password = this.encrDecrService.encrypt(this.validationForm.controls['password'].value);
+
+    return credential;
+  }
+
+  private getCredentialForActivation(userName: string): ProfileCredential {
+    const credential = new ProfileCredential();
+    credential.userName = userName;
 
     return credential;
   }

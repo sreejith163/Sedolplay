@@ -19,6 +19,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { EmailRequest } from '../../shared/models/email-request.model';
 import { EmailTemplateParams } from '../../shared/models/email-template-params.model';
 import { EmailService } from '../../shared/services/email.service';
+import { EncrDecrService } from '../../shared/services/encr-decr.service';
 
 @Component({
   selector: 'app-register-page',
@@ -45,6 +46,7 @@ export class RegisterPageComponent implements OnInit {
     private genericService: GenericService,
     private userService: UserService,
     private emailService: EmailService,
+    private encrDecrService: EncrDecrService,
     private toastr: ToastrManager,
     private router: Router) { }
 
@@ -60,7 +62,7 @@ export class RegisterPageComponent implements OnInit {
     const request = this.getImsRequestFormat();
     this.userService.register(request).subscribe((data: Ims) => {
       if (data !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
-        this.sentRegMail();
+        this.sentRegMail(data.ims.content.data.credential.userName);
       } else {
         this.toastr.errorToastr('Failed to create new account', 'Registration failed!');
       }
@@ -91,14 +93,14 @@ export class RegisterPageComponent implements OnInit {
     return offset + id;
   }
 
-  private sentRegMail() {
-    const request = this.getEmailRequestForRegistration();
-    this.emailService.sendMail(request).subscribe(data => {
+  private sentRegMail(userName: string) {
+    const request = this.getEmailRequestForRegistration(userName);
+    this.emailService.sendMail(request).subscribe(() => {
       this.toastr.successToastr('An email has been sent to ' + this.getRegisteredEmail() + ', please click the link ' +
                                   'in the email to activate your account. You can login after you have activated your account.',
                                   'Registration Success!');
       this.validationForm.reset();
-    }, error => this.toastr.errorToastr('Sending email to registered mail has been failed.', 'Email sent failed!'));
+    }, () => this.toastr.errorToastr('Sending email to registered mail has been failed.', 'Email sent failed!'));
   }
 
   private loadCountries() {
@@ -141,7 +143,7 @@ export class RegisterPageComponent implements OnInit {
     const header = new Header('2', 'USER', 'SIGNUP', '');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
-    dataContent.acc = new ProfileCurr('USD');
+    dataContent.acc = new ProfileCurr(this.validationForm.controls['curr'].value);
     dataContent.credential = this.getCredential();
     dataContent.docs = [];
     dataContent.info = this.getProfileInfo();
@@ -174,7 +176,7 @@ export class RegisterPageComponent implements OnInit {
   private getCredential(): ProfileCredential {
     const credential = new ProfileCredential();
     credential.userName = '';
-    credential.password = this.validationForm.controls['pass'].value;
+    credential.password = this.encrDecrService.encrypt(this.validationForm.controls['pass'].value);
 
     return credential;
   }
@@ -187,24 +189,26 @@ export class RegisterPageComponent implements OnInit {
     return startMonth.toString() + startDay.toString() + startYear.toString();
   }
 
-  private getEmailRequestForRegistration(): EmailRequest {
+  private getEmailRequestForRegistration(userName: string): EmailRequest {
     const emailRequest = new EmailRequest();
     emailRequest.service_id = 'sedolplay_mail';
     emailRequest.template_id = 'contact';
     emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'SedolPay Account Activation';
-    emailRequest.template_params.content = this.getEmailContent();
+    emailRequest.template_params.content = this.getEmailContent(userName);
     emailRequest.template_params.heading = 'Dear ' + this.validationForm.controls['firstName'].value;
     // emailRequest.template_params.reply_email = this.validationForm.controls['regEmail'].value;
     emailRequest.template_params.reply_email = 'sreejith.jith09@gmail.com';
     return emailRequest;
   }
 
-  private getEmailContent(): string {
+  private getEmailContent(userName: string): string {
     let message = '';
-    message += 'Please click this <a href=="">link</a> to activate your SedolPay account.';
-    message += 'Once your account is activated, please login using the Customer ID <b>SRE00019</b>';
+    const regKey = this.encrDecrService.encrypt(userName);
+    message += 'Please click this <a href=="http://localhost:4200/login?key="' + regKey + '>link</a>' +
+                'to activate your SedolPay account.';
+    message += 'Once your account is activated, please login using the Customer ID <b>' + userName + '</b>';
 
     return message;
   }

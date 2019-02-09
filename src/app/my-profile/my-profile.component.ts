@@ -14,7 +14,7 @@ import { GenericService } from '../shared/services/generic.service';
 import { TimeZone } from '../models/timezone.model';
 import { matchOtherValidator } from '../session/shared/validators/match-other-validator';
 import { ToastrManager } from 'ng6-toastr-notifications';
-import * as CryptoJS from 'crypto-js';
+import { EncrDecrService } from '../shared/services/encr-decr.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -42,6 +42,7 @@ export class MyProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private profileService: ProfileService,
     private toastr: ToastrManager,
+    private encrDecrService: EncrDecrService,
     private genericService: GenericService) { }
 
   ngOnInit() {
@@ -214,7 +215,7 @@ export class MyProfileComponent implements OnInit {
     const credential = new ProfileCredential();
     credential.userName = '';
     credential.password = this.passwordValidationForm.controls['newPass'].value;
-    credential.password = CryptoJS.AES.encrypt('', credential.password);
+    credential.password = this.encrDecrService.encrypt(credential.password);
 
     return credential;
   }

@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of as observableOf, throwError as observableThrowError, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Email } from '../models/email.model';
 import { EmailRequest } from '../models/email-request.model';
-import { EmailTemplateParams } from '../models/email-template-params.model';
 
 @Injectable()
 export class EmailService {

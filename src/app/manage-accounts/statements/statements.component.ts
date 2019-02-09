@@ -22,7 +22,6 @@ export class StatementsComponent implements OnInit {
     { value: 'Transactions', label: 'Transactions' }
   ];
   countries: KeyValue[];
-
   accounts: Array<any> = [];
   allAccounts: Array<any> = [];
   imsRequest: Ims;
@@ -114,7 +113,7 @@ export class StatementsComponent implements OnInit {
     if (this._endDate !== null) {
       const endDate = new Date(this._endDate.toString());
       const endYear = endDate.getFullYear();
-      const endMonth = endDate.getMonth() + 1 < 10 ? '0' + (endDate.getMonth() + 1) : (endDate.getMonth() + 1) ;
+      const endMonth = endDate.getMonth() + 1 < 10 ? '0' + (endDate.getMonth() + 1) : (endDate.getMonth() + 1);
       const endDay = endDate.getDate() < 10 ? '0' + endDate.getDate() : endDate.getDate();
       toDate = endMonth.toString() + endDay.toString() + endYear.toString();
     }
@@ -159,14 +158,14 @@ export class StatementsComponent implements OnInit {
     this.imsRequest.ims = request;
 
     this.accountService.getStatements(this.imsRequest).subscribe((data: Ims) => {
-      this.accounts =  data.ims.content.data.accounts;
+      this.accounts = data.ims.content.data.accounts;
       this.allAccounts = Object.assign(this.allAccounts, this.accounts);
     });
     this.loadCountries();
   }
 
   private loadCountries() {
-    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
+    const immRequest = this.getImsRequestFormatForContries('COUNTRY');
     this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
       if (data !== undefined) {
         this.countries = data.ims.data.countries;
@@ -174,7 +173,7 @@ export class StatementsComponent implements OnInit {
     });
   }
 
-  private getGenericImsRequestFormat( mode: string) {
+  private getImsRequestFormatForContries(mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
     imsRequest.ims.header = new Header('2', 'USER', mode, '');

@@ -37,11 +37,6 @@
 				<button type="button" class="btn btn-primary btn-cons m-t-10" [disabled]="validationForm.invalid" (click)="login()">Sign
 					in
 				</button>
-				<div class="padding-top-10" *ngIf="isFailed">
-					<div class="alert custom-alert-danger">
-						<b>Incorrect username or password.</b>
-					</div>
-				</div>
 				<div class="text-center m-t-50">
 					<a (click)="register()" class="cursor-pointer margin-auto ">Don't have account? Sign Up.</a>
 				</div>

@@ -19,7 +19,6 @@ import { StatementsComponent } from './statements/statements.component';
 import { ApplyAdditionalAccountsComponent } from './apply-additional-accounts/apply-additional-accounts.component';
 
 import { ManageAccountsRoutes } from './manage-accounts.routing';
-import { AccountService } from './shared/services/account.service';
 
 @NgModule({
   imports: [
@@ -34,6 +33,6 @@ import { AccountService } from './shared/services/account.service';
 
   ],
   declarations: [AccountPortfolioComponent, StatementsComponent, ApplyAdditionalAccountsComponent],
-  providers: [AccountService]
+  providers: []
 })
 export class ManageAccountsModule { }

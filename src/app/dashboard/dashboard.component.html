@@ -1,8 +1,8 @@
 <div class="jumbotron page-cover" data-pages="parallax">
-  <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
+  <div class=" container-fluid container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item"><a routerLink="/corporate/dashboard">Sedolpay</a></li>
         <li class="breadcrumb-item active">Dashboard</li>
       </ol>
     </div>
@@ -63,7 +63,7 @@
             <div class="form-group form-group-default form-group-default-select2 required">
               <label class="">Account Number</label>
               <pg-select style="width: 100%;" [Mode]="'multiple'" [PlaceHolder]="'Select Account'" [NotFoundContent]="'Not found'">
-                <pg-option *ngFor="let option of accountno" [Label]="option.label" [Value]="option.value">
+                <pg-option *ngFor="let option of accounts" [Label]="getAccountLabel(option)" [Value]="option.accNo">
                 </pg-option>
               </pg-select>
             </div>

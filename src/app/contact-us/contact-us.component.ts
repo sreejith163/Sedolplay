@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Email } from '../shared/models/email.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { of as observableOf } from 'rxjs';
 import { EmailService } from '../shared/services/email.service';
 import { EmailRequest } from '../shared/models/email-request.model';
 import { EmailTemplateParams } from '../shared/models/email-template-params.model';
@@ -39,10 +37,10 @@ export class ContactUsComponent implements OnInit {
     const request = this.getEmailRequest();
     this.emailService.sendMail(request).subscribe(data => {
       this.toastr.successToastr('An email has been sent to the administrator, someone will get in touch with you shortly.',
-                                'Email Sent Successfully!');
+        'Email Sent Successfully!');
       this.validationForm.reset();
     }, error => {
-      this.toastr.errorToastr('Somethimg went wrong while sending mail.', 'Email Sent Failed!');
+      this.toastr.errorToastr('Something went wrong while sending mail.', 'Email Sent Failed!');
     }, () => {
       this.isloading = false;
     });
@@ -50,7 +48,7 @@ export class ContactUsComponent implements OnInit {
 
   getControlBorderColour(control: string): any {
     return this.validationForm.controls[control].touched &&
-           this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
+      this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
   }
 
   private getEmailRequest(): EmailRequest {
