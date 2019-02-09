@@ -48,12 +48,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.createValidationForm();
-    this.route.queryParams.subscribe(data => {
-      if (data !== undefined) {
-        this.isPasswordChangePage = data['showView'] !== undefined && data['showView'] !== null ? true : false;
-        this.custId = data['changeKey'];
-      }
-    });
+    this.processResetPassword();
   }
 
   getControlBorderColour(control: string): any {
@@ -68,7 +63,7 @@ export class ForgotPasswordComponent implements OnInit {
         this.custId = data.ims.content.dataheader.custId;
         this.sendResetPasswordMail();
       } else {
-        this.toastr.errorToastr('There is no such email address', 'Validate User failed!');
+        this.toastr.errorToastr('There is no such email address');
       }
     }, error => this.toastr.errorToastr('There is no such email address', 'Validate User failed!'));
   }
@@ -96,8 +91,28 @@ export class ForgotPasswordComponent implements OnInit {
     return this.emailForm.controls['email'].value;
   }
 
+  private processResetPassword() {
+    this.route.queryParams.subscribe(data => {
+      if (data !== undefined && data['showView'] !== undefined && data['changeKey'] !== undefined) {
+        this.custId = this.encrDecrService.decryptMailContent(data['changeKey']).toString();
+        if (this.custId !== undefined && this.custId.length) {
+          const custReq = this.getImsRequestFormatForCustomerIdValidation(this.custId);
+          this.userService.validateCustomerId(custReq).subscribe((req: Ims) => {
+            if (req.ims !== undefined && req.ims.content.dataheader.status === 'VALID') {
+              this.isPasswordChangePage = true;
+            } else {
+              this.toastr.errorToastr('The requested url request is not valid');
+            }
+          });
+        } else {
+          this.toastr.errorToastr('The requested url request is not valid');
+        }
+      }
+    });
+  }
+
   private sendResetPasswordMail() {
-    const forgotPassKey = this.encrDecrService.encrypt(this.custId);
+    const forgotPassKey = this.encrDecrService.encryptMailContent(this.custId);
     const request = this.getEmailRequestForResetPassword(forgotPassKey);
     this.emailService.sendMail(request).subscribe(data => {
       this.toastr.successToastr('An email has been sent to ' + this.getEmailId() + ', please click the link in the email to ' +
@@ -108,19 +123,21 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getCredential() {
     const credential = new ProfileCredential();
-    credential.password = this.encrDecrService.encrypt(this.validationForm.controls['pass'].value);
+    credential.password = this.encrDecrService.encryptPassword(this.validationForm.controls['pass'].value);
 
     return credential;
   }
 
-  private createValidationForm() {
-    this.validationForm = this.formBuilder.group({
-      pass: ['', Validators.required],
-      passConfirm: ['', Validators.compose([Validators.required, matchOtherValidator('pass')])],
-    });
-    this.emailForm = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.email, Validators.required])],
-    });
+  private getImsRequestFormatForCustomerIdValidation(custId: string) {
+    const imsRequest = new Ims();
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
+    const dataHeader = new DataHeader(custId);
+
+    const content = new Content(dataHeader);
+    const request = new RequestResponse(header, content);
+    imsRequest.ims = request;
+
+    return imsRequest;
   }
 
   private getImsRequestFormatForPasswordReset() {
@@ -151,13 +168,6 @@ export class ForgotPasswordComponent implements OnInit {
     return imsRequest;
   }
 
-  private getProfileInfo(): ProfileInfo {
-    const profile = new ProfileInfo();
-    profile.email = this.emailForm.controls['email'].value;
-
-    return profile;
-  }
-
   private getEmailRequestForResetPassword(key: string): EmailRequest {
     const emailRequest = new EmailRequest();
     emailRequest.service_id = 'sedolplay_mail';
@@ -167,6 +177,24 @@ export class ForgotPasswordComponent implements OnInit {
     emailRequest.template_params.subject = 'Forgot your password?';
     emailRequest.template_params.content = 'http://localhost:4200/forgotpass?showView=changePassword&changeKey=' + key;
     emailRequest.template_params.reply_email = this.emailForm.controls['email'].value;
+
     return emailRequest;
+  }
+
+  private getProfileInfo(): ProfileInfo {
+    const profile = new ProfileInfo();
+    profile.email = this.emailForm.controls['email'].value;
+
+    return profile;
+  }
+
+  private createValidationForm() {
+    this.validationForm = this.formBuilder.group({
+      pass: ['', Validators.required],
+      passConfirm: ['', Validators.compose([Validators.required, matchOtherValidator('pass')])],
+    });
+    this.emailForm = this.formBuilder.group({
+      email: ['', Validators.compose([Validators.email, Validators.required])],
+    });
   }
 }

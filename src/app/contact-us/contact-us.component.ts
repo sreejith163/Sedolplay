@@ -59,7 +59,7 @@ export class ContactUsComponent implements OnInit {
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'New support received';
     emailRequest.template_params.content = 'You have a new message from ' + this.validationForm.controls['message'].value;
-    emailRequest.template_params.reply_email = 'sreejith.jith09@gmail.com';
+    emailRequest.template_params.reply_email = this.validationForm.controls['email'].value;
     return emailRequest;
   }
 

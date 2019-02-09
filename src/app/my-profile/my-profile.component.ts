@@ -215,7 +215,7 @@ export class MyProfileComponent implements OnInit {
     const credential = new ProfileCredential();
     credential.userName = '';
     credential.password = this.passwordValidationForm.controls['newPass'].value;
-    credential.password = this.encrDecrService.encrypt(credential.password);
+    credential.password = this.encrDecrService.encryptPassword(credential.password);
 
     return credential;
   }

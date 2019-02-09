@@ -42,19 +42,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.createValidationForm();
-    this.route.queryParams.subscribe(data => {
-      if (data !== undefined && data['key'] !== undefined) {
-        const userName = this.encrDecrService.decrypt( data['key']);
-        const request = this.getImsRequestFormatForActivation(userName);
-        this.userService.register(request).subscribe((data1: Ims) => {
-          this.toastr.successToastr('Email verification has been completed. You can login.', 'Email verification completed');
-        });
-      }
-    });
+    this.processActivation();
   }
 
   login() {
-    const request = this.getImsRequestFormat();
+    const request = this.getImsRequestFormatForAuthentication();
     this.userService.login(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.authService.setloginCookies(data.ims.header.token.toString(), data.ims.header.userId.toString(),
@@ -81,7 +73,34 @@ export class LoginComponent implements OnInit {
            this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
   }
 
-  private getImsRequestFormat() {
+  private processActivation() {
+    this.route.queryParams.subscribe(data => {
+      if (data !== undefined && data['key'] !== undefined) {
+        const userName = this.encrDecrService.decryptMailContent(data['key']).toString();
+        if (userName !== undefined && userName.length) {
+          const userRequest = this.getImsRequestFormatForUserIdValidation(userName);
+          this.userService.validateUser(userRequest).subscribe((req: Ims) => {
+            if (req.ims !== undefined && req.ims.content.dataheader.status === 'VALID') {
+              const request = this.getImsRequestFormatForUserActivation(userName);
+              this.userService.activate(request).subscribe((resp: Ims) => {
+                if (resp !== undefined && resp.ims.content.dataheader.status === 'SUCCESS') {
+                  this.toastr.successToastr('Email verification has been completed. You can login.', 'Email verification completed');
+                } else {
+                  this.toastr.errorToastr('Email verification failed.');
+                }
+              });
+            } else {
+              this.toastr.errorToastr('Email verification failed.');
+            }
+          });
+        } else {
+          this.toastr.errorToastr('Email verification failed.');
+        }
+      }
+    });
+  }
+
+  private getImsRequestFormatForAuthentication() {
     const imsRequest = new Ims();
     const header = new Header('2', 'USER', 'AUTH', '');
     const dataHeader = new DataHeader('');
@@ -95,7 +114,22 @@ export class LoginComponent implements OnInit {
     return imsRequest;
   }
 
-  private getImsRequestFormatForActivation(userName: string) {
+  private getImsRequestFormatForUserIdValidation(userName: string) {
+    const imsRequest = new Ims();
+    const header = new Header('2', 'USER', 'SIGNUP', '');
+    const dataContent = new DataContent();
+    dataContent.credential = new ProfileCredential();
+    dataContent.credential.userName = userName;
+
+    const content = new Content();
+    content.data = dataContent;
+    const request = new RequestResponse(header, content);
+    imsRequest.ims = request;
+
+    return imsRequest;
+  }
+
+  private getImsRequestFormatForUserActivation(userName: string) {
     const imsRequest = new Ims();
     const header = new Header('2', 'USER', 'SIGNUP', '');
     const dataHeader = new DataHeader('');
@@ -120,7 +154,7 @@ export class LoginComponent implements OnInit {
   private getCredentialForLogin(): ProfileCredential {
     const credential = new ProfileCredential();
     credential.userName = this.validationForm.controls['userName'].value;
-    credential.password = this.encrDecrService.encrypt(this.validationForm.controls['password'].value);
+    credential.password = this.encrDecrService.encryptPassword(this.validationForm.controls['password'].value);
 
     return credential;
   }

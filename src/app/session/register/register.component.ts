@@ -176,7 +176,7 @@ export class RegisterPageComponent implements OnInit {
   private getCredential(): ProfileCredential {
     const credential = new ProfileCredential();
     credential.userName = '';
-    credential.password = this.encrDecrService.encrypt(this.validationForm.controls['pass'].value);
+    credential.password = this.encrDecrService.encryptPassword(this.validationForm.controls['pass'].value);
 
     return credential;
   }
@@ -205,7 +205,7 @@ export class RegisterPageComponent implements OnInit {
 
   private getEmailContent(userName: string): string {
     let message = '';
-    const regKey = this.encrDecrService.encrypt(userName);
+    const regKey = this.encrDecrService.encryptMailContent(userName);
     message += 'Please click this <a href=="http://localhost:4200/login?key="' + regKey + '>link</a>' +
                 'to activate your SedolPay account.';
     message += 'Once your account is activated, please login using the Customer ID <b>' + userName + '</b>';

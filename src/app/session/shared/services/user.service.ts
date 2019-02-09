@@ -27,7 +27,31 @@ export class UserService {
       catchError(this.handleError));
   }
 
+  activate(request: Ims): Observable<Ims> {
+    const url = `${this.baseUrl}/createacc`;
+
+    return this.httpClient.post(url, JSON.stringify(request)).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
+  validateUser(request: Ims): Observable<Ims> {
+    const url = `${this.baseUrl}/validateuser`;
+
+    return this.httpClient.post(url, JSON.stringify(request)).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
   validateEmail(request: Ims): Observable<Ims> {
+    const url = `${this.baseUrl}/validateuser`;
+
+    return this.httpClient.post(url, JSON.stringify(request)).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
+  validateCustomerId(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/validateuser`;
 
     return this.httpClient.post(url, JSON.stringify(request)).pipe(
