@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { BeneficiaryService } from '../shared/services/beneficiary.service';
-import { Ims } from '../models/ims.model';
-import { Header } from '../models/header.model';
-import { DataHeader } from '../models/data-header.model';
-import { DataContent } from '../models/data-content.model';
-import { Content } from '../models/content.model';
-import { RequestResponse } from '../models/request-response.model';
-import { Beneficiary } from '../models/beneficiary/beneficiary.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { KeyValue } from '../models/key-value.model';
 import { GenericService } from '../shared/services/generic.service';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { KeyValue } from '../shared/models/key-value.model';
+import { Beneficiary } from '../shared/models/beneficiary.model';
+import { Ims } from '../shared/models/ims.model';
+import { Header } from '../shared/models/header.model';
+import { DataHeader } from '../shared/models/data-header.model';
+import { DataContent } from '../shared/models/data-content.model';
+import { Content } from '../shared/models/content.model';
+import { RequestResponse } from '../shared/models/request-response.model';
 
 @Component({
   selector: 'app-manage-beneficiaries',

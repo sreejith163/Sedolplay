@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { TrackPaymentService } from '../shared/services/track-payment.service';
-import { Ims } from '../models/ims.model';
-import { Header } from '../models/header.model';
-import { DataHeader } from '../models/data-header.model';
-import { DataContent } from '../models/data-content.model';
-import { Content } from '../models/content.model';
-import { RequestResponse } from '../models/request-response.model';
-import { Transfer } from '../models/transfer-track-payments/transfer.model';
+import { Transfer } from '../reports/shared/models/transfer.model';
+import { Ims } from '../shared/models/ims.model';
+import { Header } from '../shared/models/header.model';
+import { DataHeader } from '../shared/models/data-header.model';
+import { DataContent } from '../shared/models/data-content.model';
+import { Content } from '../shared/models/content.model';
+import { RequestResponse } from '../shared/models/request-response.model';
 
 
 @Component({

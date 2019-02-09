@@ -1,14 +1,14 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Header } from '../models/header.model';
-import { Ims } from '../models/ims.model';
-import { Content } from '../models/content.model';
-import { DataContent } from '../models/data-content.model';
-import { DataHeader } from '../models/data-header.model';
-import { RequestResponse } from '../models/request-response.model';
 import { AccountService } from '../manage-accounts/shared/services/account.service';
-import { Account } from '../models/account/account.model';
+import { Account } from '../manage-accounts/shared/models/account.model';
+import { DataHeader } from '../shared/models/data-header.model';
+import { Ims } from '../shared/models/ims.model';
+import { Header } from '../shared/models/header.model';
+import { DataContent } from '../shared/models/data-content.model';
+import { Content } from '../shared/models/content.model';
+import { RequestResponse } from '../shared/models/request-response.model';
 
 @Component({
   selector: 'app-dashboard',

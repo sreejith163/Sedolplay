@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { KeyValue } from '../../models/key-value.model';
-import { TimeZone } from '../../models/timezone.model';
+import { KeyValue } from '../models/key-value.model';
+import { TimeZone } from '../models/timezone.model';
 
 @Injectable()
 export class SedolpayStateManagerService {

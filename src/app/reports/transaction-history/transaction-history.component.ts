@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { Transfer } from '../../models/transfer-track-payments/transfer.model';
-import { Ims } from '../../models/ims.model';
-import { DataContent } from '../../models/data-content.model';
-import { DataHeader } from '../../models/data-header.model';
-import { Header } from '../../models/header.model';
-import { Content } from '../../models/content.model';
-import { RequestResponse } from '../../models/request-response.model';
 import { ReportService } from '../shared/services/report.service';
-import { TxnHistory } from '../../models/transaction-history/txn-history.model';
+import { Transfer } from '../shared/models/transfer.model';
+import { TxnHistory } from '../shared/models/txn-history.model';
+import { Ims } from '../../shared/models/ims.model';
+import { Header } from '../../shared/models/header.model';
+import { DataHeader } from '../../shared/models/data-header.model';
+import { DataContent } from '../../shared/models/data-content.model';
+import { Content } from '../../shared/models/content.model';
+import { RequestResponse } from '../../shared/models/request-response.model';
 declare var jsPDF: any;
 
 @Component({

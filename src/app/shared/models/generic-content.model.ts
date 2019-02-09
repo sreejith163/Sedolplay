@@ -1,5 +1,5 @@
-import { KeyValue } from '../../models/key-value.model';
-import { TimeZone } from '../../models/timezone.model';
+import { KeyValue } from './key-value.model';
+import { TimeZone } from './timezone.model';
 
 export class GenericContent {
     currencies: KeyValue[];

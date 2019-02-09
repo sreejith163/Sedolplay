@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProfileService } from '../shared/services/profile.service';
-import { ProfileInfo } from '../models/profile/profile-info.model';
-import { Ims } from '../models/ims.model';
-import { Header } from '../models/header.model';
-import { DataHeader } from '../models/data-header.model';
-import { DataContent } from '../models/data-content.model';
-import { Content } from '../models/content.model';
-import { RequestResponse } from '../models/request-response.model';
-import { ProfileCredential } from '../models/profile/profile-credential.model';
-import { KeyValue } from '../models/key-value.model';
 import { GenericService } from '../shared/services/generic.service';
-import { TimeZone } from '../models/timezone.model';
 import { matchOtherValidator } from '../session/shared/validators/match-other-validator';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { EncrDecrService } from '../shared/services/encr-decr.service';
+import { KeyValue } from '../shared/models/key-value.model';
+import { TimeZone } from '../shared/models/timezone.model';
+import { Ims } from '../shared/models/ims.model';
+import { RequestResponse } from '../shared/models/request-response.model';
+import { Header } from '../shared/models/header.model';
+import { DataHeader } from '../shared/models/data-header.model';
+import { DataContent } from '../shared/models/data-content.model';
+import { Content } from '../shared/models/content.model';
+import { ProfileInfo } from '../shared/models/profile-info.model';
+import { ProfileCredential } from '../shared/models/profile-credential.model';
 
 @Component({
   selector: 'app-my-profile',

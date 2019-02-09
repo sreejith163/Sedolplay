@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../shared/services/authentication.service';
 import { pagesToggleService } from '../../services/toggler.service';
 import { GenericService } from '../../../shared/services/generic.service';
-import { Ims } from '../../../models/ims.model';
-import { Header } from '../../../models/header.model';
 import { SedolpayStateManagerService } from '../../../shared/services/sedolpay-state-manager.service';
-import { RequestResponse } from '../../../models/request-response.model';
+import { Ims } from '../../../shared/models/ims.model';
+import { RequestResponse } from '../../../shared/models/request-response.model';
+import { Header } from '../../../shared/models/header.model';
 
 
 @Component({

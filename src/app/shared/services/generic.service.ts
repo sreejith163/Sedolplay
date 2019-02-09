@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { throwError as observableThrowError , Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Ims } from '../../models/ims.model';
-import { KeyValue } from '../../models/key-value.model';
+import { Ims } from '../models/ims.model';
 
 @Injectable()
 export class GenericService {

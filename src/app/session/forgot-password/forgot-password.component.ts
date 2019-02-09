@@ -4,18 +4,18 @@ import { UserService } from '../shared/services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { matchOtherValidator } from '../shared/validators/match-other-validator';
 import { EmailService } from '../../shared/services/email.service';
-import { Ims } from '../../models/ims.model';
-import { Header } from '../../models/header.model';
-import { DataContent } from '../../models/data-content.model';
-import { Content } from '../../models/content.model';
-import { RequestResponse } from '../../models/request-response.model';
-import { ProfileCredential } from '../../models/profile/profile-credential.model';
-import { ProfileInfo } from '../../models/profile/profile-info.model';
 import { EmailRequest } from '../../shared/models/email-request.model';
 import { EmailTemplateParams } from '../../shared/models/email-template-params.model';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { EncrDecrService } from '../../shared/services/encr-decr.service';
-import { DataHeader } from '../../models/data-header.model';
+import { Ims } from '../../shared/models/ims.model';
+import { ProfileCredential } from '../../shared/models/profile-credential.model';
+import { Header } from '../../shared/models/header.model';
+import { DataHeader } from '../../shared/models/data-header.model';
+import { DataContent } from '../../shared/models/data-content.model';
+import { Content } from '../../shared/models/content.model';
+import { RequestResponse } from '../../shared/models/request-response.model';
+import { ProfileInfo } from '../../shared/models/profile-info.model';
 
 @Component({
   selector: 'app-forgot-password',

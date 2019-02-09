@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { AccountService } from '../shared/services/account.service';
-import { Ims } from '../../models/ims.model';
-import { RequestResponse } from '../../models/request-response.model';
-import { Content } from '../../models/content.model';
-import { DataContent } from '../../models/data-content.model';
-import { DataHeader } from '../../models/data-header.model';
-import { Header } from '../../models/header.model';
-import { Statement } from '../../models/statement/statement.model';
-import { StatementAccount } from '../../models/statement/statement-account.model';
-import { KeyValue } from '../../models/key-value.model';
 import { GenericService } from '../../shared/services/generic.service';
+import { KeyValue } from '../../shared/models/key-value.model';
+import { Ims } from '../../shared/models/ims.model';
+import { Statement } from '../../manage-accounts/shared/models/statement.model';
+import { StatementAccount } from '../shared/models/statement-account.model';
+import { Header } from '../../shared/models/header.model';
+import { DataHeader } from '../../shared/models/data-header.model';
+import { DataContent } from '../../shared/models/data-content.model';
+import { Content } from '../../shared/models/content.model';
+import { RequestResponse } from '../../shared/models/request-response.model';
+
 @Component({
   selector: 'app-statements',
   templateUrl: './statements.component.html',
