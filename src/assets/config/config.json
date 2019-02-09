@@ -1,0 +1,12 @@
+{
+  "api": {
+    "sedolpay": "http://103.35.198.115:7019/ecsservice/service/customerportal",
+    "sedolpay_generic": "http://103.35.198.115:7019/ecsservice/service/generic"
+  },
+  "email": {
+    "emailapi": "https://api.emailjs.com/api/v1.0/email/send",
+    "service_id": "sedolplay_mail",
+    "template_id": "sedolpay_template",
+    "user_id": "user_r1g6gTm4EE5wXwXzxqtEn"
+  }
+}
