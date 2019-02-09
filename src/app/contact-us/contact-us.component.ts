@@ -4,6 +4,7 @@ import { EmailService } from '../shared/services/email.service';
 import { EmailRequest } from '../shared/models/email-request.model';
 import { EmailTemplateParams } from '../shared/models/email-template-params.model';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { AppConfigService } from '../shared/services/app-config.service';
 
 @Component({
   selector: 'app-contact-us',
@@ -26,6 +27,7 @@ export class ContactUsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private emailService: EmailService,
+    private environmentService: AppConfigService,
     private toastr: ToastrManager) { }
 
   ngOnInit() {
@@ -53,9 +55,9 @@ export class ContactUsComponent implements OnInit {
 
   private getEmailRequest(): EmailRequest {
     const emailRequest = new EmailRequest();
-    emailRequest.service_id = 'sedolplay_mail';
-    emailRequest.template_id = 'sedolpay_template';
-    emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
+    emailRequest.service_id = this.environmentService.environment['email'].service_id;
+    emailRequest.template_id = this.environmentService.environment['email'].template_id;
+    emailRequest.user_id = this.environmentService.environment['email'].user_id;
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'New support received';
     emailRequest.template_params.content = this.getMailContent();

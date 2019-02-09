@@ -16,6 +16,7 @@ import { DataContent } from '../../shared/models/data-content.model';
 import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
 import { ProfileInfo } from '../../shared/models/profile-info.model';
+import { AppConfigService } from '../../shared/services/app-config.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -43,6 +44,7 @@ export class ForgotPasswordComponent implements OnInit {
     private userService: UserService,
     private emailService: EmailService,
     private encrDecrService: EncrDecrService,
+    private environmentService: AppConfigService,
     private toastr: ToastrManager,
     private route: ActivatedRoute,
     private router: Router) { }
@@ -175,9 +177,9 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getEmailRequestForResetPassword(key: string): EmailRequest {
     const emailRequest = new EmailRequest();
-    emailRequest.service_id = 'sedolplay_mail';
-    emailRequest.template_id = 'sedolpay_template';
-    emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
+    emailRequest.service_id = this.environmentService.environment['email'].service_id;
+    emailRequest.template_id = this.environmentService.environment['email'].template_id;
+    emailRequest.user_id = this.environmentService.environment['email'].user_id;
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'Forgot your password?';
     emailRequest.template_params.content = this.getMailContent(key);

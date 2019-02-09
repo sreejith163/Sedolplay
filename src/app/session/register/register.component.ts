@@ -20,6 +20,7 @@ import { ProfileCurr } from '../../shared/models/profile-curr.model';
 import { Content } from '../../shared/models/content.model';
 import { ProfileInfo } from '../../shared/models/profile-info.model';
 import { ProfileCredential } from '../../shared/models/profile-credential.model';
+import { AppConfigService } from '../../shared/services/app-config.service';
 
 @Component({
   selector: 'app-register-page',
@@ -46,6 +47,7 @@ export class RegisterPageComponent implements OnInit {
     private genericService: GenericService,
     private userService: UserService,
     private emailService: EmailService,
+    private environmentService: AppConfigService,
     private encrDecrService: EncrDecrService,
     private toastr: ToastrManager,
     private router: Router) { }
@@ -192,9 +194,9 @@ export class RegisterPageComponent implements OnInit {
 
   private getEmailRequestForRegistration(key: string): EmailRequest {
     const emailRequest = new EmailRequest();
-    emailRequest.service_id = 'sedolplay_mail';
-    emailRequest.template_id = 'sedolpay_template';
-    emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
+    emailRequest.service_id = this.environmentService.environment['email'].service_id;
+    emailRequest.template_id = this.environmentService.environment['email'].template_id;
+    emailRequest.user_id = this.environmentService.environment['email'].user_id;
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'SedolPay Account Activation';
     emailRequest.template_params.content = this.getMailContent(key);
