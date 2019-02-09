@@ -31,7 +31,7 @@
           <div class="form-group form-group-default form-group-default-select2 required">
             <label class="">Account No</label>
             <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" [(ngModel)]="selectedAcNo" (OpenChange)="filter()">
-              <pg-option *ngFor="let option of accounts" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+              <pg-option *ngFor="let option of accounts" [Label]="option" [Value]="option">
               </pg-option>
             </pg-select>
           </div>
@@ -47,7 +47,7 @@
           <div class="form-group form-group-default form-group-default-select2 required">
             <label class="">Beneficiary</label>
             <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" [(ngModel)]="selectedBenef" (OpenChange)="filter()">
-              <pg-option *ngFor="let option of beneficiary" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+              <pg-option *ngFor="let option of beneficiary" [Label]="option" [Value]="option">
               </pg-option>
             </pg-select>
           </div>
@@ -56,7 +56,7 @@
           <div class="form-group form-group-default form-group-default-select2 required">
             <label class="">Status</label>
             <pg-select style="width: 100%;" [PlaceHolder]="'Select Status'" [(ngModel)]="selectedStatus" (OpenChange)="filter()">
-              <pg-option *ngFor="let option of status" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+              <pg-option *ngFor="let option of status" [Label]="option" [Value]="option">
               </pg-option>
             </pg-select>
           </div>
@@ -78,7 +78,7 @@
           </div>
         </div>
         <div class="col-md-1 col-sm-4">
-          <button class="btn btn-primary btn-lg short btn-block" (click)="search()">Search</button>
+          <button class="btn btn-primary btn-lg short btn-block" [disabled]="!transfers.length" (click)="search()">Search</button>
         </div>
       </div>
     </div>
@@ -122,7 +122,8 @@
       </div>
       <div class="row">
         <div class="col-md-3 col-sm-8">
-          <button type="button" class="btn btn-primary m-t-30" (click)="downloadPdf()">Download PDF</button>
+          <button type="button" class="btn btn-primary m-t-30" [disabled]="!transfers.length" (click)="downloadPdf()">Download
+            PDF</button>
         </div>
       </div>
     </div>

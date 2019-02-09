@@ -2,7 +2,7 @@
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item"><a>Sedolpay</a></li>
         <li class="breadcrumb-item active">Internal Transfer</li>
       </ol>
     </div>
@@ -12,96 +12,86 @@
   </div>
 </div>
 
-<div class=" container-fluid   container-fixed-lg">
-  <ng-container *ngIf="isProcessed; else notProcessed">
-    <div class="col-md-12 padding-top-10">
-      <div class="alert custom-alert-info alert-dismissible">
-        <b>Your payment request is posted and the last known status is IN QUEUE. Reference: {{ transRef }}</b>
+<div class=" container-fluid container-fixed-lg">
+  <form [formGroup]="validationForm" novalidate>
+    <div class="card card-default">
+      <div class="card-header">
+        <h4>Choose Account</h4>
       </div>
-    </div>
-  </ng-container>
-  <ng-template #notProcessed>
-    <form [formGroup]="validationForm" novalidate>
-      <div class="card card-default">
-        <div class="card-header">
-          <h4>Choose Account</h4>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('fromAc')">
-                <label>From Account</label>
-                <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" formControlName="fromAc" (OpenChange)="fromAccountSelected()">
-                  <pg-option *ngFor="let option of accounts" [Label]="getFromAccountLabel(option)" [Value]="option.accNo"
-                    [Disabled]="option.disabled">
-                  </pg-option>
-                </pg-select>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('viban')">
-                <label>Select Account</label>
-                <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" formControlName="viban" (OpenChange)="vibanSelected()">
-                  <pg-option *ngFor="let option of accounts" [Label]="option.viban" [Value]="option.viban" [Disabled]="option.disabled">
-                  </pg-option>
-                </pg-select>
-              </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('fromAc')">
+              <label>From Account</label>
+              <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" formControlName="fromAc" (OpenChange)="fromAccountSelected()">
+                <pg-option *ngFor="let option of accounts" [Label]="getFromAccountLabel(option)" [Value]="option.accNo">
+                </pg-option>
+              </pg-select>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('toAc')">
-                <label>To Account</label>
-                <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" formControlName="toAc">
-                  <pg-option *ngFor="let option of benefAccounts" [Label]="getToAccountLabel(option)" [Value]="option.accNo"
-                    [Disabled]="option.disabled">
-                  </pg-option>
-                </pg-select>
-              </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('viban')">
+              <label>Select Account</label>
+              <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" formControlName="viban" (OpenChange)="vibanSelected()">
+                <pg-option *ngFor="let option of accounts" [Label]="option.viban" [Value]="option.viban">
+                </pg-option>
+              </pg-select>
             </div>
-            <div class="col-sm-6"></div>
           </div>
         </div>
-        <div class="card-body payment-det" [hidden]="!isAccountSelected()">
-          <h4>Payment Details</h4>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('payAmt')">
-                <label>Amount (Balance {{ getAvailableBal() }})</label>
-                <input type="number" class="form-control" formControlName="payAmt" placeholder="Type Amount">
-                <span *ngIf="validationForm.controls['payAmt'].touched && validationForm.controls['payAmt'].invalid"
-                  class="required-field" title="Required Field">{{ getErrorMessageForBalance() }}</span>
-              </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('toAc')">
+              <label>To Account</label>
+              <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" formControlName="toAc">
+                <pg-option *ngFor="let option of benefAccounts" [Label]="getToAccountLabel(option)" [Value]="option.accNo">
+                </pg-option>
+              </pg-select>
             </div>
-            <div class="col-sm-6">
-              <div class="form-group form-group-default input-group required">
-                <div class="form-input-group">
-                  <label>Payment Date</label>
-                  <pg-datepicker Placeholder="Pay Date" formControlName="payDate" [Format]="'YYYY-MM-DD'"></pg-datepicker>
-                </div>
-                <div class="input-group-append ">
-                  <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                </div>
+          </div>
+          <div class="col-sm-6"></div>
+        </div>
+      </div>
+      <div class="card-body payment-det" [hidden]="!isAccountSelected()">
+        <h4>Payment Details</h4>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('payAmt')">
+              <label>Amount (Balance {{ getAvailableBal() }})</label>
+              <input type="number" class="form-control" formControlName="payAmt" placeholder="Type Amount">
+              <span *ngIf="validationForm.controls['payAmt'].touched && validationForm.controls['payAmt'].invalid"
+                class="required-field" title="Required Field">{{ getErrorMessageForBalance() }}</span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default input-group required">
+              <div class="form-input-group">
+                <label>Payment Date</label>
+                <pg-datepicker Placeholder="Pay Date" formControlName="payDate" [Format]="'YYYY-MM-DD'"></pg-datepicker>
+              </div>
+              <div class="input-group-append ">
+                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('remarks')">
-                <label>Remarks</label>
-                <input type="text" class="form-control" formControlName="remarks" placeholder="Type Remarks">
-              </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('remarks')">
+              <label>Remarks</label>
+              <input type="text" class="form-control" formControlName="remarks" placeholder="Type Remarks">
             </div>
-            <div class="col-sm-6"></div>
           </div>
-          <div class="row">
-            <div class="col-md-3 col-sm-4">
-              <button class="btn btn-primary btn-lg short btn-block" [disabled]="validationForm.invalid" (click)="transferPayment()">SEND
-                PAYMENT REQUEST</button>
-            </div>
+          <div class="col-sm-6"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-sm-4">
+            <button class="btn btn-primary btn-lg short btn-block" [disabled]="validationForm.invalid || loading"
+              (click)="transferPayment()">SEND
+              PAYMENT REQUEST</button>
           </div>
         </div>
       </div>
-    </form>
-  </ng-template>
+    </div>
+  </form>
 </div>

@@ -15,21 +15,6 @@
 </div>
 <div class="container-fluid container-fixed-lg">
   <div class="card card-default">
-    <div class="col-md-12 padding-top-10" *ngIf="isSaved">
-      <div class="alert custom-alert-success alert-dismissible">
-        <a (click)="closeAlertWindow()" class="close">&times;</a>
-        <b>Your request was processed successfully. Please
-          <a href="javascript:window.location.href=window.location.href">
-            reload
-          </a> this page to see the changes.</b>
-      </div>
-    </div>
-    <div class="col-md-12 padding-top-10" *ngIf="isFailed">
-      <div class="alert custom-alert-danger alert-dismissible">
-        <a (click)="closeAlertWindow()" class="close">&times;</a>
-        <b>Internal account updation failed due to missing account details</b>
-      </div>
-    </div>
     <div class="card-header search-bg">
       <h5 class="pull-left">
         Search & Filter
@@ -64,7 +49,7 @@
           <div class="form-group form-group form-group-default form-group-default-select2">
             <label>Country</label>
             <pg-select style="width: 100%;" [(ngModel)]="selecteCountry" [PlaceHolder]="'Select Option'" (OpenChange)="filter()">
-              <pg-option *ngFor="let option of countries" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+              <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
               </pg-option>
             </pg-select>
           </div>
@@ -119,7 +104,7 @@
                 <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
                   <label>Country</label>
                   <pg-select style="width: 100%;" formControlName="country" [PlaceHolder]="'Select Option'">
-                    <pg-option *ngFor="let option of countries" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+                    <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
                     </pg-option>
                   </pg-select>
                 </div>
@@ -148,7 +133,7 @@
                 <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('curr')">
                   <label>Currency</label>
                   <pg-select style="width: 100%;" formControlName="curr" [PlaceHolder]="'Select Currency'">
-                    <pg-option *ngFor="let option of currency" [Label]="option" [Value]="option">
+                    <pg-option *ngFor="let option of currency" [Label]="option.name" [Value]="option.code">
                     </pg-option>
                   </pg-select>
                 </div>
@@ -157,12 +142,12 @@
           </div>
           <div class="ab-footer">
             <ng-container *ngIf="mode === 'Add'; else update">
-              <button class="btn btn-primary mr-3" (click)="addbeneficiary()" [disabled]="validationForm.invalid">Add
+              <button class="btn btn-primary mr-3" (click)="addbeneficiary()" [disabled]="validationForm.invalid || isLoading">Add
                 Beneficiary
               </button>
             </ng-container>
             <ng-template #update>
-              <button class="btn btn-primary mr-3" (click)="updatebeneficiary()" [disabled]="validationForm.invalid">Update
+              <button class="btn btn-primary mr-3" (click)="updatebeneficiary()" [disabled]="validationForm.invalid || isLoading">Update
                 Beneficiary
               </button>
             </ng-template>
@@ -232,21 +217,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="d('Cancel click')">Cancel</button>
-    <button type="button" ngbAutofocus class="btn btn-danger" (click)="deleteBeneficiary(benefDeleted)">Ok</button>
-  </div>
-</ng-template>
-<!-- Modal popup for benef deleted messgae -->
-<ng-template #benefDeleted let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">Beneficiary deletion</h4>
-    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <p><strong>Beneficiary was successfully deleted</strong></p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="c('Ok click')">Ok</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="deleteBeneficiary()">Ok</button>
   </div>
 </ng-template>

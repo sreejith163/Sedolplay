@@ -1,23 +1,17 @@
 <div class="jumbotron">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
-      <!-- START BREADCRUMB -->
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
         <li class="breadcrumb-item active">Track payments</li>
       </ol>
-      <!-- END BREADCRUMB -->
     </div>
-
     <h4 class="page-title sm-p-l-20">
       Track Payments
     </h4>
   </div>
 </div>
-<!-- START CONTAINER FLUID -->
 <div class=" container-fluid   container-fixed-lg">
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
-
   <div class="card card-default">
     <div class="card-header search-bg">
       <h5>
@@ -28,7 +22,7 @@
           <div class="form-group form-group-default form-group-default-select2 required">
             <label class="">Account No</label>
             <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" [(ngModel)]="selectedAcNo" (OpenChange)="filter()">
-              <pg-option *ngFor="let option of accounts" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+              <pg-option *ngFor="let option of accounts" [Label]="option" [Value]="option">
               </pg-option>
             </pg-select>
 
@@ -37,14 +31,15 @@
         <div class="col-md-2 col-sm-4">
           <div class="form-group form-group-default required ">
             <label>Reference</label>
-            <input type="text" class="form-control" required="" [(ngModel)]="selectedRef" placeholder="Type Reference" (input)="filter()">
+            <input type="text" class="form-control" required="" [(ngModel)]="selectedRef" placeholder="Type Reference"
+              (input)="filter()">
           </div>
         </div>
         <div class="col-md-2 col-sm-4">
           <div class="form-group form-group-default form-group-default-select2 required">
             <label class="">Beneficiary</label>
             <pg-select style="width: 100%;" [PlaceHolder]="'Select Account'" [(ngModel)]="selectedBenef" (OpenChange)="filter()">
-              <pg-option *ngFor="let option of beneficiary" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+              <pg-option *ngFor="let option of beneficiary" [Label]="option" [Value]="option">
               </pg-option>
             </pg-select>
           </div>
@@ -66,7 +61,7 @@
           </div>
         </div>
         <div class="col-md-2 col-sm-4">
-          <button class="btn btn-primary btn-lg btn-block" (click)="search()">Search</button>
+          <button class="btn btn-primary btn-lg btn-block" [disabled]="!transfers.length" (click)="search()">Search</button>
         </div>
       </div>
     </div>
@@ -75,9 +70,6 @@
         <table class="table table-hover" id="basicTable">
           <thead>
             <tr>
-              <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user
-    										Comman Practice Followed
-    										-->
               <th style="width:1%" class="text-center">
                 No
               </th>
@@ -110,9 +102,6 @@
           </tbody>
         </table>
       </div>
-
     </div>
   </div>
-
 </div>
-<!-- END PLACE PAGE CONTENT HERE -->

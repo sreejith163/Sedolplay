@@ -1,5 +1,6 @@
 export class EmailTemplateParams {
-    name: string;
+    subject: string;
     reply_email: string;
-    message: string;
+    content: string;
+    heading: string;
 }

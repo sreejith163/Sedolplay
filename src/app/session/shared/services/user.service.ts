@@ -27,6 +27,22 @@ export class UserService {
       catchError(this.handleError));
   }
 
+  validateEmail(request: Ims): Observable<Ims> {
+    const url = `${this.baseUrl}/validateuser`;
+
+    return this.httpClient.post(url, JSON.stringify(request)).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
+  resetPassword(request: Ims): Observable<Ims> {
+    const url = `${this.baseUrl}/updatepass`;
+
+    return this.httpClient.post(url, JSON.stringify(request)).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
   private extractData(response: Response) {
     return response !== undefined && response !== null  ?  response : {};
   }

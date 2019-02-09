@@ -13,25 +13,12 @@ export class EmailService {
 
   constructor(private httpClient: HttpClient) { }
 
-  sendMail(email: Email): Observable<any> {
+  sendMail(request: EmailRequest): Observable<any> {
     const url = `${this.baseUrl}`;
-    const request = this.getEmailRequest(email);
 
     return this.httpClient.post(url, request).pipe(
       map(this.extractData),
       catchError(this.handleError));
-  }
-
-  private getEmailRequest(email: Email): EmailRequest {
-    const emailRequest = new EmailRequest();
-    emailRequest.service_id = 'sedolplay_mail';
-    emailRequest.template_id = 'template_NTrcOOzK';
-    emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
-    emailRequest.template_params = new EmailTemplateParams();
-    emailRequest.template_params.message = email.message;
-    emailRequest.template_params.name = email.firstName + ' ' + email.lastName;
-    emailRequest.template_params.reply_email = 'sreejith.jith09@gmail.com';
-    return emailRequest;
   }
 
   private extractData(response: Response) {

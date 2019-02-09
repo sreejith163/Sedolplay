@@ -9,6 +9,12 @@ import { DataContent } from '../models/data-content.model';
 import { Content } from '../models/content.model';
 import { RequestResponse } from '../models/request-response.model';
 import { ProfileCredential } from '../models/profile/profile-credential.model';
+import { KeyValue } from '../models/key-value.model';
+import { GenericService } from '../shared/services/generic.service';
+import { TimeZone } from '../models/timezone.model';
+import { matchOtherValidator } from '../session/shared/validators/match-other-validator';
+import { ToastrManager } from 'ng6-toastr-notifications';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-my-profile',
@@ -17,47 +23,12 @@ import { ProfileCredential } from '../models/profile/profile-credential.model';
 })
 
 export class MyProfileComponent implements OnInit {
-  selecteCountryThree;
-  countries: string[] = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua and Barbuda',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'The Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia and Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina Faso',
-    'Burundi'
-  ];
-
-  timezone = [
-    { value: 'EST', label: 'EST +6' },
-    { value: 'GMT', label: 'GMT +6' },
-  ];
+  countries: KeyValue[];
+  timezone: TimeZone[];
+  loading = false;
 
   validationForm: FormGroup;
   passwordValidationForm: FormGroup;
-  isUpdated = false;
-  isFailed = false;
 
   requiredBorder = {
     'border-color': 'red',
@@ -67,7 +38,11 @@ export class MyProfileComponent implements OnInit {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
 
-  constructor(private formBuilder: FormBuilder, private profileService: ProfileService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private profileService: ProfileService,
+    private toastr: ToastrManager,
+    private genericService: GenericService) { }
 
   ngOnInit() {
     this.createValidationForm();
@@ -76,26 +51,32 @@ export class MyProfileComponent implements OnInit {
   }
 
   updateProfile() {
-    const request = this.getImsRequestFormat('PROFILE', 'UPDATE', false);
+    this.loading = true;
+    const request = this.getImsRequestFormatForProfile('PROFILE', 'UPDATE');
     this.profileService.updateProfileDetails(request).subscribe((data: Ims) => {
-      this.isUpdated = true;
+      if (data.ims.content.dataheader.status === 'SUCCESS') {
+        this.toastr.successToastr('Your profile was successfully updated.', 'Profile updation success!');
+      } else {
+        this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Profile updation failed!');
+      }
     }, error => {
-      this.isFailed = true;
-    });
+      this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Profile updation failed!');
+    }, () => this.loading = false);
   }
 
   updatePassword() {
-    const request = this.getImsRequestFormat('PROFILE', 'UPDATE', true);
-    this.profileService.updateProfileDetails(request).subscribe((data: Ims) => {
-      this.isUpdated = true;
-      this.passwordValidationForm.reset();
+    this.loading = true;
+    const request = this.getImsRequestFormatForPasswordUpdate();
+    this.profileService.updatePassword(request).subscribe((data: Ims) => {
+      if (data.ims.content.dataheader.status === 'SUCCESS') {
+        this.toastr.successToastr('Your profile was successfully updated.', 'Profile updation success!');
+        this.passwordValidationForm.reset();
+      } else {
+        this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Profile updation failed!');
+      }
     }, error => {
-      this.isFailed = true;
-    });
-  }
-
-  closeAlertWindow() {
-    this.resetAlertControls();
+      this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Profile updation failed!');
+    }, () => this.loading = false);
   }
 
   getControlBorderColour(control: string): any {
@@ -108,11 +89,48 @@ export class MyProfileComponent implements OnInit {
            this.passwordValidationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
   }
 
+  getTimezoneLabel(offset: string, id: string) {
+    const index = id.lastIndexOf('/') + 1;
+    if (index !== -1) {
+      return offset + ' ' + id.substring(index);
+    }
+
+    return offset + id;
+  }
+
   private loadProfile() {
-    const request = this.getImsRequestFormat('PROFILE', 'VIEW', false);
+    const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
     this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
       this.setValidationValue(data.ims);
     });
+    this.loadCountries();
+    this.loadTimeZones();
+  }
+
+  private loadCountries() {
+    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
+    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.countries = data.ims.data.countries;
+      }
+    });
+  }
+
+  private loadTimeZones() {
+    const immRequest = this.getGenericImsRequestFormat('TIMEZONE');
+    this.genericService.getTimezone(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.timezone = data.ims.data.timezones;
+      }
+    });
+  }
+
+  private getGenericImsRequestFormat( mode: string) {
+    const imsRequest = new Ims();
+    imsRequest.ims = new RequestResponse();
+    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+
+    return imsRequest;
   }
 
   private setValidationValue(response: RequestResponse) {
@@ -137,28 +155,38 @@ export class MyProfileComponent implements OnInit {
     this.validationForm.controls['telephone'].updateValueAndValidity();
     this.validationForm.controls['dob'].setValue(profile.dob);
     this.validationForm.controls['dob'].updateValueAndValidity();
-    // this.validationForm.controls['timezone'].setValue(response.header.usertimezone);
-    // this.validationForm.controls['timezone'].updateValueAndValidity();
+    this.validationForm.controls['timezone'].setValue(response.header.usertimezone);
+    this.validationForm.controls['timezone'].updateValueAndValidity();
     this.validationForm.controls['email'].setValue(profile.email);
     this.validationForm.controls['email'].updateValueAndValidity();
   }
 
-  private getImsRequestFormat(type: string, mode: string, isPassword) {
+  private getImsRequestFormatForProfile(type: string, mode: string) {
     const imsRequest = new Ims();
     const header = new Header('2', type, mode, 'b08f86af-35da-48f2-8fab-cef3904660bd');
     const dataHeader = new DataHeader('172');
     dataHeader.portalUserid = '';
     const dataContent = new DataContent();
-    if (mode === 'UPDATE' && !isPassword) {
-      dataContent.docs = [];
-      dataContent.info = this.getProfileInfo();
-    } else if (mode === 'UPDATE' && isPassword) {
-      dataContent.credential = this.getCredential();
-      dataContent.docs = [];
-      dataContent.info = this.getProfileInfo();
-    }
+    dataContent.docs = [];
+    dataContent.info = this.getProfileInfo();
 
     const content = new Content(dataHeader, dataContent);
+    const request = new RequestResponse(header, content);
+    imsRequest.ims = request;
+
+    return imsRequest;
+  }
+
+  private getImsRequestFormatForPasswordUpdate() {
+    const imsRequest = new Ims();
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
+    const dataContent = new DataContent();
+    dataContent.credential = this.getCredential();
+    dataContent.info = new ProfileInfo();
+    dataContent.info.email = this.validationForm.controls['email'].value;
+
+    const content = new Content();
+    content.data = dataContent;
     const request = new RequestResponse(header, content);
     imsRequest.ims = request;
 
@@ -176,7 +204,7 @@ export class MyProfileComponent implements OnInit {
     profile.country = this.validationForm.controls['country'].value;
     profile.mobile = this.validationForm.controls['mobile'].value;
     profile.telephone = this.validationForm.controls['telephone'].value;
-    profile.dob = this.validationForm.controls['dob'].value;
+    profile.dob = this.getDobFormat(this.validationForm.controls['dob'].value);
     profile.email = this.validationForm.controls['email'].value;
 
     return profile;
@@ -185,16 +213,25 @@ export class MyProfileComponent implements OnInit {
   private getCredential(): ProfileCredential {
     const credential = new ProfileCredential();
     credential.userName = '';
-    credential.password = '';
+    credential.password = this.passwordValidationForm.controls['newPass'].value;
+    credential.password = CryptoJS.AES.encrypt('', credential.password);
 
     return credential;
+  }
+
+  private getDobFormat(value) {
+    const startDate = new Date(value.toString());
+    const startYear = startDate.getFullYear();
+    const startMonth = startDate.getMonth() + 1 < 10 ? '0' + (startDate.getMonth() + 1) : (startDate.getMonth() + 1);
+    const startDay = startDate.getDate() < 10 ? '0' + startDate.getDate() : startDate.getDate();
+    return startMonth.toString() + startDay.toString() + startYear.toString();
   }
 
   private createPasswordValidationForm() {
     this.passwordValidationForm = this.formBuilder.group({
       oldPass: ['', Validators.required],
       newPass: ['', Validators.required],
-      newPassConfirm: ['', Validators.required],
+      newPassConfirm: ['', Validators.compose([Validators.required, matchOtherValidator('newPass')])],
     });
   }
 
@@ -213,10 +250,5 @@ export class MyProfileComponent implements OnInit {
       dob: ['', Validators.required],
       email: ['', Validators.compose([Validators.email, Validators.required])],
     });
-  }
-
-  private resetAlertControls() {
-    this.isUpdated = false;
-    this.isFailed = false;
   }
 }

@@ -9,6 +9,8 @@ import { DataHeader } from '../../models/data-header.model';
 import { Header } from '../../models/header.model';
 import { Statement } from '../../models/statement/statement.model';
 import { StatementAccount } from '../../models/statement/statement-account.model';
+import { KeyValue } from '../../models/key-value.model';
+import { GenericService } from '../../shared/services/generic.service';
 @Component({
   selector: 'app-statements',
   templateUrl: './statements.component.html',
@@ -19,36 +21,7 @@ export class StatementsComponent implements OnInit {
     { value: 'All', label: 'All' },
     { value: 'Transactions', label: 'Transactions' }
   ];
-  countries: string[] = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua and Barbuda',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'The Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia and Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina Faso',
-    'Burundi'
-  ];
+  countries: KeyValue[];
 
   accounts: Array<any> = [];
   allAccounts: Array<any> = [];
@@ -56,41 +29,47 @@ export class StatementsComponent implements OnInit {
   statements: Array<Statement> = [];
   selectedAccount: string;
 
-  //Date Range Setup
   _startDate = null;
   _endDate = null;
+
   newArray = (len) => {
     const result = [];
     for (let i = 0; i < len; i++) {
       result.push(i);
     }
     return result;
-  };
+  }
+
   _startValueChange = () => {
     if (this._startDate > this._endDate) {
       this._endDate = null;
     }
-  };
+  }
+
   _endValueChange = () => {
     if (this._startDate > this._endDate) {
       this._startDate = null;
     }
-  };
+  }
+
   _disabledStartDate = (startValue) => {
     if (!startValue || !this._endDate) {
       return false;
     }
     return startValue.getTime() >= this._endDate.getTime();
-  };
+  }
+
   _disabledEndDate = (endValue) => {
     if (!endValue || !this._startDate) {
       return false;
     }
     return endValue.getTime() <= this._startDate.getTime();
-  };
-  get _isSameDay() {
-    return this._startDate && this._endDate && moment(this._startDate).isSame(this._endDate, 'day')
   }
+
+  get _isSameDay() {
+    return this._startDate && this._endDate && moment(this._startDate).isSame(this._endDate, 'day');
+  }
+
   get _endTime() {
     return {
       nzHideDisabledOptions: true,
@@ -109,11 +88,12 @@ export class StatementsComponent implements OnInit {
         }
         return [];
       }
-    }
+    };
   }
-  //END Date Range
 
-  constructor(private accountService: AccountService) { }
+  constructor(
+    private accountService: AccountService,
+    private genericService: GenericService) { }
 
   ngOnInit() {
     this.getStatements();
@@ -182,6 +162,24 @@ export class StatementsComponent implements OnInit {
       this.accounts =  data.ims.content.data.accounts;
       this.allAccounts = Object.assign(this.allAccounts, this.accounts);
     });
+    this.loadCountries();
+  }
+
+  private loadCountries() {
+    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
+    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.countries = data.ims.data.countries;
+      }
+    });
+  }
+
+  private getGenericImsRequestFormat( mode: string) {
+    const imsRequest = new Ims();
+    imsRequest.ims = new RequestResponse();
+    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+
+    return imsRequest;
   }
 
 }

@@ -3,6 +3,11 @@ import { RootLayout } from '../root/root.component';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../../shared/services/authentication.service';
 import { pagesToggleService } from '../../services/toggler.service';
+import { GenericService } from '../../../shared/services/generic.service';
+import { Ims } from '../../../models/ims.model';
+import { Header } from '../../../models/header.model';
+import { SedolpayStateManagerService } from '../../../shared/services/sedolpay-state-manager.service';
+import { RequestResponse } from '../../../models/request-response.model';
 
 
 @Component({
@@ -119,7 +124,9 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
   constructor(
     public toggler: pagesToggleService,
     public router: Router,
-    private authService: AuthenticationService) {
+    private authService: AuthenticationService,
+    private sedolpayStateManagerService: SedolpayStateManagerService,
+    private genericService: GenericService) {
     super(toggler, router);
   }
 
@@ -127,10 +134,55 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     this.changeLayout('menu-pin');
     this.changeLayout('menu-behind');
     this.autoHideMenuPin();
+    this.loadGenericData();
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(['login']);
+  }
+
+  private loadGenericData() {
+    this.loadCurrencies();
+    this.loadCountries();
+    this.loadTimezones();
+  }
+
+  private loadCurrencies() {
+    const immRequest = this.getImsRequestFormat('CURRENCY');
+    this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        const currencies = data.ims.data.currencies;
+        this.sedolpayStateManagerService.setCurrencies(null);
+      }
+    });
+  }
+
+  private loadCountries() {
+    const immRequest = this.getImsRequestFormat('COUNTRY');
+    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        const countries = data.ims.data.countries;
+        this.sedolpayStateManagerService.setCountries(countries);
+      }
+    });
+  }
+
+  private loadTimezones() {
+    const immRequest = this.getImsRequestFormat('TIMEZONE');
+    this.genericService.getTimezone(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        const timezones = data.ims.data.timezones;
+        this.sedolpayStateManagerService.setTimeZones(timezones);
+      }
+    });
+  }
+
+  private getImsRequestFormat( mode: string) {
+    const imsRequest = new Ims();
+    imsRequest.ims = new RequestResponse();
+    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+
+    return imsRequest;
   }
 }

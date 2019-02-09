@@ -10,8 +10,15 @@ import { ProfileInfo } from '../../models/profile/profile-info.model';
 import { ProfileCredential } from '../../models/profile/profile-credential.model';
 import { ProfileCurr } from '../../models/profile/profile-curr.model';
 import { UserService } from '../shared/services/user.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { matchOtherValidator } from '../shared/validators/match-other-validator';
+import { KeyValue } from '../../models/key-value.model';
+import { GenericService } from '../../shared/services/generic.service';
+import { TimeZone } from '../../models/timezone.model';
+import { ToastrManager } from 'ng6-toastr-notifications';
+import { EmailRequest } from '../../shared/models/email-request.model';
+import { EmailTemplateParams } from '../../shared/models/email-template-params.model';
+import { EmailService } from '../../shared/services/email.service';
 
 @Component({
   selector: 'app-register-page',
@@ -20,45 +27,11 @@ import { matchOtherValidator } from '../shared/validators/match-other-validator'
 })
 export class RegisterPageComponent implements OnInit {
 
-  countries: string[] = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua and Barbuda',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'The Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia and Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina Faso',
-    'Burundi'
-  ];
-
-  timezone = [
-    { value: 'EST', label: 'EST +6' },
-    { value: 'GMT', label: 'GMT +6' },
-  ];
-
+  countries: KeyValue[];
+  timezone: TimeZone[];
+  currency: KeyValue[];
   validationForm: FormGroup;
-  isFailed: boolean;
-  isCreated: boolean;
+  loading: boolean;
   requiredBorder = {
     'border-color': 'red',
   };
@@ -67,23 +40,33 @@ export class RegisterPageComponent implements OnInit {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private genericService: GenericService,
+    private userService: UserService,
+    private emailService: EmailService,
+    private toastr: ToastrManager,
+    private router: Router) { }
 
   ngOnInit() {
     this.createValidationForm();
+    this.loadCountries();
+    this.loadTimeZones();
+    this.loadCurrencies();
   }
 
   register() {
-    this.resetValues();
+    this.loading = true;
     const request = this.getImsRequestFormat();
-    this.userService.login(request).subscribe((data: Ims) => {
-      if (data.ims.content.dataheader.status === 'SUCCESS') {
-        this.isCreated = true;
+    this.userService.register(request).subscribe((data: Ims) => {
+      if (data !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
+        this.sentRegMail();
       } else {
-        this.isFailed = true;
-      }}, error => {
-        this.isFailed = true;
-      });
+        this.toastr.errorToastr('Failed to create new account', 'Registration failed!');
+      }
+    }, error => {
+      this.toastr.errorToastr('Failed to create new account', 'Registration failed!');
+    }, () => this.loading = false);
   }
 
   login() {
@@ -91,12 +74,66 @@ export class RegisterPageComponent implements OnInit {
   }
 
   getRegisteredEmail() {
-    return this.validationForm.controls['email'].value;
+    return this.validationForm.controls['regEmail'].value;
   }
 
   getControlBorderColour(control: string): any {
     return this.validationForm.controls[control].touched &&
            this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
+  }
+
+  getTimezoneLabel(offset: string, id: string) {
+    const index = id.lastIndexOf('/') + 1;
+    if (index !== -1) {
+      return offset + ' ' + id.substring(index);
+    }
+
+    return offset + id;
+  }
+
+  private sentRegMail() {
+    const request = this.getEmailRequestForRegistration();
+    this.emailService.sendMail(request).subscribe(data => {
+      this.toastr.successToastr('An email has been sent to ' + this.getRegisteredEmail() + ', please click the link ' +
+                                  'in the email to activate your account. You can login after you have activated your account.',
+                                  'Registration Success!');
+      this.validationForm.reset();
+    }, error => this.toastr.errorToastr('Sending email to registered mail has been failed.', 'Email sent failed!'));
+  }
+
+  private loadCountries() {
+    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
+    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.countries = data.ims.data.countries;
+      }
+    });
+  }
+
+  private loadTimeZones() {
+    const immRequest = this.getGenericImsRequestFormat('TIMEZONE');
+    this.genericService.getTimezone(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.timezone = data.ims.data.timezones;
+      }
+    });
+  }
+
+  private loadCurrencies() {
+    const immRequest = this.getGenericImsRequestFormat('CURRENCY');
+    this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.currency = data.ims.data.currencies;
+      }
+    });
+  }
+
+  private getGenericImsRequestFormat( mode: string) {
+    const imsRequest = new Ims();
+    imsRequest.ims = new RequestResponse();
+    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+
+    return imsRequest;
   }
 
   private getImsRequestFormat() {
@@ -127,8 +164,8 @@ export class RegisterPageComponent implements OnInit {
     profile.country = this.validationForm.controls['country'].value;
     profile.mobile = this.validationForm.controls['mobile'].value;
     profile.telephone = this.validationForm.controls['telephone'].value;
-    profile.dob = this.validationForm.controls['dob'].value;
-    profile.email = this.validationForm.controls['email'].value;
+    profile.dob = this.getDobFormat(this.validationForm.controls['dob'].value);
+    profile.email = this.validationForm.controls['regEmail'].value;
     profile.active = 'N';
 
     return profile;
@@ -140,6 +177,36 @@ export class RegisterPageComponent implements OnInit {
     credential.password = this.validationForm.controls['pass'].value;
 
     return credential;
+  }
+
+  private getDobFormat(value) {
+    const startDate = new Date(value.toString());
+    const startYear = startDate.getFullYear();
+    const startMonth = startDate.getMonth() + 1 < 10 ? '0' + (startDate.getMonth() + 1) : (startDate.getMonth() + 1);
+    const startDay = startDate.getDate() < 10 ? '0' + startDate.getDate() : startDate.getDate();
+    return startMonth.toString() + startDay.toString() + startYear.toString();
+  }
+
+  private getEmailRequestForRegistration(): EmailRequest {
+    const emailRequest = new EmailRequest();
+    emailRequest.service_id = 'sedolplay_mail';
+    emailRequest.template_id = 'contact';
+    emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
+    emailRequest.template_params = new EmailTemplateParams();
+    emailRequest.template_params.subject = 'SedolPay Account Activation';
+    emailRequest.template_params.content = this.getEmailContent();
+    emailRequest.template_params.heading = 'Dear ' + this.validationForm.controls['firstName'].value;
+    // emailRequest.template_params.reply_email = this.validationForm.controls['regEmail'].value;
+    emailRequest.template_params.reply_email = 'sreejith.jith09@gmail.com';
+    return emailRequest;
+  }
+
+  private getEmailContent(): string {
+    let message = '';
+    message += 'Please click this <a href=="">link</a> to activate your SedolPay account.';
+    message += 'Once your account is activated, please login using the Customer ID <b>SRE00019</b>';
+
+    return message;
   }
 
   private createValidationForm() {
@@ -155,14 +222,10 @@ export class RegisterPageComponent implements OnInit {
       mobile: ['', Validators.required],
       telephone: [''],
       dob: ['', Validators.required],
-      email: ['', Validators.compose([Validators.email, Validators.required])],
+      regEmail: ['', Validators.compose([Validators.email, Validators.required])],
+      curr: ['', Validators.required],
       pass: ['', Validators.required],
       passConfirm: ['', Validators.compose([Validators.required, matchOtherValidator('pass')])],
     });
-  }
-
-  private resetValues() {
-    this.isCreated = false;
-    this.isFailed = false;
   }
 }

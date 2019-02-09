@@ -49,12 +49,14 @@ import { pgTimePickerModule } from './@pages/components/time-picker/timepicker.m
 
 import { pgSelectfx } from './@pages/components/cs-select/select.module';
 import { pgDatePickerModule } from './@pages/components/datepicker/datepicker.module';
+import { ToastrModule } from 'ng6-toastr-notifications';
 
 import { NvD3Module } from 'ngx-nvd3';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { IsotopeModule } from 'ngx-isotope';
 import { NgxDnDModule } from '@swimlane/ngx-dnd';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LoadingModule } from 'ngx-loading';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { QuillModule } from 'ngx-quill';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -76,6 +78,9 @@ import { ProfileService } from './shared/services/profile.service';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { CookieService } from 'ngx-cookie-service';
+import { GenericService } from './shared/services/generic.service';
+import { SedolpayStateManagerService } from './shared/services/sedolpay-state-manager.service';
+import { EncrDecrService } from './shared/services/encr-decr.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -120,6 +125,7 @@ export class AppHammerConfig extends HammerGestureConfig {
     HttpModule,
     HttpClientModule,
     SharedModule,
+    LoadingModule,
     NgbModule,
     ProgressModule,
     pgListViewModule,
@@ -136,6 +142,7 @@ export class AppHammerConfig extends HammerGestureConfig {
     TabsModule.forRoot(),
     TooltipModule.forRoot(),
     TypeaheadModule.forRoot(),
+    ToastrModule.forRoot(),
     NvD3Module,
     pgTabsModule,
     NgxEchartsModule,
@@ -149,8 +156,8 @@ export class AppHammerConfig extends HammerGestureConfig {
     pgDatePickerModule,
     pgTimePickerModule
   ],
-  providers: [ AuthenticationService, CookieService, AuthGuard, BeneficiaryService, TrackPaymentService, EmailService,
-               ProfileService, QuickviewService, pagesToggleService, {
+  providers: [ AuthenticationService, GenericService, CookieService, SedolpayStateManagerService, AuthGuard, EncrDecrService,
+               BeneficiaryService, TrackPaymentService, EmailService, ProfileService, QuickviewService, pagesToggleService, {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
   },

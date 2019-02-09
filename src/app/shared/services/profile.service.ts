@@ -21,6 +21,14 @@ private baseUrl = 'http://103.35.198.115:7019/ecsservice/service/customerportal'
 
   updateProfileDetails(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/custprofile`;
+    console.log(JSON.stringify(request));
+    return this.httpClient.post(url, JSON.stringify(request)).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
+  updatePassword(request: Ims): Observable<Ims> {
+    const url = `${this.baseUrl}/updatepass`;
 
     return this.httpClient.post(url, JSON.stringify(request)).pipe(
       map(this.extractData),

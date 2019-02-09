@@ -11,6 +11,9 @@ import { Transfer } from '../../models/transfer-track-payments/transfer.model';
 import { TransferCustomer } from '../../models/transfer-track-payments/transfer-customer.model';
 import { Beneficiary } from '../../models/beneficiary/beneficiary.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { KeyValue } from '../../models/key-value.model';
+import { GenericService } from '../../shared/services/generic.service';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-external-transfer',
@@ -21,42 +24,13 @@ export class ExternalTransferComponent implements OnInit {
 
   paymenttype = ['Payments', 'FX', 'Transfer'];
   type = ['IBAN',  'V_IBAN' ];
-  countries: string[] = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua and Barbuda',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'The Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia and Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina Faso',
-    'Burundi'
-  ];
+  countries: KeyValue[];
   accounts: Array<Account> = [];
   benefAccounts: Array<Beneficiary> = [];
   transRef: string;
   imsRequest: Ims;
   validationForm: FormGroup;
-  isProcessed = false;
+  loading = false;
 
   requiredBorder = {
     'border-color': 'red',
@@ -66,7 +40,11 @@ export class ExternalTransferComponent implements OnInit {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
 
-  constructor(private paymentRequestService: PaymentRequestService, private formBuilder: FormBuilder) { }
+  constructor(
+    private paymentRequestService: PaymentRequestService,
+    private genericService: GenericService,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrManager) { }
 
   ngOnInit() {
     this.createValidationForm();
@@ -126,6 +104,7 @@ export class ExternalTransferComponent implements OnInit {
   }
 
   transferPayment() {
+    this.loading = true;
     const fromAc = this.validationForm.controls['fromAc'].value;
     const payAmt = this.validationForm.controls['payAmt'].value;
     const remarks = this.validationForm.controls['remarks'].value;
@@ -150,10 +129,14 @@ export class ExternalTransferComponent implements OnInit {
     this.paymentRequestService.transferPayment(this.imsRequest).subscribe((data: Ims) => {
       if (data.ims.content.dataheader.status === 'IN QUEUE. Reference: ' + transfer.transRef) {
         this.transRef = transfer.transRef;
+       this.toastr.successToastr('Your payment request is posted and the last known status is IN QUEUE. Reference: ' + transfer.transRef,
+                                  'Payemnet Transfer Success.', { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
         this.resetValues();
-        this.isProcessed = true;
       }
-    });
+    }, error => {
+      this.toastr.successToastr('Something went wrong.', 'Payemnet Transfer Failed!',
+                                { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
+    }, () => this.loading = false);
   }
 
   getErrorMessageForBalance() {
@@ -217,6 +200,24 @@ export class ExternalTransferComponent implements OnInit {
       this.accounts = data.ims.content.data.accounts;
       this.benefAccounts = data.ims.content.data.benef;
     });
+    this.loadCountries();
+  }
+
+  private loadCountries() {
+    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
+    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.countries = data.ims.data.countries;
+      }
+    });
+  }
+
+  private getGenericImsRequestFormat( mode: string) {
+    const imsRequest = new Ims();
+    imsRequest.ims = new RequestResponse();
+    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+
+    return imsRequest;
   }
 
   private getImsRequestFormat() {

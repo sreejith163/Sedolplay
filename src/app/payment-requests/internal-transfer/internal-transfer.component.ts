@@ -11,6 +11,7 @@ import { Transfer } from '../../models/transfer-track-payments/transfer.model';
 import { TransferCustomer } from '../../models/transfer-track-payments/transfer-customer.model';
 import { Beneficiary } from '../../models/beneficiary/beneficiary.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-internal-transfer',
@@ -23,7 +24,7 @@ export class InternalTransferComponent implements OnInit {
   transRef: string;
   imsRequest: Ims;
   validationForm: FormGroup;
-  isProcessed = false;
+  loading = false;
 
   requiredBorder = {
     'border-color': 'red',
@@ -33,7 +34,10 @@ export class InternalTransferComponent implements OnInit {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
 
-  constructor(private paymentRequestService: PaymentRequestService, private formBuilder: FormBuilder) { }
+  constructor(
+    private paymentRequestService: PaymentRequestService,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrManager) { }
 
   ngOnInit() {
     this.createValidationForm();
@@ -82,6 +86,7 @@ export class InternalTransferComponent implements OnInit {
   }
 
   transferPayment() {
+    this.loading = true;
     const fromAc = this.validationForm.controls['fromAc'].value;
     const payAmt = this.validationForm.controls['payAmt'].value;
     const remarks = this.validationForm.controls['remarks'].value;
@@ -106,10 +111,14 @@ export class InternalTransferComponent implements OnInit {
     this.paymentRequestService.transferPayment(this.imsRequest).subscribe((data: Ims) => {
       if (data.ims.content.dataheader.status === 'IN QUEUE. Reference: ' + transfer.transRef) {
         this.transRef = transfer.transRef;
+       this.toastr.successToastr('Your payment request is posted and the last known status is IN QUEUE. Reference: ' + transfer.transRef,
+                                  'Payemnet Transfer Success.', { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
         this.resetValues();
-        this.isProcessed = true;
       }
-    });
+    }, error => {
+      this.toastr.successToastr('Something went wrong.', 'Payemnet Transfer Failed!',
+                                { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
+    }, () => this.loading = false);
   }
 
   getErrorMessageForBalance() {

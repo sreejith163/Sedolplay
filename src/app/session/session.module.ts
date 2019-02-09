@@ -12,6 +12,7 @@ import { RegisterPageComponent } from './register/register.component';
 import { UserService } from './shared/services/user.service';
 import { pgSelectModule } from '../@pages/components/select/select.module';
 import { pgDatePickerModule } from '../@pages/components/datepicker/datepicker.module';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { pgDatePickerModule } from '../@pages/components/datepicker/datepicker.m
     pgDatePickerModule,
     RouterModule.forChild(SessionRoute),
   ],
-  declarations: [ErrorComponent, LoginComponent, LockscreenComponent, RegisterPageComponent],
+  declarations: [ErrorComponent, LoginComponent, LockscreenComponent, RegisterPageComponent, ForgotPasswordComponent],
   providers: [UserService]
 })
 export class SessionModule { }

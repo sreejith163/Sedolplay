@@ -3,6 +3,9 @@ import { Email } from '../shared/models/email.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { of as observableOf } from 'rxjs';
 import { EmailService } from '../shared/services/email.service';
+import { EmailRequest } from '../shared/models/email-request.model';
+import { EmailTemplateParams } from '../shared/models/email-template-params.model';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-contact-us',
@@ -12,8 +15,7 @@ import { EmailService } from '../shared/services/email.service';
 export class ContactUsComponent implements OnInit {
 
   validationForm: FormGroup;
-  isSent = false;
-  isFailed = false;
+  isloading = false;
 
   requiredBorder = {
     'border-color': 'red',
@@ -22,30 +24,28 @@ export class ContactUsComponent implements OnInit {
   optionalBorder = {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
-  constructor(private formBuilder: FormBuilder, private emailService: EmailService) { }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private emailService: EmailService,
+    private toastr: ToastrManager) { }
 
   ngOnInit() {
     this.createValidationForm();
   }
 
   submitMail() {
-    this.resetAlertControls();
-    const email = new Email();
-    email.firstName = this.validationForm.controls['firstName'].value;
-    email.lastName = this.validationForm.controls['lastName'].value;
-    email.email = this.validationForm.controls['email'].value;
-    email.message = this.validationForm.controls['message'].value;
-
-    this.emailService.sendMail(email).subscribe(data => {
-      this.isSent = true;
+    this.isloading = true;
+    const request = this.getEmailRequest();
+    this.emailService.sendMail(request).subscribe(data => {
+      this.toastr.successToastr('An email has been sent to the administrator, someone will get in touch with you shortly.',
+                                'Email Sent Successfully!');
       this.validationForm.reset();
     }, error => {
-      this.isFailed = true;
+      this.toastr.errorToastr('Somethimg went wrong while sending mail.', 'Email Sent Failed!');
+    }, () => {
+      this.isloading = false;
     });
-  }
-
-  closeAlertWindow() {
-    this.resetAlertControls();
   }
 
   getControlBorderColour(control: string): any {
@@ -53,9 +53,16 @@ export class ContactUsComponent implements OnInit {
            this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
   }
 
-  private resetAlertControls() {
-    this.isSent = false;
-    this.isFailed = false;
+  private getEmailRequest(): EmailRequest {
+    const emailRequest = new EmailRequest();
+    emailRequest.service_id = 'sedolplay_mail';
+    emailRequest.template_id = 'contact';
+    emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
+    emailRequest.template_params = new EmailTemplateParams();
+    emailRequest.template_params.subject = 'New support received';
+    emailRequest.template_params.content = 'You have a new message from ' + this.validationForm.controls['message'].value;
+    emailRequest.template_params.reply_email = 'sreejith.jith09@gmail.com';
+    return emailRequest;
   }
 
   private createValidationForm() {

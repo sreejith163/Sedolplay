@@ -1,69 +1,3 @@
-<ng-template #contactUs class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-content">
-    <div class="modal-header clearfix text-left">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="modalRef.hide()"><i class="
-pg pg-close fs-14"></i>
-      </button>
-      <h5>Send us a <span class="semi-bold">Message</span></h5>
-      <p>Use the form bellow to tell us how we can help you. A support ticket will be created and you will be
-        contacted shortly by one of our customer service operators.</p>
-    </div>
-    <div class="modal-body">
-      <form role="form" id="gobalContact" method="post" autocomplete="off">
-        <div class="form-group-attached">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group form-group-default required">
-                <label>Full Name</label>
-                <input type="text" name="m_fullname" id="fullname" class="form-control" value="Victor Chukwumah"
-                  required="">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group form-group-default required">
-                <label>Email</label>
-                <input type="email" name="m_email" id="m_email" class="form-control" value="ike@qodictive.com" required="">
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group form-group-default required">
-                <label>Telephone</label>
-                <input type="text" name="m_tel" id="m_tel" class="form-control" required="" value="0749089083">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group form-group-default required">
-                <label>Subject</label>
-                <input type="text" name="m_subject" id="m_subject" class="form-control" required="">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group form-group-default required">
-                <label>Message</label>
-                <textarea name="m_text" id="m_text" class="form-control" style="height: 130px" required=""></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-8">
-          </div>
-          <div class="col-md-4 m-t-10 sm-m-t-10">
-            <button type="submit" id="submitContact" class="btn btn-primary btn-block m-t-5">Send Message</button>
-            <img class="image-responsive-height demo-mw-50 hide" id="contactLoader" src="/assets/img/demo/progress.svg"
-              alt="Progress">
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</ng-template>
 <div class="jumbotron page-cover" data-pages="parallax">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
@@ -100,11 +34,11 @@ pg pg-close fs-14"></i>
               <br>
 
               <div class="helpalert">
-                <a (click)="openModal(contactUs)" class="inline">
+                <a (click)="routeToSelectedSection('corporate/contact-us')" class="inline">
                   <i class="fa fa-question-circle" style="font-size:40px"></i>
                 </a>
                 <div class="inline m-l-10">
-                  <p class="hint-text m-t-5 fs-13">Do you requre assistance <br> click <a (click)="openModal(contactUs)"
+                  <p class="hint-text m-t-5 fs-13">Do you requre assistance <br> click <a (click)="routeToSelectedSection('corporate/contact-us')"
                       data-toggle="modal" class="bold" style="text-decoration: underline;">HERE</a>
                     to create a support
                     ticket</p>
@@ -129,7 +63,7 @@ pg pg-close fs-14"></i>
             <div class="form-group form-group-default form-group-default-select2 required">
               <label class="">Account Number</label>
               <pg-select style="width: 100%;" [Mode]="'multiple'" [PlaceHolder]="'Select Account'" [NotFoundContent]="'Not found'">
-                <pg-option *ngFor="let option of accountno" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
+                <pg-option *ngFor="let option of accountno" [Label]="option.label" [Value]="option.value">
                 </pg-option>
               </pg-select>
             </div>
@@ -142,7 +76,8 @@ pg pg-close fs-14"></i>
             <h5 class="page-title sm-p-l-20">
               Last 10 Transactions
             </h5>
-            <button class="btn btn-primary btn-lg">Go to Transactions</button>
+            <button class="btn btn-primary btn-lg" (click)="routeToSelectedSection('corporate/reports/transaction-history')">Go
+              to Transactions</button>
           </div>
         </div>
         <h5 class="page-title m-t-40">

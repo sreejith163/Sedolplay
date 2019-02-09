@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<div class="col-md-6 d-flex align-items-center justify-content-end">
-						<a href="forgot-password.html">Forgot Password?</a>
+						<a (click)="forgotPass()" class="cursor-pointer">Forgot Password?</a>
 					</div>
 				</div>
 				<button type="button" class="btn btn-primary btn-cons m-t-10" [disabled]="validationForm.invalid" (click)="login()">Sign

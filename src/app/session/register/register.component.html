@@ -6,139 +6,130 @@
     <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
       <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" width="150">
       <h4 class="p-t-35 title-page">Register with sedolPay</h4>
-      <ng-container *ngIf="isCreated; else registerContent">
-        <div class="col-md-12 padding-top-10">
-          <div class="alert custom-alert-info">
-            <b>An email has been sent to {{ getRegisteredEmail() }}, please click the link in the email to activate
-              your account. You can <a class="cursor-pointer" (click)="login()">login</a> after you have activated your
-              account.</b>
+      <form class="p-t-15" [formGroup]="validationForm" novalidate>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('firstName')">
+              <label>First Name</label>
+              <input type="text" class="form-control" placeHolder="Type First Name" formControlName="firstName">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default">
+              <label>Middle Name</label>
+              <input type="text" class="form-control" placeHolder="Type Middle Name" formControlName="middleName">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('lastName')">
+              <label>Last name</label>
+              <input type="text" class="form-control" placeHolder="Type Last Name" formControlName="lastName">
+            </div>
           </div>
         </div>
-      </ng-container>
-      <ng-template #registerContent>
-        <form id="form-login" class="p-t-15" [formGroup]="validationForm" novalidate>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('firstName')">
-                <label>First Name</label>
-                <input type="text" class="form-control" placeHolder="Type First Name" formControlName="firstName">
-              </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('address1')">
+              <label>Address Line 1</label>
+              <input type="text" class="form-control" placeHolder="Type Address Line 1" formControlName="address1">
             </div>
-            <div class="col-sm-4">
-              <div class="form-group form-group-default">
-                <label>Middle Name</label>
-                <input type="text" class="form-control" placeHolder="Type Middle Name" formControlName="middleName">
-              </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group  form-group-default required" [ngStyle]="getControlBorderColour('address2')">
+              <label>Address Line 2</label>
+              <input type="text" class="form-control" placeHolder="Type Address Line 2" formControlName="address2">
             </div>
-            <div class="col-sm-4">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('lastName')">
-                <label>Last name</label>
-                <input type="text" class="form-control" placeHolder="Type Last Name" formControlName="lastName">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required " [ngStyle]="getControlBorderColour('zip')">
+              <label>Zip/Postal Code</label>
+              <input type="text" class="form-control" placeHolder="Type Postal Code" formControlName="zip">
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
+              <label class="">Country</label>
+              <pg-select style="width: 100%;" formControlName="country" [PlaceHolder]="'Select Option'">
+                <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('timezone')">
+              <label class="">Timezone</label>
+              <pg-select style="width: 100%;" formControlName="timezone" [PlaceHolder]="'Select Timezone'">
+                <pg-option *ngFor="let option of timezone" [Label]="getTimezoneLabel(option.offset, option.id)" [Value]="option.id">
+                </pg-option>
+              </pg-select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('mobile')">
+              <label>Mobile No.</label>
+              <input type="text" class="form-control" placeHolder="Type Mobile No" formControlName="mobile">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default">
+              <label>Telephone No.</label>
+              <input type="text" class="form-control" placeHolder="Type Telephone No" formControlName="telephone">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group form-group-default input-group required" [ngStyle]="getControlBorderColour('dob')">
+              <div class="form-input-group">
+                <label>Date of Birth</label>
+                <pg-datepicker Placeholder="Select Date of Birth" formControlName="dob" [Format]="'YYYY-MM-DD'"></pg-datepicker>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('address1')">
-                <label>Address Line 1</label>
-                <input type="text" class="form-control" placeHolder="Type Address Line 1" formControlName="address1">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group  form-group-default required" [ngStyle]="getControlBorderColour('address2')">
-                <label>Address Line 2</label>
-                <input type="text" class="form-control" placeHolder="Type Address Line 2" formControlName="address2">
-              </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('regEmail')">
+              <label>Email</label>
+              <input type="email" class="form-control" placeHolder="Type Email" formControlName="regEmail" placeholder="example@example.com">
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="form-group form-group-default required " [ngStyle]="getControlBorderColour('zip')">
-                <label>Zip/Postal Code</label>
-                <input type="text" class="form-control" placeHolder="Type Postal Code" formControlName="zip">
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
-                <label class="">Country</label>
-                <pg-select style="width: 100%;" formControlName="country" [PlaceHolder]="'Select Option'">
-                  <pg-option *ngFor="let option of countries" [Label]="option" [Value]="option" [Disabled]="option.disabled">
-                  </pg-option>
-                </pg-select>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('timezone')">
-                <label class="">Timezone</label>
-                <pg-select style="width: 100%;" formControlName="timezone" [PlaceHolder]="'Select Timezone'">
-                  <pg-option *ngFor="let option of timezone" [Label]="option.label" [Value]="option.value" [Disabled]="option.disabled">
-                  </pg-option>
-                </pg-select>
-              </div>
+          <div class="col-sm-4">
+            <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('curr')">
+              <label>Currency</label>
+              <pg-select style="width: 100%;" formControlName="curr" [PlaceHolder]="'Select Currency'">
+                <pg-option *ngFor="let option of currency" [Label]="option.name" [Value]="option.code">
+                </pg-option>
+              </pg-select>
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('mobile')">
-                <label>Mobile No.</label>
-                <input type="text" class="form-control" placeHolder="Type Mobile No" formControlName="mobile">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group form-group-default">
-                <label>Telephone No.</label>
-                <input type="text" class="form-control" placeHolder="Type Telephone No" formControlName="telephone">
-              </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('pass')">
+              <label>Password</label>
+              <input type="password" class="form-control" placeHolder="Type Password" formControlName="pass">
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default input-group required" [ngStyle]="getControlBorderColour('dob')">
-                <div class="form-input-group">
-                  <label>Date of Birth</label>
-                  <pg-datepicker Placeholder="Select Date of Birth" formControlName="dob" [Format]="'YYYY-MM-DD'"></pg-datepicker>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('email')">
-                <label>Email</label>
-                <input type="email" class="form-control" placeHolder="Type Email" formControlName="email" placeholder="example@example.com">
-              </div>
+          <div class="col-sm-6">
+            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('passConfirm')">
+              <label>Confirm Password</label>
+              <input type="password" class="form-control" placeHolder="Type Confirm Password" formControlName="passConfirm">
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('pass')">
-                <label>Password</label>
-                <input type="password" class="form-control" placeHolder="Type Password" formControlName="pass">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('passConfirm')">
-                <label>Confirm Password</label>
-                <input type="password" class="form-control" placeHolder="Type Confirm Password" formControlName="passConfirm">
-              </div>
-            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <button class="btn btn-primary m-t-30" [disabled]="validationForm.invalid || loading" (click)="register()">Create
+              Account</button>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <button class="btn btn-primary m-t-30" [disabled]="validationForm.invalid" (click)="register()">Create
-                Account</button>
-            </div>
-            <div class="col-md-6">
-              <a (click)="login()" class="cursor-pointer margin-auto pull-right m-t-40">Already have an account?</a>
-            </div>
+          <div class="col-md-6">
+            <a (click)="login()" class="cursor-pointer margin-auto pull-right m-t-40">Already have an account?</a>
           </div>
-          <div class="row" *ngIf="isFailed">
-            <div class="col-md-12 padding-top-10">
-              <div class="alert custom-alert-danger">
-                <b>Registartion failed</b>
-              </div>
-            </div>
-          </div>
-        </form>
-      </ng-template>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -73,3 +73,7 @@
     vertical-align: middle !important;    
     padding-left: 4px!important;
 }
+
+#toastr-container {
+    position: fixed !important;
+}

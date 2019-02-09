@@ -1,9 +1,9 @@
 export class KeyValue {
-    key: string;
-    value: string;
+    code: string;
+    name: string;
 
     constructor(key: string, value: string) {
-        this.key = key;
-        this.value = value;
+        this.code = key;
+        this.code = value;
     }
 }

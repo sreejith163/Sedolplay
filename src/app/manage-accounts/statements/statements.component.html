@@ -27,8 +27,8 @@
         <div class="col-md-3 col-sm-6">
           <div class="form-group form-group form-group-default form-group-default-select2 required">
             <label class="">Country</label>
-            <pg-select style="width: 100%;" [(ngModel)]="selectedOption" [PlaceHolder]="'Select Option'">
-              <pg-option *ngFor="let option of countries" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+            <pg-select style="width: 100%;" [PlaceHolder]="'Select Option'">
+              <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
               </pg-option>
             </pg-select>
           </div>

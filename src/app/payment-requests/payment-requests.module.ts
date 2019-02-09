@@ -21,6 +21,7 @@ import { PayFromCardComponent } from './pay-from-card/pay-from-card.component';
 
 import { PaymentRequestsRoutes } from './payment-requests.routing';
 import { PaymentRequestService } from './shared/services/payment-request.service';
+import { LoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { PaymentRequestService } from './shared/services/payment-request.service
     RouterModule.forChild(PaymentRequestsRoutes),
     FormsModule,
     ReactiveFormsModule,
+    LoadingModule,
     pgSelectModule,
     pgTimePickerModule,
     pgSelectfx,

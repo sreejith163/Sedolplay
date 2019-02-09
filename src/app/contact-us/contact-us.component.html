@@ -2,7 +2,7 @@
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
+        <li class="breadcrumb-item"><a>Sedolpay</a></li>
         <li class="breadcrumb-item active">Contact Us</li>
       </ol>
     </div>
@@ -12,14 +12,6 @@
   </div>
 </div>
 <div class="container-fluid container-fixed-lg">
-  <div class="row">
-    <div class="col-md-12 padding-top-10" *ngIf="isSent">
-      <div class="alert custom-alert-success alert-dismissible">
-        <a (click)="closeAlertWindow()" class="close">&times;</a>
-        <b>An email has been sent to the administrator, someone will get in touch with you shortly.</b>
-      </div>
-    </div>
-  </div>
   <div class="row">
     <div class="col-md-6">
       <h2>How can we assist you?</h2>
@@ -56,7 +48,7 @@
             <p class="pull-left small hint-text m-t-5 font-arial">I hereby certify that the information above
               is true and
               accurate. </p>
-            <button class="btn btn-primary float-right" (click)="submitMail()" [disabled]="validationForm.invalid">Submit</button>
+            <button class="btn btn-primary float-right" (click)="submitMail()" [disabled]="validationForm.invalid || isloading">Submit</button>
           </div>
           <div class="clearfix"></div>
         </form>

@@ -10,7 +10,9 @@ import { ProfileCredential } from '../../models/profile/profile-credential.model
 import { ProfileCurr } from '../../models/profile/profile-curr.model';
 import { UserService } from '../shared/services/user.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrManager } from 'ng6-toastr-notifications';
+import { ProfileInfo } from '../../models/profile/profile-info.model';
 
 @Component({
   selector: 'app-login',
@@ -30,11 +32,27 @@ export class LoginComponent implements OnInit {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService,
-              private authService: AuthenticationService, private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private authService: AuthenticationService,
+    private toastr: ToastrManager,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     this.createValidationForm();
+    this.route.queryParams.subscribe(data => {
+      if (data !== undefined && data['key'] !== undefined) {
+        const key = data['key'];
+
+        const req = this.getImsRequestFormatForActivation();
+        this.userService.register(req).subscribe((data1: Ims) => {
+          console.log(data1);
+          this.toastr.successToastr('Email verification has been completed. You can login.', 'Email  verification completed');
+        });
+      }
+    });
   }
 
   login() {
@@ -53,6 +71,10 @@ export class LoginComponent implements OnInit {
 
   register() {
     this.router.navigate(['register']);
+  }
+
+  forgotPass() {
+    this.router.navigate(['forgotpass']);
   }
 
   getControlBorderColour(control: string): any {
@@ -74,6 +96,30 @@ export class LoginComponent implements OnInit {
     imsRequest.ims = request;
 
     return imsRequest;
+  }
+
+  private getImsRequestFormatForActivation() {
+    const imsRequest = new Ims();
+    const header = new Header('2', 'USER', 'SIGNUP', '');
+    const dataHeader = new DataHeader('');
+    const dataContent = new DataContent();
+    dataContent.acc = new ProfileCurr('USD');
+    dataContent.credential = this.getCredential();
+    dataContent.docs = [];
+    dataContent.info = this.getProfileInfo();
+
+    const content = new Content(dataHeader, dataContent);
+    const request = new RequestResponse(header, content);
+    imsRequest.ims = request;
+
+    return imsRequest;
+  }
+
+  private getProfileInfo(): ProfileInfo {
+    const profile = new ProfileInfo();
+    profile.active = 'Y';
+
+    return profile;
   }
 
   private getCredential(): ProfileCredential {

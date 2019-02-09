@@ -1,21 +1,17 @@
 <div class="jumbotron">
   <div class=" container-fluid   container-fixed-lg sm-p-l-0 sm-p-r-0">
     <div class="inner">
-      <!-- START BREADCRUMB -->
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="home.html">Sedolpay</a></li>
         <li class="breadcrumb-item active">Own Account Transfer</li>
       </ol>
-      <!-- END BREADCRUMB -->
     </div>
     <h4 class="page-title sm-p-l-20">
       Account portfolio
     </h4>
   </div>
 </div>
-<!-- START CONTAINER FLUID -->
 <div class=" container-fluid   container-fixed-lg">
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
   <form class="" role="form">
     <div class="card card-default">
       <div class="card-header search-bg">
@@ -35,7 +31,7 @@
               <label class="">Type</label>
               <pg-select style="width: 100%;" [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}"
                 (OpenChange)="filter()" [PlaceHolder]="'Select Option'">
-                <pg-option *ngFor="let option of type" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+                <pg-option *ngFor="let option of type" [Label]="option" [Value]="option">
                 </pg-option>
               </pg-select>
             </div>
@@ -47,7 +43,7 @@
                 (OpenChange)="filter()" [PlaceHolder]="'Select Option'">
                 <pg-option [Label]="'All'" [Value]="'All'">
                 </pg-option>
-                <pg-option *ngFor="let option of viewcurrency" [Label]="option" [Value]="option" [Disabled]="option.disabled">
+                <pg-option *ngFor="let option of viewcurrency" [Label]="option" [Value]="option">
                 </pg-option>
               </pg-select>
             </div>
@@ -69,9 +65,6 @@
           <table class="table table-hover" id="basicTable">
             <thead>
               <tr>
-                <!-- NOTE * : Inline Style Width For Table Cell is Required as it may differ from user to user
-    										Comman Practice Followed
-    										-->
                 <th style="width:1%" class="text-center">
                   No
                 </th>
@@ -114,4 +107,3 @@
     </div>
   </form>
 </div>
-<!-- END PLACE PAGE CONTENT HERE -->

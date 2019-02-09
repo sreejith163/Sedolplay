@@ -9,6 +9,9 @@ import { RequestResponse } from '../models/request-response.model';
 import { Beneficiary } from '../models/beneficiary/beneficiary.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { KeyValue } from '../models/key-value.model';
+import { GenericService } from '../shared/services/generic.service';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-manage-beneficiaries',
@@ -22,44 +25,14 @@ export class ManageBeneficiariesComponent implements OnInit {
   selectedName = '';
   selectedBank = '';
   selectedAcNo = '';
+  countries: KeyValue[];
 
-  countries: string[] = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua and Barbuda',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'The Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia and Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina Faso',
-    'Burundi'
-  ];
-
-  currency = ['USD', 'EUR', 'GBP'];
+  currency: KeyValue[];
   isHidden = true;
-  isSaved = false;
-  isFailed = false;
+  isLoading = false;
   mode = '';
   benefId = '';
+  benef: Beneficiary;
   availableBeneficiaries: Array<Beneficiary> = [];
   availableBeneficiariesOrig: Array<Beneficiary> = [];
   validationForm: FormGroup;
@@ -72,7 +45,11 @@ export class ManageBeneficiariesComponent implements OnInit {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
 
-  constructor(private beneficiaryService: BeneficiaryService, private formBuilder: FormBuilder,
+  constructor(
+    private beneficiaryService: BeneficiaryService,
+    private formBuilder: FormBuilder,
+    private genericService: GenericService,
+    private toastr: ToastrManager,
     config: NgbModalConfig, private modalService: NgbModal) {
     config.backdrop = 'static';
     config.keyboard = false;
@@ -108,40 +85,50 @@ export class ManageBeneficiariesComponent implements OnInit {
   }
 
   addbeneficiary() {
+    this.isLoading = true;
     const immRequest = this.getImsRequestFormat('BENEF', 'UPDATE');
-    this.beneficiaryService.deleteBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
+    this.beneficiaryService.addBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
       if (data.ims.content.dataheader.status === 'SUCCESS') {
+        this.availableBeneficiaries.push(this.benef);
         this.resetValidationForm();
         this.isHidden = !this.isHidden;
-        this.isSaved = true;
+        this.toastr.successToastr('Your request was processed successfully.', 'Beneficairy create success!');
         this.mode = '';
         this.validationForm.reset();
       } else {
-        this.isFailed = true;
+        this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Beneficairy update failed!');
       }
     }, error => {
-      this.isFailed = true;
+      this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Beneficairy update failed!!');
+    }, () => {
+      this.isLoading = false;
     });
   }
 
   updatebeneficiary() {
+    this.isLoading = true;
     const immRequest = this.getImsRequestFormat('BENEF', 'UPDATE');
-    this.beneficiaryService.deleteBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
+    this.beneficiaryService.updateBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
       if (data.ims.content.dataheader.status === 'SUCCESS') {
         this.isHidden = !this.isHidden;
-        this.isSaved = true;
+        const index = this.availableBeneficiaries.findIndex(x => x.benefId === this.benefId);
+        if (index !== -1) {
+          this.availableBeneficiaries[index] = this.benef;
+        }
+        this.toastr.successToastr('Your request was processed successfully.', 'Beneficairy update success!');
         this.resetValidationForm();
         this.mode = '';
         this.validationForm.reset();
       } else {
-        this.isFailed = true;
+        this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Beneficairy update failed!');
       }
     }, error => {
-      this.isFailed = true;
-    });
+      this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Beneficairy update failed!');
+    }, () => this.isLoading = false);
   }
 
-  deleteBeneficiary(benefDeleted) {
+  deleteBeneficiary() {
+    this.isLoading = true;
     const immRequest = this.getImsRequestFormat('BENEF', 'DELETE', this.benefId);
     this.beneficiaryService.deleteBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
       if (data.ims.content.dataheader.status === 'Successfully Deleted') {
@@ -151,9 +138,9 @@ export class ManageBeneficiariesComponent implements OnInit {
         }
         this.benefId = '';
         this.modalService.dismissAll();
-        this.modalService.open(benefDeleted);
+        this.toastr.successToastr('Beneficiary was successfully deleted', 'Beneficiary delete success');
       }
-    });
+    }, () => { }, () => this.isLoading = false);
   }
 
   filter() {
@@ -170,11 +157,11 @@ export class ManageBeneficiariesComponent implements OnInit {
       this.availableBeneficiaries = this.availableBeneficiaries.filter(i =>
         i.name.toLowerCase().indexOf(this.selectedName.toLowerCase()) > -1);
     }
-    if (this.selectedType !== '') {
+    if (this.selectedType !== '' && this.selectedType !== 'Any') {
       this.availableBeneficiaries = this.availableBeneficiaries.filter(i =>
         i.accType.toLowerCase().indexOf(this.selectedType.toLowerCase()) > -1);
     }
-    if (this.selecteCountry !== '') {
+    if (this.selecteCountry !== '' && this.selecteCountry !== 'Any') {
       this.availableBeneficiaries = this.availableBeneficiaries.filter(i =>
         i.country.toLowerCase().indexOf(this.selecteCountry.toLowerCase()) > -1);
     }
@@ -188,10 +175,6 @@ export class ManageBeneficiariesComponent implements OnInit {
     return '';
   }
 
-  closeAlertWindow() {
-    this.resetAlertControls();
-  }
-
   getControlBorderColour(control: string): any {
     return this.validationForm.controls[control].touched &&
            this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
@@ -202,7 +185,26 @@ export class ManageBeneficiariesComponent implements OnInit {
     this.beneficiaryService.getBeneficiaryDetails(imsRequest).subscribe((data: Ims) => {
       this.availableBeneficiaries = data.ims.content.data.benef;
       this.availableBeneficiariesOrig = Object.assign(this.availableBeneficiaries, this.availableBeneficiaries);
+    });
+    this.loadCountries();
+    this.loadCurrencies();
+  }
 
+  private loadCountries() {
+    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
+    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.countries = data.ims.data.countries;
+      }
+    });
+  }
+
+  private loadCurrencies() {
+    const immRequest = this.getGenericImsRequestFormat('CURRENCY');
+    this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
+      if (data !== undefined) {
+        this.currency = data.ims.data.currencies;
+      }
     });
   }
 
@@ -226,6 +228,14 @@ export class ManageBeneficiariesComponent implements OnInit {
     const content = new Content(dataHeader, dataContent);
     const request = new RequestResponse(header, content);
     imsRequest.ims = request;
+
+    return imsRequest;
+  }
+
+  private getGenericImsRequestFormat( mode: string) {
+    const imsRequest = new Ims();
+    imsRequest.ims = new RequestResponse();
+    imsRequest.ims.header = new Header('2', 'USER', mode, '');
 
     return imsRequest;
   }
@@ -266,19 +276,19 @@ export class ManageBeneficiariesComponent implements OnInit {
   }
 
   private loadValidationValue(): Beneficiary {
-    const benef = new Beneficiary();
-    benef.benefId = this.benefId;
-    benef.name = this.validationForm.controls['name'].value;
-    benef.accNo = this.validationForm.controls['acNo'].value;
-    benef.address = this.validationForm.controls['addr'].value;
-    benef.bankSWIFTBIC = this.validationForm.controls['bankSwift'].value;
-    benef.bankRoutingCode = this.validationForm.controls['bankCode'].value;
-    benef.bankName = this.validationForm.controls['bankName'].value;
-    benef.accType = this.validationForm.controls['bankType'].value;
-    benef.country = this.validationForm.controls['country'].value;
-    benef.cur = this.validationForm.controls['curr'].value;
+    this.benef = new Beneficiary();
+    this.benef.benefId = this.benefId;
+    this.benef.name = this.validationForm.controls['name'].value;
+    this.benef.accNo = this.validationForm.controls['acNo'].value;
+    this.benef.address = this.validationForm.controls['addr'].value;
+    this.benef.bankSWIFTBIC = this.validationForm.controls['bankSwift'].value;
+    this.benef.bankRoutingCode = this.validationForm.controls['bankCode'].value;
+    this.benef.bankName = this.validationForm.controls['bankName'].value;
+    this.benef.accType = this.validationForm.controls['bankType'].value;
+    this.benef.country = this.validationForm.controls['country'].value;
+    this.benef.cur = this.validationForm.controls['curr'].value;
 
-    return benef;
+    return this.benef;
   }
 
   private resetValidationForm() {
@@ -290,10 +300,5 @@ export class ManageBeneficiariesComponent implements OnInit {
     if (element !== undefined && element !== null) {
       window.scrollTo(0, element.offsetTop);
     }
-  }
-
-  private resetAlertControls() {
-    this.isSaved = false;
-    this.isFailed = false;
   }
 }

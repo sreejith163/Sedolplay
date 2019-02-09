@@ -11,7 +11,7 @@ export class Header {
     from: String = 'SEDOLPAY';
     comment: String = '';
     to: String = 'ECS';
-    usertimezone: String = 'America\/Boa_Vista';
+    usertimezone: String = 'America/Boa_Vista';
     userType: String = '';
     timestamp: Date = new Date();
     token: String = '';
