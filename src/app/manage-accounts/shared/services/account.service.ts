@@ -3,13 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { throwError as observableThrowError , Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Ims } from '../../../shared/models/ims.model';
+import { AppConfigService } from '../../../shared/services/app-config.service';
 
 @Injectable()
 export class AccountService {
 
-  private baseUrl = 'http://103.35.198.115:7019/ecsservice/service/customerportal';
+  private baseUrl = '';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient,
+    private environmentService: AppConfigService) {
+
+      this.baseUrl = this.environmentService.environment['api'].sedolpay;
+    }
 
   getAccountPortfolio(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/custaccs`;

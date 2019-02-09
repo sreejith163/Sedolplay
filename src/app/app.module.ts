@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -82,6 +82,7 @@ import { GenericService } from './shared/services/generic.service';
 import { SedolpayStateManagerService } from './shared/services/sedolpay-state-manager.service';
 import { EncrDecrService } from './shared/services/encr-decr.service';
 import { AccountService } from './manage-accounts/shared/services/account.service';
+import { AppConfigService } from './shared/services/app-config.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -157,16 +158,27 @@ export class AppHammerConfig extends HammerGestureConfig {
     pgDatePickerModule,
     pgTimePickerModule
   ],
-  providers: [ AuthenticationService, GenericService, CookieService, SedolpayStateManagerService, AuthGuard, EncrDecrService,
-               AccountService, BeneficiaryService, TrackPaymentService, EmailService, ProfileService, QuickviewService,
-               pagesToggleService, {
-    provide: PERFECT_SCROLLBAR_CONFIG,
-    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-  },
+  providers: [AuthenticationService, GenericService, CookieService, SedolpayStateManagerService, AuthGuard, EncrDecrService,
+    AccountService, BeneficiaryService, TrackPaymentService, EmailService, ProfileService, QuickviewService, AppConfigService,
+    pagesToggleService,
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    },
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: AppHammerConfig
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initAppConfig,
+      deps: [AppConfigService],
+      multi: true
     }],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
+
+export function initAppConfig(appConfig: AppConfigService) {
+  return () => appConfig.loadConfiguration();
+}

@@ -3,13 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { throwError as observableThrowError , Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Ims } from '../models/ims.model';
+import { AppConfigService } from './app-config.service';
 
 @Injectable()
 export class GenericService {
 
-  private baseUrl = 'http://103.35.198.115:7019/ecsservice/service/generic';
+  private baseUrl = '';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient,
+    private environmentService: AppConfigService) {
+
+      this.baseUrl = this.environmentService.environment['api'].sedolpay_generic;
+    }
 
   getCurrencies(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/currency`;

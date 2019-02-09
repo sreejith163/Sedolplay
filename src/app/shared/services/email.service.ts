@@ -3,13 +3,19 @@ import { HttpClient } from '@angular/common/http';
 import { of as observableOf, throwError as observableThrowError, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { EmailRequest } from '../models/email-request.model';
+import { AppConfigService } from './app-config.service';
 
 @Injectable()
 export class EmailService {
 
-  private baseUrl = 'https://api.emailjs.com/api/v1.0/email/send';
+  private baseUrl = '';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient,
+    private environmentService: AppConfigService) {
+
+      this.baseUrl = this.environmentService.environment['api'].emailapi;
+    }
 
   sendMail(request: EmailRequest): Observable<any> {
     const url = `${this.baseUrl}`;
