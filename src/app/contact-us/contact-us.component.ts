@@ -54,13 +54,29 @@ export class ContactUsComponent implements OnInit {
   private getEmailRequest(): EmailRequest {
     const emailRequest = new EmailRequest();
     emailRequest.service_id = 'sedolplay_mail';
-    emailRequest.template_id = 'contact';
+    emailRequest.template_id = 'sedolpay_template';
     emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'New support received';
-    emailRequest.template_params.content = 'You have a new message from ' + this.validationForm.controls['message'].value;
-    emailRequest.template_params.reply_email = this.validationForm.controls['email'].value;
+    emailRequest.template_params.content = this.getMailContent();
+    emailRequest.template_params.reply_email = 'sreejith.jith09@gmail.com';
     return emailRequest;
+  }
+
+  private getMailContent(): string {
+    let message = '';
+    const firstName = this.validationForm.controls['firstName'].value;
+    const lastName = this.validationForm.controls['lastName'].value;
+    const email = this.validationForm.controls['email'].value;
+    const content = this.validationForm.controls['message'].value;
+
+    message += 'You have a new message from ' + firstName + ' ' + lastName + '.';
+    message += '<blockquote>';
+    message += 'Email: ' + email + '<br>';
+    message += 'Message: ' + content;
+    message += '</blockquote>';
+
+    return message;
   }
 
   private createValidationForm() {

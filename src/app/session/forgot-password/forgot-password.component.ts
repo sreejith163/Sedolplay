@@ -28,6 +28,7 @@ export class ForgotPasswordComponent implements OnInit {
   emailForm: FormGroup;
   custId: string;
   isPasswordChangePage = false;
+  loading: boolean;
 
   requiredBorder = {
     'border-color': 'red',
@@ -57,6 +58,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   validateUser() {
+    this.loading = true;
     const request = this.getImsRequestFormatForEmailValidation();
     this.userService.validateEmail(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'VALID') {
@@ -65,10 +67,11 @@ export class ForgotPasswordComponent implements OnInit {
       } else {
         this.toastr.errorToastr('There is no such email address');
       }
-    }, error => this.toastr.errorToastr('There is no such email address', 'Validate User failed!'));
+    }, error => this.toastr.errorToastr('There is no such email address', 'Validate User failed!'), () => this.loading = false);
   }
 
   resetPassword() {
+    this.loading = true;
     const request = this.getImsRequestFormatForPasswordReset();
     this.userService.resetPassword(request).subscribe((data: Ims) => {
       if (data !== undefined) {
@@ -80,7 +83,7 @@ export class ForgotPasswordComponent implements OnInit {
       }
     }, error => {
       this.toastr.errorToastr('Something went wrong while updating the password', 'Password update failed!');
-    });
+    }, () => this.loading = false);
   }
 
   login() {
@@ -95,6 +98,7 @@ export class ForgotPasswordComponent implements OnInit {
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['showView'] !== undefined && data['changeKey'] !== undefined) {
         this.custId = this.encrDecrService.decryptMailContent(data['changeKey']).toString();
+        this.loading = true;
         if (this.custId !== undefined && this.custId.length) {
           const custReq = this.getImsRequestFormatForCustomerIdValidation(this.custId);
           this.userService.validateCustomerId(custReq).subscribe((req: Ims) => {
@@ -103,9 +107,10 @@ export class ForgotPasswordComponent implements OnInit {
             } else {
               this.toastr.errorToastr('The requested url request is not valid');
             }
-          });
+          }, error => console.log(error), () => this.loading = false);
         } else {
           this.toastr.errorToastr('The requested url request is not valid');
+          this.loading = false;
         }
       }
     });
@@ -171,11 +176,11 @@ export class ForgotPasswordComponent implements OnInit {
   private getEmailRequestForResetPassword(key: string): EmailRequest {
     const emailRequest = new EmailRequest();
     emailRequest.service_id = 'sedolplay_mail';
-    emailRequest.template_id = 'template_NTrcOOzK';
+    emailRequest.template_id = 'sedolpay_template';
     emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'Forgot your password?';
-    emailRequest.template_params.content = 'http://localhost:4200/forgotpass?showView=changePassword&changeKey=' + key;
+    emailRequest.template_params.content = this.getMailContent(key);
     emailRequest.template_params.reply_email = this.emailForm.controls['email'].value;
 
     return emailRequest;
@@ -186,6 +191,18 @@ export class ForgotPasswordComponent implements OnInit {
     profile.email = this.emailForm.controls['email'].value;
 
     return profile;
+  }
+
+  private getMailContent(key: string): string {
+    let message = '';
+    message += '<b>Password Reset Request</b> <br><br>';
+    message += 'Hello, <br><br>';
+    message += 'Someone requested that your SedolPay password be reset. <br><br>';
+    message += 'If this was a mistake, just ignore this email and nothing will happen. <br><br>';
+    message += 'To reset your password, please visit the following url: <br><br>';
+    message += 'http://localhost:4200/forgotpass?showView=changePassword&changeKey=' + key;
+
+    return message;
   }
 
   private createValidationForm() {

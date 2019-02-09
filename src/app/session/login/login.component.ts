@@ -22,7 +22,7 @@ import { ProfileCredential } from '../../shared/models/profile-credential.model'
 export class LoginComponent implements OnInit {
 
   validationForm: FormGroup;
-
+  loading: boolean;
   requiredBorder = {
     'border-color': 'red',
   };
@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.loading = true;
     const request = this.getImsRequestFormatForAuthentication();
     this.userService.login(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
@@ -57,7 +58,7 @@ export class LoginComponent implements OnInit {
         this.toastr.errorToastr('Login Failed!');
       }}, error => {
         this.toastr.errorToastr('Login Failed!');
-      });
+      }, () => this.loading = false);
   }
 
   register() {
@@ -77,6 +78,7 @@ export class LoginComponent implements OnInit {
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['key'] !== undefined) {
         const userName = this.encrDecrService.decryptMailContent(data['key']).toString();
+        this.loading = true;
         if (userName !== undefined && userName.length) {
           const userRequest = this.getImsRequestFormatForUserIdValidation(userName);
           this.userService.validateUser(userRequest).subscribe((req: Ims) => {
@@ -88,13 +90,15 @@ export class LoginComponent implements OnInit {
                 } else {
                   this.toastr.errorToastr('Email verification failed.');
                 }
-              });
+              }, error => console.log(error), () => this.loading = false);
             } else {
               this.toastr.errorToastr('Email verification failed.');
+              this.loading = false;
             }
           });
         } else {
           this.toastr.errorToastr('Email verification failed.');
+          this.loading = false;
         }
       }
     });

@@ -34,7 +34,7 @@
 						<a (click)="forgotPass()" class="cursor-pointer">Forgot Password?</a>
 					</div>
 				</div>
-				<button type="button" class="btn btn-primary btn-cons m-t-10" [disabled]="validationForm.invalid" (click)="login()">Sign
+				<button type="button" class="btn btn-primary btn-cons m-t-10" [disabled]="validationForm.invalid || loading" (click)="login()">Sign
 					in
 				</button>
 				<div class="text-center m-t-50">

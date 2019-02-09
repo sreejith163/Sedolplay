@@ -94,7 +94,8 @@ export class RegisterPageComponent implements OnInit {
   }
 
   private sentRegMail(userName: string) {
-    const request = this.getEmailRequestForRegistration(userName);
+    const regKey = this.encrDecrService.encryptMailContent(userName);
+    const request = this.getEmailRequestForRegistration(regKey);
     this.emailService.sendMail(request).subscribe(() => {
       this.toastr.successToastr('An email has been sent to ' + this.getRegisteredEmail() + ', please click the link ' +
                                   'in the email to activate your account. You can login after you have activated your account.',
@@ -189,24 +190,26 @@ export class RegisterPageComponent implements OnInit {
     return startMonth.toString() + startDay.toString() + startYear.toString();
   }
 
-  private getEmailRequestForRegistration(userName: string): EmailRequest {
+  private getEmailRequestForRegistration(key: string): EmailRequest {
     const emailRequest = new EmailRequest();
     emailRequest.service_id = 'sedolplay_mail';
-    emailRequest.template_id = 'contact';
+    emailRequest.template_id = 'sedolpay_template';
     emailRequest.user_id = 'user_r1g6gTm4EE5wXwXzxqtEn';
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'SedolPay Account Activation';
-    emailRequest.template_params.content = this.getEmailContent(userName);
-    emailRequest.template_params.heading = 'Dear ' + this.validationForm.controls['firstName'].value;
+    emailRequest.template_params.content = this.getMailContent(key);
     emailRequest.template_params.reply_email = this.validationForm.controls['regEmail'].value;
     return emailRequest;
   }
 
-  private getEmailContent(userName: string): string {
+  private getMailContent(key: string): string {
     let message = '';
-    const regKey = this.encrDecrService.encryptMailContent(userName);
-    message += 'Please click this <a href=="http://localhost:4200/login?key="' + regKey + '>link</a>' +
-                'to activate your SedolPay account.';
+    const name = this.validationForm.controls['firstName'].value;
+    const userName = this.encrDecrService.decryptMailContent(key).toString();
+
+    message += '<b>Dear ' + name + '<br><br><br><br>';
+    message += 'Please click this <a href=="http://localhost:4200/login?key="' + key + '>link</a>';
+    message += 'to activate your SedolPay account.<br><br>';
     message += 'Once your account is activated, please login using the Customer ID <b>' + userName + '</b>';
 
     return message;
