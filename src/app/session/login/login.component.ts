@@ -77,10 +77,13 @@ export class LoginComponent implements OnInit {
   private processActivation() {
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['key'] !== undefined) {
-        const userName = this.encrDecrService.decryptMailContent(data['key']).toString();
         this.loading = true;
-        if (userName !== undefined && userName.length) {
-          const userRequest = this.getImsRequestFormatForUserIdValidation(userName);
+        const decryptedKey = this.encrDecrService.decryptMailContent(data['key']).toString();
+        const userName = this.getActualValueFromQueryString(decryptedKey.split('&')[0]);
+        const email = this.getActualValueFromQueryString(decryptedKey.split('&')[1]);
+
+        if (userName !== undefined && email !== undefined) {
+          const userRequest = this.getImsRequestFormatForUserIdValidation(userName, email);
           this.userService.validateUser(userRequest).subscribe((req: Ims) => {
             if (req.ims !== undefined && req.ims.content.dataheader.status === 'VALID') {
               const request = this.getImsRequestFormatForUserActivation(userName);
@@ -118,12 +121,14 @@ export class LoginComponent implements OnInit {
     return imsRequest;
   }
 
-  private getImsRequestFormatForUserIdValidation(userName: string) {
+  private getImsRequestFormatForUserIdValidation(userName: string, email: string) {
     const imsRequest = new Ims();
     const header = new Header('2', 'USER', 'SIGNUP', '');
     const dataContent = new DataContent();
     dataContent.credential = new ProfileCredential();
     dataContent.credential.userName = userName;
+    dataContent.info = new ProfileInfo();
+    dataContent.info.email = email;
 
     const content = new Content();
     content.data = dataContent;
@@ -168,6 +173,11 @@ export class LoginComponent implements OnInit {
     credential.userName = userName;
 
     return credential;
+  }
+
+  private getActualValueFromQueryString(value) {
+    const startPosition = value.lastIndexOf('=');
+    return value.substring(startPosition + 1, value.length);
   }
 
   private createValidationForm() {

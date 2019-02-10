@@ -64,7 +64,7 @@ export class RegisterPageComponent implements OnInit {
     const request = this.getImsRequestFormat();
     this.userService.register(request).subscribe((data: Ims) => {
       if (data !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
-        this.sentRegMail(data.ims.content.data.credential.userName);
+        this.sentRegMail(data.ims.content.data.credential.userName, );
       } else {
         this.toastr.errorToastr('Failed to create new account', 'Registration failed!');
       }
@@ -96,8 +96,7 @@ export class RegisterPageComponent implements OnInit {
   }
 
   private sentRegMail(userName: string) {
-    const regKey = this.encrDecrService.encryptMailContent(userName);
-    const request = this.getEmailRequestForRegistration(regKey);
+    const request = this.getEmailRequestForRegistration(userName);
     this.emailService.sendMail(request).subscribe(() => {
       this.toastr.successToastr('An email has been sent to ' + this.getRegisteredEmail() + ', please click the link ' +
                                   'in the email to activate your account. You can login after you have activated your account.',
@@ -192,22 +191,23 @@ export class RegisterPageComponent implements OnInit {
     return startMonth.toString() + startDay.toString() + startYear.toString();
   }
 
-  private getEmailRequestForRegistration(key: string): EmailRequest {
+  private getEmailRequestForRegistration(userName: string): EmailRequest {
     const emailRequest = new EmailRequest();
     emailRequest.service_id = this.environmentService.environment['email'].service_id;
     emailRequest.template_id = this.environmentService.environment['email'].template_id;
     emailRequest.user_id = this.environmentService.environment['email'].user_id;
     emailRequest.template_params = new EmailTemplateParams();
     emailRequest.template_params.subject = 'SedolPay Account Activation';
-    emailRequest.template_params.content = this.getMailContent(key);
+    emailRequest.template_params.content = this.getMailContent(userName);
     emailRequest.template_params.reply_email = this.validationForm.controls['regEmail'].value;
     return emailRequest;
   }
 
-  private getMailContent(key: string): string {
+  private getMailContent(userName: string): string {
     let message = '';
     const name = this.validationForm.controls['firstName'].value;
-    const userName = this.encrDecrService.decryptMailContent(key).toString();
+    const email = this.getRegisteredEmail();
+    const key = this.encrDecrService.encryptMailContent('hash=' + userName + '&email=' + email);
 
     message += '<b>Dear ' + name + '<br><br><br><br>';
     message += 'Please click this <a href=="http://localhost:4200/login?key="' + key + '>link</a>';
