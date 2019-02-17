@@ -102,7 +102,8 @@ export class ForgotPasswordComponent implements OnInit {
   private processResetPassword() {
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['showView'] !== undefined && data['changeKey'] !== undefined) {
-        this.custId = this.encrDecrService.decodeMailContent(data['changeKey']).toString();
+        const decryptedKey = this.encrDecrService.decodeMailContent(data['changeKey']).toString();
+        this.custId = this.getActualValueFromQueryString(decryptedKey.split('&')[0]);
         this.loading = true;
         if (this.custId !== undefined && this.custId.length) {
           const custReq = this.getImsRequestFormatForCustomerIdValidation(this.custId);
@@ -122,7 +123,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   private sendResetPasswordMail() {
-    const forgotPassKey = this.encrDecrService.encodeMailContent(this.custId);
+    const forgotPassKey = this.encrDecrService.encodeMailContent('custid=' + this.custId);
     const request = this.getEmailRequestForResetPassword(forgotPassKey);
     this.emailService.sendMail(request).subscribe(data => {
       this.toastr.successToastr('An email has been sent to ' + this.getEmailId() + ', please click the link in the email to ' +
@@ -137,6 +138,11 @@ export class ForgotPasswordComponent implements OnInit {
     credential.password = this.encrDecrService.encryptPassword(this.validationForm.controls['pass'].value);
 
     return credential;
+  }
+
+  private getActualValueFromQueryString(value) {
+    const startPosition = value.lastIndexOf('=');
+    return value.substring(startPosition + 1, value.length);
   }
 
   private getImsRequestFormatForCustomerIdValidation(custId: string) {

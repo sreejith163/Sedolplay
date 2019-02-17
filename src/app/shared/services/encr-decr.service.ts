@@ -17,10 +17,13 @@ export class EncrDecrService {
   }
 
   encodeMailContent(value) {
-    return btoa(value);
+    const rawStr = value;
+    const wordArray = CryptoJS.enc.Utf8.parse(rawStr);
+    return CryptoJS.enc.Base64.stringify(wordArray);
   }
 
   decodeMailContent(value) {
-    return atob(value);
+    const parsedWordArray = CryptoJS.enc.Base64.parse(value);
+    return parsedWordArray.toString(CryptoJS.enc.Utf8);
   }
 }
