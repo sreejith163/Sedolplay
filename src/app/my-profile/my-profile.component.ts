@@ -17,6 +17,7 @@ import { ProfileInfo } from '../shared/models/profile-info.model';
 import { ProfileCredential } from '../shared/models/profile-credential.model';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../shared/services/authentication.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-my-profile',
@@ -162,8 +163,8 @@ export class MyProfileComponent implements OnInit {
     this.validationForm.controls['mobile'].updateValueAndValidity();
     this.validationForm.controls['telephone'].setValue(profile.telephone);
     this.validationForm.controls['telephone'].updateValueAndValidity();
-    // this.validationForm.controls['dob'].setValue(profile.dob);
-    // this.validationForm.controls['dob'].updateValueAndValidity();
+    this.validationForm.controls['dob'].setValue(moment(profile.dob, 'MMDDYYYY'));
+    this.validationForm.controls['dob'].updateValueAndValidity();
     this.validationForm.controls['timezone'].setValue(response.header.usertimezone);
     this.validationForm.controls['timezone'].updateValueAndValidity();
     this.validationForm.controls['email'].setValue(profile.email);
@@ -189,13 +190,12 @@ export class MyProfileComponent implements OnInit {
   private getImsRequestFormatForPasswordUpdate() {
     const imsRequest = new Ims();
     const header = new Header('2', 'USER', 'PASSWORDUPDATE');
+    const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
-    dataContent.credential = this.getCredential();
-    dataContent.info = new ProfileInfo();
-    dataContent.info.email = this.validationForm.controls['email'].value;
+    dataContent.credential = new ProfileCredential();
+    dataContent.credential.password = this.encrDecrService.encryptPassword(this.passwordValidationForm.controls['newPass'].value);
 
-    const content = new Content();
-    content.data = dataContent;
+    const content = new Content(dataHeader, dataContent);
     const request = new RequestResponse(header, content);
     imsRequest.ims = request;
 

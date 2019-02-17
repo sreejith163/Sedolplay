@@ -20,7 +20,6 @@ export class EmailService {
   sendMail(request: EmailRequest): Observable<any> {
     const url = `${this.baseUrl}`;
 
-    console.log(JSON.stringify(request));
     return this.httpClient.post(url, request).pipe(
       map(this.extractData),
       catchError(this.handleError));

@@ -5,7 +5,6 @@ import * as CryptoJS from 'crypto-js';
 export class EncrDecrService {
 
   passPhrase = 'ec3fn1n#';
-  emailContentPhrase = 'drfp;[su';
 
   constructor() { }
 
@@ -17,11 +16,11 @@ export class EncrDecrService {
     return CryptoJS.AES.decrypt(value, this.passPhrase).toString(CryptoJS.enc.Utf8);
   }
 
-  encryptMailContent(value) {
-    return CryptoJS.AES.encrypt(value, this.emailContentPhrase).toString();
+  encodeMailContent(value) {
+    return btoa(value);
   }
 
-  decryptMailContent(value) {
-    return CryptoJS.AES.decrypt(value, this.emailContentPhrase).toString(CryptoJS.enc.Utf8);
+  decodeMailContent(value) {
+    return atob(value);
   }
 }

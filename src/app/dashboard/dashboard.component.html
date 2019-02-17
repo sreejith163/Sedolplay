@@ -62,14 +62,15 @@
             </h5>
             <div class="form-group form-group-default form-group-default-select2 required">
               <label class="">Account Number</label>
-              <pg-select style="width: 100%;" [Mode]="'multiple'" [PlaceHolder]="'Select Account'" [NotFoundContent]="'Not found'">
+              <pg-select style="width: 100%;" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAccounts" (OpenChange)="setAccount()"
+                [PlaceHolder]="'Select Account'" [NotFoundContent]="'Not found'">
                 <pg-option *ngFor="let option of accounts" [Label]="getAccountLabel(option)" [Value]="option.accNo">
                 </pg-option>
               </pg-select>
             </div>
             <div class="form-group form-group-default">
               <label class="">Current Balance</label>
-              <h1>USD 1.567</h1>
+              <h1>{{ Currency }} {{ totalBalance }}</h1>
             </div>
           </div>
           <div class="col-md-8">

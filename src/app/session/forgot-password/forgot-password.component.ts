@@ -76,7 +76,7 @@ export class ForgotPasswordComponent implements OnInit {
   resetPassword() {
     this.loading = true;
     const request = this.getImsRequestFormatForPasswordReset();
-    console.log(JSON.stringify(request));
+
     this.userService.resetPassword(request).subscribe((data: Ims) => {
       if (data !== undefined) {
         if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
@@ -102,9 +102,7 @@ export class ForgotPasswordComponent implements OnInit {
   private processResetPassword() {
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['showView'] !== undefined && data['changeKey'] !== undefined) {
-        console.log(btoa('password'));
-        console.log(atob('cGFzc3dvcmQ='));
-        this.custId = this.encrDecrService.decryptMailContent(data['changeKey']).toString();
+        this.custId = this.encrDecrService.decodeMailContent(data['changeKey']).toString();
         this.loading = true;
         if (this.custId !== undefined && this.custId.length) {
           const custReq = this.getImsRequestFormatForCustomerIdValidation(this.custId);
@@ -124,7 +122,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   private sendResetPasswordMail() {
-    const forgotPassKey = this.encrDecrService.encryptMailContent(this.custId);
+    const forgotPassKey = this.encrDecrService.encodeMailContent(this.custId);
     const request = this.getEmailRequestForResetPassword(forgotPassKey);
     this.emailService.sendMail(request).subscribe(data => {
       this.toastr.successToastr('An email has been sent to ' + this.getEmailId() + ', please click the link in the email to ' +
@@ -209,7 +207,6 @@ export class ForgotPasswordComponent implements OnInit {
     message += 'If this was a mistake, just ignore this email and nothing will happen. <br><br>';
     message += 'To reset your password, please visit the following url: <br><br>';
     message += 'http://localhost:4200/forgotpass?showView=changePassword&changeKey=' + key;
-    console.log(key);
 
     return message;
   }

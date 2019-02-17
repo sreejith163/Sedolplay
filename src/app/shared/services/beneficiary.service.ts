@@ -27,7 +27,6 @@ export class BeneficiaryService {
 
   updateBeneficiaryDetails(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/upbenefdtls`;
-    console.log(JSON.stringify(request));
 
     return this.httpClient.post(url, JSON.stringify(request)).pipe(
       map(this.extractData),

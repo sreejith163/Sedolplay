@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['key'] !== undefined) {
         this.loading = true;
-        const decryptedKey = this.encrDecrService.decryptMailContent(data['key']).toString();
+        const decryptedKey = this.encrDecrService.decodeMailContent(data['key']).toString();
         const userName = this.getActualValueFromQueryString(decryptedKey.split('&')[0]);
         const email = this.getActualValueFromQueryString(decryptedKey.split('&')[1]);
 

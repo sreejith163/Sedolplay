@@ -153,10 +153,8 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
   private loadProfile() {
     const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
     this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
-      if (data.ims !== undefined) {
+      if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
         this.name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
-      } else {
-        this.toastr.errorToastr('Failed to load the user details');
       }
     });
     this.loadCurrencies();

@@ -207,8 +207,7 @@ export class RegisterPageComponent implements OnInit {
     let message = '';
     const name = this.validationForm.controls['firstName'].value;
     const email = this.getRegisteredEmail();
-    const key = this.encrDecrService.encryptMailContent('hash=' + userName + '&email=' + email);
-    console.log(key);
+    const key = this.encrDecrService.encodeMailContent('hash=' + userName + '&email=' + email);
 
     message += '<b>Dear ' + name + '<br><br>';
     message += 'Please click this <a href="http://localhost:4200/login?key=' + key + '\">link</a> ';

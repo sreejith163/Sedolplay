@@ -20,10 +20,9 @@ import { AuthenticationService } from '../shared/services/authentication.service
 export class CorporateDashboardComponent implements OnInit {
 
   accounts: Array<any> = [];
-  accountno = [
-    { value: 'USD-987977890', label: 'USD-987977890' },
-    { value: 'EUR-987977890', label: 'EUR-987977890' }
-  ];
+  selectedAccounts: Array<string> = [];
+  totalBalance: number;
+  Currency: string;
 
   constructor(
     private accountService: AccountService,
@@ -40,6 +39,13 @@ export class CorporateDashboardComponent implements OnInit {
 
   getAccountLabel(account: Account) {
     return account.cur + ' - ' + account.accNo;
+  }
+
+  setAccount() {
+    if (this.selectedAccounts.length) {
+      this.Currency = this.accounts.find(x => x.accNo === this.selectedAccounts).cur;
+      this.totalBalance = this.accounts.find(x => x.accNo === this.selectedAccounts).availbalance;
+    }
   }
 
   private loadCustomerAccounts() {
