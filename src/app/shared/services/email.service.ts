@@ -14,12 +14,13 @@ export class EmailService {
     private httpClient: HttpClient,
     private environmentService: AppConfigService) {
 
-      this.baseUrl = this.environmentService.environment['api'].emailapi;
+      this.baseUrl = this.environmentService.environment['email'].emailapi;
     }
 
   sendMail(request: EmailRequest): Observable<any> {
     const url = `${this.baseUrl}`;
 
+    console.log(JSON.stringify(request));
     return this.httpClient.post(url, request).pipe(
       map(this.extractData),
       catchError(this.handleError));

@@ -135,14 +135,14 @@ export class RegisterPageComponent implements OnInit {
   private getGenericImsRequestFormat( mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+    imsRequest.ims.header = new Header('2', 'USER', mode);
 
     return imsRequest;
   }
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'SIGNUP', '');
+    const header = new Header('2', 'USER', 'SIGNUP');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
     dataContent.acc = new ProfileCurr(this.validationForm.controls['curr'].value);
@@ -208,9 +208,10 @@ export class RegisterPageComponent implements OnInit {
     const name = this.validationForm.controls['firstName'].value;
     const email = this.getRegisteredEmail();
     const key = this.encrDecrService.encryptMailContent('hash=' + userName + '&email=' + email);
+    console.log(key);
 
-    message += '<b>Dear ' + name + '<br><br><br><br>';
-    message += 'Please click this <a href=="http://localhost:4200/login?key="' + key + '>link</a>';
+    message += '<b>Dear ' + name + '<br><br>';
+    message += 'Please click this <a href="http://localhost:4200/login?key=' + key + '\">link</a> ';
     message += 'to activate your SedolPay account.<br><br>';
     message += 'Once your account is activated, please login using the Customer ID <b>' + userName + '</b>';
 

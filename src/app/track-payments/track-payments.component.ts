@@ -8,6 +8,8 @@ import { DataHeader } from '../shared/models/data-header.model';
 import { DataContent } from '../shared/models/data-content.model';
 import { Content } from '../shared/models/content.model';
 import { RequestResponse } from '../shared/models/request-response.model';
+import { AuthenticationService } from '../shared/services/authentication.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -88,7 +90,10 @@ export class TrackPaymentsComponent implements OnInit {
     };
   }
 
-  constructor(private trackPaymentService: TrackPaymentService) { }
+  constructor(
+    private trackPaymentService: TrackPaymentService,
+    private authenticationService: AuthenticationService,
+    private router: Router) { }
 
   ngOnInit() {
     this.loadPayments();
@@ -167,10 +172,19 @@ export class TrackPaymentsComponent implements OnInit {
     });
   }
 
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
+
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'TRACK_PAY', 'VIEW', 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('2', 'TRACK_PAY', 'VIEW');
+    const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.txnCnt = '30';
     dataHeader.fromDate = '';
     dataHeader.toDate = '';

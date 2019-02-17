@@ -27,6 +27,7 @@ export class UserService {
 
   register(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/signup`;
+    console.log(JSON.stringify(request));
 
     return this.httpClient.post(url, JSON.stringify(request)).pipe(
       map(this.extractData),
@@ -41,7 +42,15 @@ export class UserService {
       catchError(this.handleError));
   }
 
-  validateUser(request: Ims): Observable<Ims> {
+  validateCustId(request: Ims): Observable<Ims> {
+    const url = `${this.baseUrl}/validatecustid`;
+
+    return this.httpClient.post(url, JSON.stringify(request)).pipe(
+      map(this.extractData),
+      catchError(this.handleError));
+  }
+
+  validateUserId(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/validateuser`;
 
     return this.httpClient.post(url, JSON.stringify(request)).pipe(
@@ -50,15 +59,7 @@ export class UserService {
   }
 
   validateEmail(request: Ims): Observable<Ims> {
-    const url = `${this.baseUrl}/validateuser`;
-
-    return this.httpClient.post(url, JSON.stringify(request)).pipe(
-      map(this.extractData),
-      catchError(this.handleError));
-  }
-
-  validateCustomerId(request: Ims): Observable<Ims> {
-    const url = `${this.baseUrl}/validateuser`;
+    const url = `${this.baseUrl}/validateemail`;
 
     return this.httpClient.post(url, JSON.stringify(request)).pipe(
       map(this.extractData),

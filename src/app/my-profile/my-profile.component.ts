@@ -15,6 +15,8 @@ import { DataContent } from '../shared/models/data-content.model';
 import { Content } from '../shared/models/content.model';
 import { ProfileInfo } from '../shared/models/profile-info.model';
 import { ProfileCredential } from '../shared/models/profile-credential.model';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../shared/services/authentication.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -40,6 +42,8 @@ export class MyProfileComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private router: Router,
     private profileService: ProfileService,
     private toastr: ToastrManager,
     private encrDecrService: EncrDecrService,
@@ -102,7 +106,11 @@ export class MyProfileComponent implements OnInit {
   private loadProfile() {
     const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
     this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
-      this.setValidationValue(data.ims);
+      if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
+        this.setValidationValue(data.ims);
+      } else {
+        this.toastr.errorToastr('Failed to load the user details');
+      }
     });
     this.loadCountries();
     this.loadTimeZones();
@@ -129,7 +137,7 @@ export class MyProfileComponent implements OnInit {
   private getGenericImsRequestFormat( mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+    imsRequest.ims.header = new Header('2', 'USER', mode);
 
     return imsRequest;
   }
@@ -164,8 +172,8 @@ export class MyProfileComponent implements OnInit {
 
   private getImsRequestFormatForProfile(type: string, mode: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', type, mode, 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('2', type, mode);
+    const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.portalUserid = '';
     const dataContent = new DataContent();
     dataContent.docs = [];
@@ -180,7 +188,7 @@ export class MyProfileComponent implements OnInit {
 
   private getImsRequestFormatForPasswordUpdate() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE');
     const dataContent = new DataContent();
     dataContent.credential = this.getCredential();
     dataContent.info = new ProfileInfo();
@@ -226,6 +234,15 @@ export class MyProfileComponent implements OnInit {
     const startMonth = startDate.getMonth() + 1 < 10 ? '0' + (startDate.getMonth() + 1) : (startDate.getMonth() + 1);
     const startDay = startDate.getDate() < 10 ? '0' + startDate.getDate() : startDate.getDate();
     return startMonth.toString() + startDay.toString() + startYear.toString();
+  }
+
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 
   private createPasswordValidationForm() {

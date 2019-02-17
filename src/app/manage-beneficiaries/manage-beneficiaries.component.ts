@@ -12,6 +12,8 @@ import { DataHeader } from '../shared/models/data-header.model';
 import { DataContent } from '../shared/models/data-content.model';
 import { Content } from '../shared/models/content.model';
 import { RequestResponse } from '../shared/models/request-response.model';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../shared/services/authentication.service';
 
 @Component({
   selector: 'app-manage-beneficiaries',
@@ -47,8 +49,10 @@ export class ManageBeneficiariesComponent implements OnInit {
 
   constructor(
     private beneficiaryService: BeneficiaryService,
+    private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private genericService: GenericService,
+    private router: Router,
     private toastr: ToastrManager,
     config: NgbModalConfig, private modalService: NgbModal) {
     config.backdrop = 'static';
@@ -91,7 +95,7 @@ export class ManageBeneficiariesComponent implements OnInit {
   addbeneficiary() {
     this.isLoading = true;
     const immRequest = this.getImsRequestFormat('BENEF', 'UPDATE');
-    this.beneficiaryService.addBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
+    this.beneficiaryService.updateBeneficiaryDetails(immRequest).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.availableBeneficiaries.push(this.benef);
         this.resetValidationForm();
@@ -100,7 +104,7 @@ export class ManageBeneficiariesComponent implements OnInit {
         this.mode = '';
         this.validationForm.reset();
       } else {
-        this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Beneficairy update failed!');
+        this.toastr.errorToastr(data.ims.content.dataheader.err, 'Beneficairy update failed!');
       }
     }, error => {
       this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Beneficairy update failed!!');
@@ -187,8 +191,10 @@ export class ManageBeneficiariesComponent implements OnInit {
   private loadBeneficiaryDetails() {
     const imsRequest = this.getImsRequestFormat('ACCOUNTS', 'VIEW');
     this.beneficiaryService.getBeneficiaryDetails(imsRequest).subscribe((data: Ims) => {
-      this.availableBeneficiaries = data.ims.content.data.benef;
-      this.availableBeneficiariesOrig = Object.assign(this.availableBeneficiaries, this.availableBeneficiaries);
+      if (data !== undefined && data.ims.content.data.benef !== undefined) {
+        this.availableBeneficiaries = data.ims.content.data.benef;
+        this.availableBeneficiariesOrig = Object.assign(this.availableBeneficiaries, this.availableBeneficiaries);
+      }
     });
     this.loadCountries();
     this.loadCurrencies();
@@ -203,6 +209,15 @@ export class ManageBeneficiariesComponent implements OnInit {
     });
   }
 
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
+
   private loadCurrencies() {
     const immRequest = this.getGenericImsRequestFormat('CURRENCY');
     this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
@@ -214,8 +229,8 @@ export class ManageBeneficiariesComponent implements OnInit {
 
   private getImsRequestFormat(type: string, mode: string, benefId?: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', type, mode, 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('2', type, mode);
+    const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     if (mode === 'VIEW') {
       dataContent.key = 'value';
@@ -239,7 +254,7 @@ export class ManageBeneficiariesComponent implements OnInit {
   private getGenericImsRequestFormat( mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+    imsRequest.ims.header = new Header('2', 'USER', mode);
 
     return imsRequest;
   }
@@ -250,7 +265,7 @@ export class ManageBeneficiariesComponent implements OnInit {
       acNo: ['', Validators.required],
       addr: ['', Validators.required],
       bankSwift: ['', Validators.required],
-      bankCode: ['', Validators.required],
+      bankCode: [''],
       bankName: ['', Validators.required],
       bankType: ['', Validators.required],
       country: ['', Validators.required],

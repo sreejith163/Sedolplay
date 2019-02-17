@@ -9,6 +9,8 @@ import { DataHeader } from '../../shared/models/data-header.model';
 import { DataContent } from '../../shared/models/data-content.model';
 import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { Router } from '@angular/router';
 declare var jsPDF: any;
 
 @Component({
@@ -100,7 +102,10 @@ export class TransactionHistoryComponent implements OnInit {
     };
   }
 
-  constructor(private reportService: ReportService) { }
+  constructor(
+    private reportService: ReportService,
+    private router: Router,
+    private authenticationService: AuthenticationService,) { }
 
   ngOnInit() {
     this.loadPayments();
@@ -241,10 +246,19 @@ export class TransactionHistoryComponent implements OnInit {
     .catch(err => console.error(err));
   }
 
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
+
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'TXN_HISTORY', 'VIEW', 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('2', 'TXN_HISTORY', 'VIEW');
+    const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.txnCnt = '30';
     dataHeader.fromDate = '';
     dataHeader.toDate = '';

@@ -12,6 +12,8 @@ import { DataContent } from '../../shared/models/data-content.model';
 import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
 import { Account } from '../../manage-accounts/shared/models/account.model';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-own-account-transfer',
@@ -36,6 +38,8 @@ export class OwnAccountTransferComponent implements OnInit {
 
   constructor(
     private paymentRequestService: PaymentRequestService,
+    private authenticationService: AuthenticationService,
+    private router: Router,
     private formBuilder: FormBuilder,
     private toastr: ToastrManager) { }
 
@@ -197,10 +201,19 @@ export class OwnAccountTransferComponent implements OnInit {
     });
   }
 
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
+
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('', 'PAY', 'OWN-VIEW', 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('', 'PAY', 'OWN-VIEW');
+    const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     const content = new Content(dataHeader, dataContent);
     const request = new RequestResponse(header, content);

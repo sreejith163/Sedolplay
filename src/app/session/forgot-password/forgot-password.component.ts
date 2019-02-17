@@ -17,6 +17,7 @@ import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
 import { ProfileInfo } from '../../shared/models/profile-info.model';
 import { AppConfigService } from '../../shared/services/app-config.service';
+import { HttpUrlEncodingCodec } from '@angular/common/http';
 
 @Component({
   selector: 'app-forgot-password',
@@ -67,20 +68,22 @@ export class ForgotPasswordComponent implements OnInit {
         this.custId = data.ims.content.dataheader.custId;
         this.sendResetPasswordMail();
       } else {
-        this.toastr.errorToastr('There is no such email address');
+        this.toastr.errorToastr(data.ims.content.dataheader.comment, 'User Validation Failed!');
       }
-    }, error => this.toastr.errorToastr('There is no such email address', 'Validate User failed!'), () => this.loading = false);
+    }, error => this.toastr.errorToastr('User is invalid', 'User Validation Failed!'), () => this.loading = false);
   }
 
   resetPassword() {
     this.loading = true;
     const request = this.getImsRequestFormatForPasswordReset();
+    console.log(JSON.stringify(request));
     this.userService.resetPassword(request).subscribe((data: Ims) => {
       if (data !== undefined) {
         if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
-          this.toastr.successToastr('Password has been updated', 'Password update success!');
+          this.toastr.successToastr(data.ims.content.dataheader.comment, 'Password update success!');
+          this.router.navigate(['login']);
         } else {
-          this.toastr.errorToastr('Something went wrong while updating the password', 'Password update failed!');
+          this.toastr.errorToastr(data.ims.content.dataheader.comment, 'Password update failed!');
         }
       }
     }, error => {
@@ -99,11 +102,13 @@ export class ForgotPasswordComponent implements OnInit {
   private processResetPassword() {
     this.route.queryParams.subscribe(data => {
       if (data !== undefined && data['showView'] !== undefined && data['changeKey'] !== undefined) {
+        console.log(btoa('password'));
+        console.log(atob('cGFzc3dvcmQ='));
         this.custId = this.encrDecrService.decryptMailContent(data['changeKey']).toString();
         this.loading = true;
         if (this.custId !== undefined && this.custId.length) {
           const custReq = this.getImsRequestFormatForCustomerIdValidation(this.custId);
-          this.userService.validateCustomerId(custReq).subscribe((req: Ims) => {
+          this.userService.validateCustId(custReq).subscribe((req: Ims) => {
             if (req.ims !== undefined && req.ims.content.dataheader.status === 'VALID') {
               this.isPasswordChangePage = true;
             } else {
@@ -123,8 +128,9 @@ export class ForgotPasswordComponent implements OnInit {
     const request = this.getEmailRequestForResetPassword(forgotPassKey);
     this.emailService.sendMail(request).subscribe(data => {
       this.toastr.successToastr('An email has been sent to ' + this.getEmailId() + ', please click the link in the email to ' +
-        'change your password.', 'Validate User Success!');
+        'change your password.');
       this.validationForm.reset();
+      this.router.navigate(['login']);
     }, error => this.toastr.errorToastr('Sending reset password to mail has been failed.', 'Email sent failed!'));
   }
 
@@ -137,7 +143,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getImsRequestFormatForCustomerIdValidation(custId: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
+    const header = new Header('2', 'USER', 'VALIDATECUSTID ');
     const dataHeader = new DataHeader(custId);
 
     const content = new Content(dataHeader);
@@ -149,7 +155,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getImsRequestFormatForPasswordReset() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE');
     const dataHeader = new DataHeader(this.custId);
     const dataContent = new DataContent();
     dataContent.credential = this.getCredential();
@@ -163,7 +169,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getImsRequestFormatForEmailValidation() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE');
     const dataContent = new DataContent();
     dataContent.info = this.getProfileInfo();
 
@@ -203,6 +209,7 @@ export class ForgotPasswordComponent implements OnInit {
     message += 'If this was a mistake, just ignore this email and nothing will happen. <br><br>';
     message += 'To reset your password, please visit the following url: <br><br>';
     message += 'http://localhost:4200/forgotpass?showView=changePassword&changeKey=' + key;
+    console.log(key);
 
     return message;
   }

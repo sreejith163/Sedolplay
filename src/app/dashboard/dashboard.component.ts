@@ -9,6 +9,7 @@ import { Header } from '../shared/models/header.model';
 import { DataContent } from '../shared/models/data-content.model';
 import { Content } from '../shared/models/content.model';
 import { RequestResponse } from '../shared/models/request-response.model';
+import { AuthenticationService } from '../shared/services/authentication.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +27,7 @@ export class CorporateDashboardComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
+    private authenticationService: AuthenticationService,
     private router: Router) { }
 
   ngOnInit() {
@@ -42,8 +44,8 @@ export class CorporateDashboardComponent implements OnInit {
 
   private loadCustomerAccounts() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'ACCOUNTS', 'VIEW', 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('2', 'ACCOUNTS', 'VIEW');
+    const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     dataContent.key = 'value';
     const content = new Content(dataHeader, dataContent);
@@ -55,5 +57,14 @@ export class CorporateDashboardComponent implements OnInit {
         this.accounts = data.ims.content.data.accounts;
       }
     });
+  }
+
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

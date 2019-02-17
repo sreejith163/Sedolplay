@@ -8,6 +8,11 @@ import { SedolpayStateManagerService } from '../../../shared/services/sedolpay-s
 import { Ims } from '../../../shared/models/ims.model';
 import { RequestResponse } from '../../../shared/models/request-response.model';
 import { Header } from '../../../shared/models/header.model';
+import { ProfileService } from '../../../shared/services/profile.service';
+import { ToastrManager } from 'ng6-toastr-notifications';
+import { DataHeader } from '../../../shared/models/data-header.model';
+import { DataContent } from '../../../shared/models/data-content.model';
+import { Content } from '../../../shared/models/content.model';
 
 
 @Component({
@@ -120,11 +125,14 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     },
 
   ];
+  name: String = '';
 
   constructor(
     public toggler: pagesToggleService,
     public router: Router,
     private authService: AuthenticationService,
+    private profileService: ProfileService,
+    private toastr: ToastrManager,
     private sedolpayStateManagerService: SedolpayStateManagerService,
     private genericService: GenericService) {
     super(toggler, router);
@@ -134,7 +142,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     this.changeLayout('menu-pin');
     this.changeLayout('menu-behind');
     this.autoHideMenuPin();
-    this.loadGenericData();
+    this.loadProfile();
   }
 
   logout() {
@@ -142,7 +150,15 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     this.router.navigate(['login']);
   }
 
-  private loadGenericData() {
+  private loadProfile() {
+    const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
+    this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
+      if (data.ims !== undefined) {
+        this.name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
+      } else {
+        this.toastr.errorToastr('Failed to load the user details');
+      }
+    });
     this.loadCurrencies();
     this.loadCountries();
     this.loadTimezones();
@@ -178,10 +194,34 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     });
   }
 
+  private getCustomerId(): any {
+    const custId = this.authService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
+
   private getImsRequestFormat( mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+    imsRequest.ims.header = new Header('2', 'USER', mode);
+
+    return imsRequest;
+  }
+
+  private getImsRequestFormatForProfile(type: string, mode: string) {
+    const imsRequest = new Ims();
+    const header = new Header('2', type, mode);
+    const dataHeader = new DataHeader(this.getCustomerId());
+    dataHeader.portalUserid = '';
+    const dataContent = new DataContent();
+    dataContent.docs = [];
+
+    const content = new Content(dataHeader, dataContent);
+    const request = new RequestResponse(header, content);
+    imsRequest.ims = request;
 
     return imsRequest;
   }

@@ -11,6 +11,8 @@ import { DataHeader } from '../../shared/models/data-header.model';
 import { DataContent } from '../../shared/models/data-content.model';
 import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-statements',
@@ -92,7 +94,9 @@ export class StatementsComponent implements OnInit {
   }
 
   constructor(
+    private authenticationService: AuthenticationService,
     private accountService: AccountService,
+    private router: Router,
     private genericService: GenericService) { }
 
   ngOnInit() {
@@ -148,10 +152,19 @@ export class StatementsComponent implements OnInit {
     }
   }
 
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
+
   private getStatements() {
     this.imsRequest = new Ims();
-    const header = new Header('2', 'STMT', 'VIEW', 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('2', 'STMT', 'VIEW');
+    const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.stmtcnt = '30';
     dataHeader.fromDate = '';
     dataHeader.toDate = '';
@@ -179,7 +192,7 @@ export class StatementsComponent implements OnInit {
   private getImsRequestFormatForContries(mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode, '');
+    imsRequest.ims.header = new Header('2', 'USER', mode);
 
     return imsRequest;
   }

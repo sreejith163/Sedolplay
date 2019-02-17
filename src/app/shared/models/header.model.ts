@@ -16,11 +16,9 @@ export class Header {
     timestamp: Date = new Date();
     token: String = '';
 
-    constructor(clientid: string, type: string, mode: string, token: string) {
+    constructor(clientid: string, type: string, mode: string) {
         this.clientId = clientid;
-
         this.type = type;
         this.mode = mode;
-        this.token = token;
     }
 }

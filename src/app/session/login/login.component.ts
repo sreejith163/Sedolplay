@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     const request = this.getImsRequestFormatForAuthentication();
     this.userService.login(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
-        this.authService.setloginCookies(data.ims.header.token.toString(), data.ims.header.userId.toString(),
+        this.authService.setloginCookies(data.ims.header.token.toString(), this.validationForm.controls['userName'].value,
                                          data.ims.content.dataheader.custId);
         this.toastr.successToastr('Login Successfull');
         this.router.navigate(['corporate/dashboard']);
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
 
         if (userName !== undefined && email !== undefined) {
           const userRequest = this.getImsRequestFormatForUserIdValidation(userName, email);
-          this.userService.validateUser(userRequest).subscribe((req: Ims) => {
+          this.userService.validateUserId(userRequest).subscribe((req: Ims) => {
             if (req.ims !== undefined && req.ims.content.dataheader.status === 'VALID') {
               const request = this.getImsRequestFormatForUserActivation(userName);
               this.userService.activate(request).subscribe((resp: Ims) => {
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit {
 
   private getImsRequestFormatForAuthentication() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'AUTH', '');
+    const header = new Header('2', 'USER', 'AUTH');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
     dataContent.credential = this.getCredentialForLogin();
@@ -123,7 +123,7 @@ export class LoginComponent implements OnInit {
 
   private getImsRequestFormatForUserIdValidation(userName: string, email: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'SIGNUP', '');
+    const header = new Header('2', 'USER', 'VALIDATEUSER');
     const dataContent = new DataContent();
     dataContent.credential = new ProfileCredential();
     dataContent.credential.userName = userName;
@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit {
 
   private getImsRequestFormatForUserActivation(userName: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'SIGNUP', '');
+    const header = new Header('2', 'USER', 'SIGNUP');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
     dataContent.credential = this.getCredentialForActivation(userName);

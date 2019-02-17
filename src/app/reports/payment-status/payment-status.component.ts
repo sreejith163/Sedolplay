@@ -8,6 +8,8 @@ import { DataHeader } from '../../shared/models/data-header.model';
 import { DataContent } from '../../shared/models/data-content.model';
 import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { Router } from '@angular/router';
 declare var jsPDF: any;
 
 @Component({
@@ -97,7 +99,10 @@ export class PaymentStatusComponent implements OnInit {
     };
   }
 
-  constructor(private reportService: ReportService) { }
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private reportService: ReportService) { }
 
   ngOnInit() {
     this.loadPayments();
@@ -234,8 +239,8 @@ export class PaymentStatusComponent implements OnInit {
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'PAY_STATUS', 'VIEW', 'b08f86af-35da-48f2-8fab-cef3904660bd');
-    const dataHeader = new DataHeader('172');
+    const header = new Header('2', 'PAY_STATUS', 'VIEW');
+    const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.txnCnt = '30';
     dataHeader.fromDate = '';
     dataHeader.toDate = '';
@@ -253,6 +258,15 @@ export class PaymentStatusComponent implements OnInit {
     this.selectedAcNo = 'All';
     this.selectedBenef = 'All';
     this.selectedStatus = 'All';
+  }
+
+  private getCustomerId(): any {
+    const custId = this.authenticationService.getCustomerId();
+    if (custId !== null && custId !== undefined && custId !== '') {
+      return custId;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 
   private async getBase64ImageFromUrl(imageUrl) {
