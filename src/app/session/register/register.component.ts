@@ -210,7 +210,9 @@ export class RegisterPageComponent implements OnInit {
     const key = this.encrDecrService.encodeMailContent('hash=' + userName + '&email=' + email);
 
     message += '<b>Dear ' + name + '<br><br>';
-    message += 'Please click this <a href="http://localhost:4200/login?key=' + key + '\">link</a> ';
+    message += 'Please click this <a href="';
+    message += this.environmentService.environment['settings'].applicationUrl;
+    message += '/login?key=' + key + '\">link</a> ';
     message += 'to activate your SedolPay account.<br><br>';
     message += 'Once your account is activated, please login using the Customer ID <b>' + userName + '</b>';
 

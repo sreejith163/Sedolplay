@@ -212,7 +212,7 @@ export class ForgotPasswordComponent implements OnInit {
     message += 'Someone requested that your SedolPay password be reset. <br><br>';
     message += 'If this was a mistake, just ignore this email and nothing will happen. <br><br>';
     message += 'To reset your password, please visit the following url: <br><br>';
-    message += 'http://localhost:4200/forgotpass?showView=changePassword&changeKey=' + key;
+    message +=  this.environmentService.environment['settings'].applicationUrl + '/forgotpass?showView=changePassword&changeKey=' + key;
 
     return message;
   }

@@ -8,5 +8,8 @@
     "service_id": "sedolplay_mail",
     "template_id": "sedolpay_template",
     "user_id": "user_r1g6gTm4EE5wXwXzxqtEn"
+  },
+  "settings": {
+    "applicationUrl": "http://localhost:4200"
   }
 }
