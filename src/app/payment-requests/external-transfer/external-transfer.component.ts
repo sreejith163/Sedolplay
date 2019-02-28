@@ -16,6 +16,7 @@ import { Content } from '../../shared/models/content.model';
 import { Account } from '../../manage-accounts/shared/models/account.model';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { Router } from '@angular/router';
+import { ProfileService } from '../../shared/services/profile.service';
 
 @Component({
   selector: 'app-external-transfer',
@@ -33,6 +34,7 @@ export class ExternalTransferComponent implements OnInit {
   imsRequest: Ims;
   validationForm: FormGroup;
   loading = false;
+  name: string;
 
   requiredBorder = {
     'border-color': 'red',
@@ -45,6 +47,7 @@ export class ExternalTransferComponent implements OnInit {
   constructor(
     private paymentRequestService: PaymentRequestService,
     private authenticationService: AuthenticationService,
+    private profileService: ProfileService,
     private router: Router,
     private genericService: GenericService,
     private formBuilder: FormBuilder,
@@ -173,7 +176,7 @@ export class ExternalTransferComponent implements OnInit {
     orderCust.accNo = selecetdAccount.accNo;
     orderCust.cur = selecetdAccount.cur;
     orderCust.viban = selecetdAccount.viban;
-    orderCust.name = 'Sreejith';
+    orderCust.name = this.name;
 
     return orderCust;
   }
@@ -218,6 +221,15 @@ export class ExternalTransferComponent implements OnInit {
     });
   }
 
+  private loadProfile() {
+    const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
+    this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
+      if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
+        this.name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
+      }
+    });
+  }
+
   private getCustomerId(): any {
     const custId = this.authenticationService.getCustomerId();
     if (custId !== null && custId !== undefined && custId !== '') {
@@ -235,9 +247,24 @@ export class ExternalTransferComponent implements OnInit {
     return imsRequest;
   }
 
+  private getImsRequestFormatForProfile(type: string, mode: string) {
+    const imsRequest = new Ims();
+    const header = new Header('2', type, mode);
+    const dataHeader = new DataHeader(this.getCustomerId());
+    dataHeader.portalUserid = '';
+    const dataContent = new DataContent();
+    dataContent.docs = [];
+
+    const content = new Content(dataHeader, dataContent);
+    const request = new RequestResponse(header, content);
+    imsRequest.ims = request;
+
+    return imsRequest;
+  }
+
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('', 'PAY', 'EXT-VIEW');
+    const header = new Header('2', 'PAY', 'EXT-VIEW');
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     const content = new Content(dataHeader, dataContent);

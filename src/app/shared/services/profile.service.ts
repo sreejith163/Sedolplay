@@ -27,7 +27,7 @@ export class ProfileService {
 
   updateProfileDetails(request: Ims): Observable<Ims> {
     const url = `${this.baseUrl}/custprofile`;
-  
+
     return this.httpClient.post(url, JSON.stringify(request)).pipe(
       map(this.extractData),
       catchError(this.handleError));

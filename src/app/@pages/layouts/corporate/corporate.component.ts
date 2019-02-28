@@ -132,7 +132,6 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     public router: Router,
     private authService: AuthenticationService,
     private profileService: ProfileService,
-    private toastr: ToastrManager,
     private sedolpayStateManagerService: SedolpayStateManagerService,
     private genericService: GenericService) {
     super(toggler, router);

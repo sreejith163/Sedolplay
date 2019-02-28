@@ -14,6 +14,7 @@ import { RequestResponse } from '../../shared/models/request-response.model';
 import { Account } from '../../manage-accounts/shared/models/account.model';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { Router } from '@angular/router';
+import { ProfileService } from '../../shared/services/profile.service';
 
 @Component({
   selector: 'app-internal-transfer',
@@ -27,6 +28,7 @@ export class InternalTransferComponent implements OnInit {
   imsRequest: Ims;
   validationForm: FormGroup;
   loading = false;
+  name: string;
 
   requiredBorder = {
     'border-color': 'red',
@@ -39,6 +41,7 @@ export class InternalTransferComponent implements OnInit {
   constructor(
     private paymentRequestService: PaymentRequestService,
     private authenticationService: AuthenticationService,
+    private profileService: ProfileService,
     private router: Router,
     private formBuilder: FormBuilder,
     private toastr: ToastrManager) { }
@@ -155,7 +158,7 @@ export class InternalTransferComponent implements OnInit {
     orderCust.accNo = selecetdAccount.accNo;
     orderCust.cur = selecetdAccount.cur;
     orderCust.viban = selecetdAccount.viban;
-    orderCust.name = 'Sreejith';
+    orderCust.name = this.name;
 
     return orderCust;
   }
@@ -199,11 +202,35 @@ export class InternalTransferComponent implements OnInit {
     }
   }
 
+  private loadProfile() {
+    const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
+    this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
+      if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
+        this.name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
+      }
+    });
+  }
+
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('', 'PAY', 'INT-VIEW');
+    const header = new Header('2', 'PAY', 'INT-VIEW');
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
+    const content = new Content(dataHeader, dataContent);
+    const request = new RequestResponse(header, content);
+    imsRequest.ims = request;
+
+    return imsRequest;
+  }
+  
+  private getImsRequestFormatForProfile(type: string, mode: string) {
+    const imsRequest = new Ims();
+    const header = new Header('2', type, mode);
+    const dataHeader = new DataHeader(this.getCustomerId());
+    dataHeader.portalUserid = '';
+    const dataContent = new DataContent();
+    dataContent.docs = [];
+
     const content = new Content(dataHeader, dataContent);
     const request = new RequestResponse(header, content);
     imsRequest.ims = request;
