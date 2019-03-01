@@ -49,6 +49,7 @@ export class OwnAccountTransferComponent implements OnInit {
   ngOnInit() {
     this.createValidationForm();
     this.loadDetails();
+    this.loadProfile();
   }
 
   getAccountLabel(account: Account) {

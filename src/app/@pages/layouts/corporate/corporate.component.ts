@@ -166,7 +166,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
       if (data !== undefined) {
         const currencies = data.ims.data.currencies;
-        this.sedolpayStateManagerService.setCurrencies(null);
+        this.sedolpayStateManagerService.setCurrencies(currencies);
       }
     });
   }

@@ -56,6 +56,7 @@ export class ExternalTransferComponent implements OnInit {
   ngOnInit() {
     this.createValidationForm();
     this.loadDetails();
+    this.loadProfile();
   }
 
   getFromAccountLabel(account: Account) {

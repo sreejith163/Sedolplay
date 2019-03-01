@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     const request = this.getImsRequestFormatForAuthentication();
     this.userService.login(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
-        this.authService.setloginCookies(data.ims.header.token.toString(), this.validationForm.controls['userName'].value,
+        this.authService.setloginCookies(this.validationForm.controls['userName'].value,
                                          data.ims.content.dataheader.custId);
         this.toastr.successToastr('Login Successfull');
         this.router.navigate(['corporate/dashboard']);

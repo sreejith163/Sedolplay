@@ -22,7 +22,7 @@ export class AuthenticationService {
     return this.cookieService.get(this.custID_KEY);
   }
 
-  setloginCookies(token: string, userId: string, custId: string) {
+  setloginCookies(userId: string, custId: string) {
     this.isLoggedIn  = true;
     this.cookieService.set(this.user_KEY, userId);
     this.cookieService.set(this.custID_KEY, custId);

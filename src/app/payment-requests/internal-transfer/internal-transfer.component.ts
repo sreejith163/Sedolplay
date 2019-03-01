@@ -49,6 +49,7 @@ export class InternalTransferComponent implements OnInit {
   ngOnInit() {
     this.createValidationForm();
     this.loadDetails();
+    this.loadProfile();
   }
 
   getFromAccountLabel(account: Account) {
@@ -222,7 +223,7 @@ export class InternalTransferComponent implements OnInit {
 
     return imsRequest;
   }
-  
+
   private getImsRequestFormatForProfile(type: string, mode: string) {
     const imsRequest = new Ims();
     const header = new Header('2', type, mode);
