@@ -14,7 +14,6 @@ import { DataHeader } from '../../../shared/models/data-header.model';
 import { DataContent } from '../../../shared/models/data-content.model';
 import { Content } from '../../../shared/models/content.model';
 
-
 @Component({
   selector: 'app-corporate-layout',
   templateUrl: './corporate.component.html',
@@ -125,7 +124,6 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     },
 
   ];
-  name = '';
 
   constructor(
     public toggler: pagesToggleService,
@@ -149,17 +147,28 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     this.router.navigate(['login']);
   }
 
+  getUserName() {
+    return this.sedolpayStateManagerService.getUserName();
+  }
+
   private loadDetails() {
-    const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
-    this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
-      if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
-        this.name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
-        this.sedolpayStateManagerService.setUserName(this.name);
-      }
-    });
+    this.loadUserDetails();
     this.loadCurrencies();
     this.loadCountries();
     this.loadTimezones();
+  }
+
+  private loadUserDetails() {
+    const userName = this.sedolpayStateManagerService.getUserName();
+    if (userName === null || userName === undefined || !userName.length) {
+      const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
+      this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
+        if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
+          const name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
+          this.sedolpayStateManagerService.setUserName(name);
+        }
+      });
+    }
   }
 
   private loadCurrencies() {

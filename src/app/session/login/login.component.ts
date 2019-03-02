@@ -13,6 +13,7 @@ import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
 import { ProfileInfo } from '../../shared/models/profile-info.model';
 import { ProfileCredential } from '../../shared/models/profile-credential.model';
+import { SedolpayStateManagerService } from '../../shared/services/sedolpay-state-manager.service';
 
 @Component({
   selector: 'app-login',
@@ -35,6 +36,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private authService: AuthenticationService,
+    private sedolpayStateManagerService: SedolpayStateManagerService,
     private encrDecrService: EncrDecrService,
     private toastr: ToastrManager,
     private route: ActivatedRoute,
@@ -50,8 +52,8 @@ export class LoginComponent implements OnInit {
     const request = this.getImsRequestFormatForAuthentication();
     this.userService.login(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
-        this.authService.setloginCookies(this.validationForm.controls['userName'].value,
-                                         data.ims.content.dataheader.custId);
+        this.authService.setloginCookies(data.ims.content.dataheader.custId);
+        this.sedolpayStateManagerService.setUserId(this.validationForm.controls['userName'].value);
         this.toastr.successToastr('Login Successfull');
         this.router.navigate(['corporate/dashboard']);
       } else {
