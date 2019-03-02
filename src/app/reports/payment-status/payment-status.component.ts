@@ -186,7 +186,7 @@ export class PaymentStatusComponent implements OnInit {
     doc.autoTable(this.columns, this.rows, {
       theme: 'striped',
       styles: {
-        fontSize: 5,
+        fontSize: 5.3,
         columnWidth: 'wrap'
       },
       headerStyles: { color: 'white', fontStyle: 'bold', fillColor: [190, 32, 106] },
