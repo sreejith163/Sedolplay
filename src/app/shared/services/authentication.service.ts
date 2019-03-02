@@ -6,12 +6,16 @@ export class AuthenticationService {
 
   private readonly user_KEY = 'SedolPlayUser';
   private readonly custID_KEY = 'SedolPlayCustId';
-  private isLoggedIn: Boolean = true;
 
   constructor(private cookieService: CookieService) { }
 
   isUserLogged() {
-    return this.isLoggedIn;
+    const custId = this.cookieService.get(this.custID_KEY);
+    if (custId !== null && custId !== undefined && custId.length ) {
+      return true;
+    }
+
+    return false;
   }
 
   getUserId() {
@@ -23,13 +27,12 @@ export class AuthenticationService {
   }
 
   setloginCookies(userId: string, custId: string) {
-    this.isLoggedIn  = true;
     this.cookieService.set(this.user_KEY, userId);
     this.cookieService.set(this.custID_KEY, custId);
   }
 
   logout() {
-    this.isLoggedIn  = false;
-    this.cookieService.deleteAll();
+    this.cookieService.delete(this.user_KEY);
+    this.cookieService.delete(this.custID_KEY);
   }
 }
