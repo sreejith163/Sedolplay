@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PaymentRequestService } from '../shared/services/payment-request.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GenericService } from '../../shared/services/generic.service';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { KeyValue } from '../../shared/models/key-value.model';
 import { Beneficiary } from '../../shared/models/beneficiary.model';
@@ -16,7 +15,7 @@ import { Content } from '../../shared/models/content.model';
 import { Account } from '../../manage-accounts/shared/models/account.model';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { Router } from '@angular/router';
-import { ProfileService } from '../../shared/services/profile.service';
+import { SedolpayStateManagerService } from '../../shared/services/sedolpay-state-manager.service';
 
 @Component({
   selector: 'app-external-transfer',
@@ -34,7 +33,6 @@ export class ExternalTransferComponent implements OnInit {
   imsRequest: Ims;
   validationForm: FormGroup;
   loading = false;
-  name: string;
 
   requiredBorder = {
     'border-color': 'red',
@@ -47,16 +45,14 @@ export class ExternalTransferComponent implements OnInit {
   constructor(
     private paymentRequestService: PaymentRequestService,
     private authenticationService: AuthenticationService,
-    private profileService: ProfileService,
+    private sedolpayStateManagerService: SedolpayStateManagerService,
     private router: Router,
-    private genericService: GenericService,
     private formBuilder: FormBuilder,
     private toastr: ToastrManager) { }
 
   ngOnInit() {
     this.createValidationForm();
     this.loadDetails();
-    this.loadProfile();
   }
 
   getFromAccountLabel(account: Account) {
@@ -177,7 +173,7 @@ export class ExternalTransferComponent implements OnInit {
     orderCust.accNo = selecetdAccount.accNo;
     orderCust.cur = selecetdAccount.cur;
     orderCust.viban = selecetdAccount.viban;
-    orderCust.name = this.name;
+    orderCust.name = this.sedolpayStateManagerService.getUserName();
 
     return orderCust;
   }
@@ -210,25 +206,7 @@ export class ExternalTransferComponent implements OnInit {
         this.benefAccounts = data.ims.content.data.benef;
       }
     });
-    this.loadCountries();
-  }
-
-  private loadCountries() {
-    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
-    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        this.countries = data.ims.data.countries;
-      }
-    });
-  }
-
-  private loadProfile() {
-    const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
-    this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
-      if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
-        this.name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
-      }
-    });
+    this.countries = this.sedolpayStateManagerService.getCountries();
   }
 
   private getCustomerId(): any {
@@ -244,21 +222,6 @@ export class ExternalTransferComponent implements OnInit {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
     imsRequest.ims.header = new Header('2', 'USER', mode);
-
-    return imsRequest;
-  }
-
-  private getImsRequestFormatForProfile(type: string, mode: string) {
-    const imsRequest = new Ims();
-    const header = new Header('2', type, mode);
-    const dataHeader = new DataHeader(this.getCustomerId());
-    dataHeader.portalUserid = '';
-    const dataContent = new DataContent();
-    dataContent.docs = [];
-
-    const content = new Content(dataHeader, dataContent);
-    const request = new RequestResponse(header, content);
-    imsRequest.ims = request;
 
     return imsRequest;
   }

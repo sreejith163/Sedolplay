@@ -14,6 +14,7 @@ import { Content } from '../shared/models/content.model';
 import { RequestResponse } from '../shared/models/request-response.model';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../shared/services/authentication.service';
+import { SedolpayStateManagerService } from '../shared/services/sedolpay-state-manager.service';
 
 @Component({
   selector: 'app-manage-beneficiaries',
@@ -50,8 +51,8 @@ export class ManageBeneficiariesComponent implements OnInit {
   constructor(
     private beneficiaryService: BeneficiaryService,
     private authenticationService: AuthenticationService,
+    private sedolpayStateManagerService: SedolpayStateManagerService,
     private formBuilder: FormBuilder,
-    private genericService: GenericService,
     private router: Router,
     private toastr: ToastrManager,
     config: NgbModalConfig, private modalService: NgbModal) {
@@ -196,17 +197,8 @@ export class ManageBeneficiariesComponent implements OnInit {
         this.availableBeneficiariesOrig = Object.assign(this.availableBeneficiaries, this.availableBeneficiaries);
       }
     });
-    this.loadCountries();
-    this.loadCurrencies();
-  }
-
-  private loadCountries() {
-    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
-    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        this.countries = data.ims.data.countries;
-      }
-    });
+    this.currency = this.sedolpayStateManagerService.getCurrencies();
+    this.countries = this.sedolpayStateManagerService.getCountries();
   }
 
   private getCustomerId(): any {
@@ -216,15 +208,6 @@ export class ManageBeneficiariesComponent implements OnInit {
     } else {
       this.router.navigate(['login']);
     }
-  }
-
-  private loadCurrencies() {
-    const immRequest = this.getGenericImsRequestFormat('CURRENCY');
-    this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        this.currency = data.ims.data.currencies;
-      }
-    });
   }
 
   private getImsRequestFormat(type: string, mode: string, benefId?: string) {
@@ -247,14 +230,6 @@ export class ManageBeneficiariesComponent implements OnInit {
     const content = new Content(dataHeader, dataContent);
     const request = new RequestResponse(header, content);
     imsRequest.ims = request;
-
-    return imsRequest;
-  }
-
-  private getGenericImsRequestFormat( mode: string) {
-    const imsRequest = new Ims();
-    imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode);
 
     return imsRequest;
   }

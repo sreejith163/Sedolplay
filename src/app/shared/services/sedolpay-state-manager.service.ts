@@ -8,8 +8,13 @@ export class SedolpayStateManagerService {
   private currencies: Array<KeyValue> = [];
   private countries: Array<KeyValue> = [];
   private timeZone: Array<TimeZone> = [];
+  private userName: string;
 
   constructor() { }
+
+  getUserName() {
+    return this.userName;
+  }
 
   getCurrencies(): KeyValue[] {
     return this.currencies;
@@ -21,6 +26,10 @@ export class SedolpayStateManagerService {
 
   getTimeZones(): TimeZone[] {
     return this.timeZone;
+  }
+
+  setUserName(name: string) {
+    this.userName = name;
   }
 
   setCurrencies(data: KeyValue[]) {

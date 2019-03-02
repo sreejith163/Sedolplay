@@ -125,7 +125,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     },
 
   ];
-  name: String = '';
+  name = '';
 
   constructor(
     public toggler: pagesToggleService,
@@ -141,7 +141,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     this.changeLayout('menu-pin');
     this.changeLayout('menu-behind');
     this.autoHideMenuPin();
-    this.loadProfile();
+    this.loadDetails();
   }
 
   logout() {
@@ -149,11 +149,12 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     this.router.navigate(['login']);
   }
 
-  private loadProfile() {
+  private loadDetails() {
     const request = this.getImsRequestFormatForProfile('PROFILE', 'VIEW');
     this.profileService.getProfileDetails(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.data.info !== undefined) {
         this.name = data.ims.content.data.info.firstName + ' ' + data.ims.content.data.info.lastName;
+        this.sedolpayStateManagerService.setUserName(this.name);
       }
     });
     this.loadCurrencies();
@@ -162,33 +163,39 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
   }
 
   private loadCurrencies() {
-    const immRequest = this.getImsRequestFormat('CURRENCY');
-    this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        const currencies = data.ims.data.currencies;
-        this.sedolpayStateManagerService.setCurrencies(currencies);
-      }
-    });
+    const currencies = this.sedolpayStateManagerService.getCurrencies();
+    if (!currencies.length) {
+      const immRequest = this.getImsRequestFormat('CURRENCY');
+      this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
+        if (data !== undefined && data.ims.data.currencies !== undefined && data.ims.data.currencies.length) {
+          this.sedolpayStateManagerService.setCurrencies(data.ims.data.currencies);
+        }
+      });
+    }
   }
 
   private loadCountries() {
-    const immRequest = this.getImsRequestFormat('COUNTRY');
-    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        const countries = data.ims.data.countries;
-        this.sedolpayStateManagerService.setCountries(countries);
-      }
-    });
+    const countries = this.sedolpayStateManagerService.getCountries();
+    if (!countries.length) {
+      const immRequest = this.getImsRequestFormat('COUNTRY');
+      this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
+        if (data !== undefined && data.ims.data.countries !== undefined && data.ims.data.countries.length) {
+          this.sedolpayStateManagerService.setCountries(data.ims.data.countries);
+        }
+      });
+    }
   }
 
   private loadTimezones() {
-    const immRequest = this.getImsRequestFormat('TIMEZONE');
-    this.genericService.getTimezone(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        const timezones = data.ims.data.timezones;
-        this.sedolpayStateManagerService.setTimeZones(timezones);
-      }
-    });
+    const timeZones = this.sedolpayStateManagerService.getTimeZones();
+    if (!timeZones.length) {
+      const immRequest = this.getImsRequestFormat('TIMEZONE');
+      this.genericService.getTimezone(immRequest).subscribe((data: Ims) => {
+        if (data !== undefined && data.ims.data.timezones !== undefined && data.ims.data.timezones.length) {
+          this.sedolpayStateManagerService.setTimeZones(data.ims.data.timezones);
+        }
+      });
+    }
   }
 
   private getCustomerId(): any {

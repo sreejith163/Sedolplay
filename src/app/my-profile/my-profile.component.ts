@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProfileService } from '../shared/services/profile.service';
-import { GenericService } from '../shared/services/generic.service';
 import { matchOtherValidator } from '../session/shared/validators/match-other-validator';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { EncrDecrService } from '../shared/services/encr-decr.service';
@@ -18,6 +17,7 @@ import { ProfileCredential } from '../shared/models/profile-credential.model';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../shared/services/authentication.service';
 import * as moment from 'moment';
+import { SedolpayStateManagerService } from '../shared/services/sedolpay-state-manager.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -48,7 +48,7 @@ export class MyProfileComponent implements OnInit {
     private profileService: ProfileService,
     private toastr: ToastrManager,
     private encrDecrService: EncrDecrService,
-    private genericService: GenericService) { }
+    private sedolpayStateManagerService: SedolpayStateManagerService) { }
 
   ngOnInit() {
     this.createValidationForm();
@@ -113,34 +113,8 @@ export class MyProfileComponent implements OnInit {
         this.toastr.errorToastr('Failed to load the user details');
       }
     });
-    this.loadCountries();
-    this.loadTimeZones();
-  }
-
-  private loadCountries() {
-    const immRequest = this.getGenericImsRequestFormat('COUNTRY');
-    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        this.countries = data.ims.data.countries;
-      }
-    });
-  }
-
-  private loadTimeZones() {
-    const immRequest = this.getGenericImsRequestFormat('TIMEZONE');
-    this.genericService.getTimezone(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        this.timezone = data.ims.data.timezones;
-      }
-    });
-  }
-
-  private getGenericImsRequestFormat( mode: string) {
-    const imsRequest = new Ims();
-    imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode);
-
-    return imsRequest;
+    this.countries = this.sedolpayStateManagerService.getCountries();
+    this.timezone = this.sedolpayStateManagerService.getTimeZones();
   }
 
   private setValidationValue(response: RequestResponse) {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { AccountService } from '../shared/services/account.service';
-import { GenericService } from '../../shared/services/generic.service';
 import { KeyValue } from '../../shared/models/key-value.model';
 import { Ims } from '../../shared/models/ims.model';
 import { Statement } from '../../manage-accounts/shared/models/statement.model';
@@ -13,6 +12,7 @@ import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { Router } from '@angular/router';
+import { SedolpayStateManagerService } from '../../shared/services/sedolpay-state-manager.service';
 
 @Component({
   selector: 'app-statements',
@@ -97,7 +97,7 @@ export class StatementsComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private accountService: AccountService,
     private router: Router,
-    private genericService: GenericService) { }
+    private sedolpayStateManagerService: SedolpayStateManagerService) { }
 
   ngOnInit() {
     this.getStatements();
@@ -177,24 +177,6 @@ export class StatementsComponent implements OnInit {
       this.accounts = data.ims.content.data.accounts;
       this.allAccounts = Object.assign(this.allAccounts, this.accounts);
     });
-    this.loadCountries();
+    this.countries  = this.sedolpayStateManagerService.getCountries();
   }
-
-  private loadCountries() {
-    const immRequest = this.getImsRequestFormatForContries('COUNTRY');
-    this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
-      if (data !== undefined) {
-        this.countries = data.ims.data.countries;
-      }
-    });
-  }
-
-  private getImsRequestFormatForContries(mode: string) {
-    const imsRequest = new Ims();
-    imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode);
-
-    return imsRequest;
-  }
-
 }
