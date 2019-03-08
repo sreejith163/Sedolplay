@@ -48,7 +48,7 @@
         <div class="col-md-2 col-sm-6">
           <div class="form-group form-group form-group-default form-group-default-select2">
             <label>Country</label>
-            <pg-select style="width: 100%;" [(ngModel)]="selecteCountry" [PlaceHolder]="'Select Option'" (OpenChange)="filter()">
+            <pg-select style="width: 100%;" [ShowSearch]="'true'" [(ngModel)]="selecteCountry" [PlaceHolder]="'Select Option'" (OpenChange)="filter()">
               <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
               </pg-option>
             </pg-select>
@@ -103,7 +103,7 @@
               <div class="col-md-3">
                 <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
                   <label>Country</label>
-                  <pg-select style="width: 100%;" formControlName="country" [PlaceHolder]="'Select Option'">
+                  <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="country" [PlaceHolder]="'Select Option'">
                     <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
                     </pg-option>
                   </pg-select>

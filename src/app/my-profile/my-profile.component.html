@@ -65,7 +65,7 @@
         <div class="col-sm-4">
           <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
             <label>Country</label>
-            <pg-select style="width: 100%;" ShowSearch formControlName="country" [PlaceHolder]="'Select Country'">
+            <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="country" [PlaceHolder]="'Select Country'">
               <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
               </pg-option>
             </pg-select>
@@ -74,7 +74,7 @@
         <div class="col-sm-4">
           <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('timezone')">
             <label class="">Timezone</label>
-            <pg-select style="width: 100%;" formControlName="timezone" [PlaceHolder]="'Select Timezone'">
+            <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="timezone" [PlaceHolder]="'Select Timezone'">
               <pg-option *ngFor="let option of timezone" [Label]="getTimezoneLabel(option.offset, option.id)" [Value]="option.id">
               </pg-option>
             </pg-select>
