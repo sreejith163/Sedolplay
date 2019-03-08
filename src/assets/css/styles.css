@@ -70,10 +70,17 @@
     color: #be206a !important;
     margin-left: 0 !important;
     display: inline-block !important;
-    vertical-align: middle !important;    
-    padding-left: 4px!important;
+    vertical-align: middle !important;
+    padding-left: 4px !important;
 }
 
 #toastr-container {
     position: fixed !important;
+}
+
+.isDisabled {
+    color: currentColor !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    text-decoration: none !important;
 }

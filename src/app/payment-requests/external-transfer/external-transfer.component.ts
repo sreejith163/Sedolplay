@@ -134,11 +134,11 @@ export class ExternalTransferComponent implements OnInit {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'IN QUEUE. Reference: ' + transfer.transRef) {
         this.transRef = transfer.transRef;
        this.toastr.successToastr('Your payment request is posted and the last known status is IN QUEUE. Reference: ' + transfer.transRef,
-                                  'Payemnet Transfer Success.', { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
+                                  'Payment Transfer Success.', { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
         this.resetValues();
       }
     }, error => {
-      this.toastr.successToastr('Something went wrong.', 'Payemnet Transfer Failed!',
+      this.toastr.successToastr('Something went wrong.', 'Payment Transfer Failed!',
                                 { toastTimeout: 10000, showCloseButton: true, dismiss: 'click' });
     }, () => this.loading = false);
   }

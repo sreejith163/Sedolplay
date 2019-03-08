@@ -45,12 +45,18 @@
               formControlName="message"></textarea>
           </div>
           <div class="sm-p-t-10 clearfix">
-            <p class="pull-left small hint-text m-t-5 font-arial">I hereby certify that the information above
-              is true and
-              accurate. </p>
-            <button class="btn btn-primary float-right" (click)="submitMail()" [disabled]="validationForm.invalid || isloading">Submit</button>
+            <div class="checkbox ">
+              <input type="checkbox" id="confirmCheckbox" formControlName="confirmCheckbox">
+              <label for="confirmCheckbox" class="pull-left small hint-text m-t-5 font-arial">I hereby certify that the
+                information above
+                is true and
+                accurate.</label>
+            </div>
+            <button class="btn btn-primary" (click)="submitMail()" [disabled]="validationForm.invalid || isloading || validationForm.get('confirmCheckbox').value != true">Submit</button>
           </div>
-          <div class="clearfix"></div>
+          <div class="
+              clearfix">
+          </div>
         </form>
       </div>
     </div>

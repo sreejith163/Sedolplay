@@ -45,17 +45,19 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
         {
           label: 'Account Portfolio',
           routerLink: 'manage-accounts/account-portfolio',
+          enabled: 'true'
 
         },
         {
           label: 'Statements',
           routerLink: 'manage-accounts/statements',
+          enabled: 'true'
 
         },
         {
           label: 'Apply Additional Accounts',
           routerLink: 'manage-accounts/',
-
+          enabled: 'false'
         }
       ]
     },
@@ -75,20 +77,22 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
         {
           label: 'Own Account Transfer',
           routerLink: 'payment-requests/own-account-transfer',
-
+          enabled: 'true'
         },
         {
           label: 'Internal Transfer',
           routerLink: 'payment-requests/internal-transfer',
-
+          enabled: 'true'
         },
         {
           label: 'External Transfer',
           routerLink: 'payment-requests/external-transfer',
+          enabled: 'true'
         },
         {
           label: 'Pay From Card',
           routerLink: 'payment-requests/pay-from-card',
+          enabled: 'false'
         }
       ]
     },
@@ -108,10 +112,12 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
         {
           label: 'Payment Status',
           routerLink: 'reports/payment-status',
+          enabled: 'true'
         },
         {
           label: 'Transaction History',
           routerLink: 'reports/transaction-history',
+          enabled: 'true'
         },
       ]
     },

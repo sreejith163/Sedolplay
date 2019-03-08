@@ -6,35 +6,40 @@
 		<div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
 			<img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" width="150">
 			<h4 class="p-t-35 title-page">Access your account</h4>
-			<p style="max-width: 850px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultrices libero sed
-				ante egestas vestibulum sed ac velit.
-				Morbi metus sapien, pretium ut libero sit amet, rutrum venenatis sem. Aliquam ac auctor nunc, in tristique massa.
-			</p>
-			<form class="p-t-15" [formGroup]="validationForm" novalidate>
-				<div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('userName')">
+			<form class="p-t-15" [formGroup]="validationForm" (submit)="login()" novalidate>
+				<div class="form-group form-group-default required">
 					<label>Login</label>
 					<div class="controls">
 						<input type="text" name="username" placeholder="Type User Name" class="form-control" formControlName="userName">
+						<div *ngIf="validationForm.controls['userName'].invalid && (validationForm.controls['userName'].dirty || validationForm.controls['userName'].touched)"
+						 class="required-field">
+							Username is required
+						</div>
 					</div>
 				</div>
-				<div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('password')">
+				<div class="form-group form-group-default required">
 					<label>Password</label>
 					<div class="controls">
 						<input type="password" class="form-control" name="password" placeholder="Type Password" formControlName="password">
+						<div *ngIf="validationForm.controls['password'].invalid && (validationForm.controls['password'].dirty || validationForm.controls['password'].touched)"
+						 class="required-field">
+							Password is required
+						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6 no-padding sm-p-l-10">
-						<div class="checkbox ">
+						<!-- <div class="checkbox ">
 							<input type="checkbox" value="1" id="checkbox1">
 							<label for="checkbox1">Keep Me Signed in</label>
-						</div>
+						</div> -->
 					</div>
 					<div class="col-md-6 d-flex align-items-center justify-content-end">
 						<a (click)="forgotPass()" class="cursor-pointer">Forgot Password?</a>
 					</div>
 				</div>
-				<button type="button" class="btn btn-primary btn-cons m-t-10" [disabled]="validationForm.invalid || loading" (click)="login()">Sign
+				<button type="submit" class="btn btn-primary btn-cons m-t-10" [disabled]="validationForm.invalid || loading"
+				 (click)="login()">Sign
 					in
 				</button>
 				<div class="text-center m-t-50">

@@ -54,12 +54,11 @@ export class LoginComponent implements OnInit {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.authService.setloginCookies(data.ims.content.dataheader.custId);
         this.sedolpayStateManagerService.setUserId(this.validationForm.controls['userName'].value);
-        this.toastr.successToastr('Login Successfull');
         this.router.navigate(['corporate/dashboard']);
       } else {
-        this.toastr.errorToastr('Login Failed!');
+        this.toastr.errorToastr('Username or password entered is incorrect');
       }}, error => {
-        this.toastr.errorToastr('Login Failed!');
+        this.toastr.errorToastr('Username or password entered is incorrect');
       }, () => this.loading = false);
   }
 

@@ -240,7 +240,8 @@ export class MyProfileComponent implements OnInit {
       mobile: ['', Validators.required],
       telephone: [''],
       dob: ['', Validators.required],
-      email: ['', Validators.compose([Validators.email, Validators.required])],
+      // tslint:disable-next-line:max-line-length
+      email: ['', Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
     });
   }
 }

@@ -232,7 +232,8 @@ export class RegisterPageComponent implements OnInit {
       mobile: ['', Validators.required],
       telephone: [''],
       dob: ['', Validators.required],
-      regEmail: ['', Validators.compose([Validators.email, Validators.required])],
+      // tslint:disable-next-line:max-line-length
+      regEmail: ['', Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
       curr: ['', Validators.required],
       pass: ['', Validators.required],
       passConfirm: ['', Validators.compose([Validators.required, matchOtherValidator('pass')])],

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { EmailService } from '../shared/services/email.service';
 import { EmailRequest } from '../shared/models/email-request.model';
 import { EmailTemplateParams } from '../shared/models/email-template-params.model';
@@ -81,11 +81,21 @@ export class ContactUsComponent implements OnInit {
     return message;
   }
 
+  checkCheckbox(c: AbstractControl) {
+    if (c.get('confirmCheckbox').value === false) {
+        return false;
+    } else {
+      return true;
+    }
+}
+
   private createValidationForm() {
     this.validationForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.compose([Validators.email, Validators.required])],
+      confirmCheckbox: ['', Validators.required],
+      // tslint:disable-next-line:max-line-length
+      email: ['', Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
       message: ['', Validators.required]
     });
   }

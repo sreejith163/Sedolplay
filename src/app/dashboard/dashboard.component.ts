@@ -10,6 +10,7 @@ import { DataContent } from '../shared/models/data-content.model';
 import { Content } from '../shared/models/content.model';
 import { RequestResponse } from '../shared/models/request-response.model';
 import { AuthenticationService } from '../shared/services/authentication.service';
+import { SedolpayStateManagerService } from '../shared/services/sedolpay-state-manager.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,11 +23,12 @@ export class CorporateDashboardComponent implements OnInit {
   accounts: Array<any> = [];
   selectedAccounts: Array<string> = [];
   totalBalance: number;
-  Currency: string;
+  currency: string;
 
   constructor(
     private accountService: AccountService,
     private authenticationService: AuthenticationService,
+    private sedolpayStateManagerService: SedolpayStateManagerService,
     private router: Router) { }
 
   ngOnInit() {
@@ -43,9 +45,13 @@ export class CorporateDashboardComponent implements OnInit {
 
   setAccount() {
     if (this.selectedAccounts.length) {
-      this.Currency = this.accounts.find(x => x.accNo === this.selectedAccounts).cur;
+      this.currency = this.accounts.find(x => x.accNo === this.selectedAccounts).cur;
       this.totalBalance = this.accounts.find(x => x.accNo === this.selectedAccounts).availbalance;
     }
+  }
+
+  getUserName() {
+    return this.sedolpayStateManagerService.getUserName();
   }
 
   private loadCustomerAccounts() {

@@ -3,11 +3,11 @@
     <div class="inner">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/corporate/dashboard">Sedolpay</a></li>
-        <li class="breadcrumb-item active">Dashboard</li>
+        <li class="breadcrumb-item active">Home</li>
       </ol>
     </div>
     <h4 class="page-title sm-p-l-20">
-      Dashboard
+      Home
     </h4>
     <div class="container-md-height m-b-20">
       <div class="row m-lg-0">
@@ -21,24 +21,16 @@
         <div class="col-xl-5 col-lg-6">
           <div class="card card-transparent">
             <div class="card-header ">
-              <div class="card-title">Welcome Ike
+              <div class="card-title">Welcome {{ getUserName() }}
               </div>
             </div>
             <div class="card-body">
-              <h3>One of the most underestimated elements of design is typography. However, it’s critical
-                in both
-                print and web media. We Made it Perfect in both.</h3>
-              <p>This feature in our product specifically creates hinted fonts for various OS browsers;
-                whether its
-                Windows, Mac OSx, or ubuntu, it does it for all.</p>
-              <br>
-
               <div class="helpalert">
                 <a (click)="routeToSelectedSection('corporate/contact-us')" class="inline">
                   <i class="fa fa-question-circle" style="font-size:40px"></i>
                 </a>
                 <div class="inline m-l-10">
-                  <p class="hint-text m-t-5 fs-13">Do you requre assistance <br> click <a (click)="routeToSelectedSection('corporate/contact-us')"
+                  <p class="hint-text m-t-5 fs-13">Do you require assistance <br> click <a (click)="routeToSelectedSection('corporate/contact-us')"
                       data-toggle="modal" class="bold" style="text-decoration: underline;">HERE</a>
                     to create a support
                     ticket</p>
@@ -62,15 +54,15 @@
             </h5>
             <div class="form-group form-group-default form-group-default-select2 required">
               <label class="">Account Number</label>
-              <pg-select style="width: 100%;" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAccounts" (OpenChange)="setAccount()"
-                [PlaceHolder]="'Select Account'" [NotFoundContent]="'Not found'">
+              <pg-select style="width: 100%;" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAccounts"
+                (OpenChange)="setAccount()" [PlaceHolder]="'Select Account'" [NotFoundContent]="'Not found'">
                 <pg-option *ngFor="let option of accounts" [Label]="getAccountLabel(option)" [Value]="option.accNo">
                 </pg-option>
               </pg-select>
             </div>
             <div class="form-group form-group-default">
               <label class="">Current Balance</label>
-              <h1>{{ Currency }} {{ totalBalance }}</h1>
+              <h1>{{ currency }} {{ totalBalance }}</h1>
             </div>
           </div>
           <div class="col-md-8">
@@ -110,7 +102,7 @@
             <i class="fas fa-list-ul"></i>
             <p>Account<br>Statements</p>
           </a>
-          <a class="q-link">
+          <a class="q-link isDisabled">
             <i class="fas fa-plus-circle"></i>
             <p>Create<br>Account</p>
           </a>
@@ -131,7 +123,7 @@
             <i class="fas fa-directions"></i>
             <p>External<br>Transfer</p>
           </a>
-          <a class="q-link">
+          <a class="q-link isDisabled">
             <i class="far fa-credit-card"></i>
             <p>Pay from<br>Card</p>
           </a>

@@ -22,7 +22,7 @@
                     <span  *ngIf="child.submenu" class=" arrow" [class.open]="item.toggle ==='open'"></span>
                 </a>
                 <ng-template #singleLinkChild>
-                <a *ngIf="child.routerLink" [routerLink]="[child.routerLink]"><span class="title">{{ child.label }}</span>
+                <a *ngIf="child.routerLink" [routerLink]="[child.routerLink]"><span class="title" [ngClass]="{'isDisabled ': child.enabled !== 'true'}">{{ child.label }}</span>
                 </a>
                 <a *ngIf="child.externalLink" href="{{child.externalLink}}" [attr.target]="item.target"><span class="title">{{ child.label }}</span>
                 </a>
