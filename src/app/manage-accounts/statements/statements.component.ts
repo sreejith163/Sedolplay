@@ -178,5 +178,12 @@ export class StatementsComponent implements OnInit {
       this.allAccounts = Object.assign(this.allAccounts, this.accounts);
     });
     this.countries  = this.sedolpayStateManagerService.getCountries();
+    if (!this.countries.length) {
+      this.sedolpayStateManagerService.countriesLoaded.subscribe((data: Array<KeyValue>) => {
+        if (data !== undefined) {
+          this.countries = data;
+        }
+      });
+    }
   }
 }

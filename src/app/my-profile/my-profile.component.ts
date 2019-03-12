@@ -115,6 +115,20 @@ export class MyProfileComponent implements OnInit {
     });
     this.countries = this.sedolpayStateManagerService.getCountries();
     this.timezone = this.sedolpayStateManagerService.getTimeZones();
+    if (!this.countries.length) {
+      this.sedolpayStateManagerService.countriesLoaded.subscribe((data: Array<KeyValue>) => {
+        if (data !== undefined) {
+          this.countries = data;
+        }
+      });
+    }
+    if (!this.timezone.length) {
+      this.sedolpayStateManagerService.timeZoneLoaded.subscribe((data: Array<TimeZone>) => {
+        if (data !== undefined) {
+          this.timezone = data;
+        }
+      });
+    }
   }
 
   private setValidationValue(response: RequestResponse) {

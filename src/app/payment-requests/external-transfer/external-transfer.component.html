@@ -98,13 +98,13 @@
         </div>
         <div class="row">
           <div class="col-md-3 col-sm-6">
-            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('bankSwift')">
+            <div class="form-group form-group-default">
               <label>Bank SWIFT BIC</label>
               <input type="text" class="form-control" formControlName="bankSwift" placeholder="Enter Bank SWIFT BIC">
             </div>
           </div>
           <div class="col-md-3 col-sm-6">
-            <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('bankCode')">
+            <div class="form-group form-group-default">
               <label>Bank Routing Code</label>
               <input type="text" class="form-control" formControlName="bankCode" placeholder="Enter Bank Routing Code">
             </div>
@@ -150,7 +150,7 @@
         </div>
         <div class="row">
           <div class="col-md-3 col-sm-4">
-            <button class="btn btn-primary btn-lg short btn-block" [disabled]="validationForm.invalid || loading"
+            <button class="btn btn-primary btn-lg short btn-block" [disabled]="isBeneficiaryInValid()"
               (click)="transferPayment()">SEND
               PAYMENT REQUEST</button>
           </div>

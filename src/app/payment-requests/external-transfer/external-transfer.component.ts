@@ -162,6 +162,12 @@ export class ExternalTransferComponent implements OnInit {
            this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
   }
 
+  isBeneficiaryInValid() {
+    return this.validationForm.invalid || this.loading ||
+           (this.validationForm.controls['bankCode'].value.trim() === '' &&
+            this.validationForm.controls['bankSwift'].value.trim() === '');
+  }
+
   private getReferenceNo(): any {
     return 100000 + Math.floor(Math.random() * 900000);
   }
@@ -207,6 +213,13 @@ export class ExternalTransferComponent implements OnInit {
       }
     });
     this.countries = this.sedolpayStateManagerService.getCountries();
+    if (!this.countries.length) {
+      this.sedolpayStateManagerService.countriesLoaded.subscribe((data: Array<KeyValue>) => {
+        if (data !== undefined) {
+          this.countries = data;
+        }
+      });
+    }
   }
 
   private getCustomerId(): any {
@@ -247,8 +260,8 @@ export class ExternalTransferComponent implements OnInit {
       type: ['', Validators.required],
       acNo: ['', Validators.required],
       addr: ['', Validators.required],
-      bankSwift: ['', Validators.required],
-      bankCode: ['', Validators.required],
+      bankSwift: [''],
+      bankCode: [''],
       bankName: ['', Validators.required],
       country: ['', Validators.required],
       payAmt: ['', Validators.required],

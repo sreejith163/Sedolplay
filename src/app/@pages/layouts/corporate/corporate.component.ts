@@ -184,6 +184,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
       this.genericService.getCurrencies(immRequest).subscribe((data: Ims) => {
         if (data !== undefined && data.ims.data.currencies !== undefined && data.ims.data.currencies.length) {
           this.sedolpayStateManagerService.setCurrencies(data.ims.data.currencies);
+          this.sedolpayStateManagerService.currenciesChanged();
         }
       });
     }
@@ -196,6 +197,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
       this.genericService.getCountries(immRequest).subscribe((data: Ims) => {
         if (data !== undefined && data.ims.data.countries !== undefined && data.ims.data.countries.length) {
           this.sedolpayStateManagerService.setCountries(data.ims.data.countries);
+          this.sedolpayStateManagerService.countriesChanged();
         }
       });
     }
@@ -208,6 +210,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
       this.genericService.getTimezone(immRequest).subscribe((data: Ims) => {
         if (data !== undefined && data.ims.data.timezones !== undefined && data.ims.data.timezones.length) {
           this.sedolpayStateManagerService.setTimeZones(data.ims.data.timezones);
+          this.sedolpayStateManagerService.timeZonesChanged();
         }
       });
     }

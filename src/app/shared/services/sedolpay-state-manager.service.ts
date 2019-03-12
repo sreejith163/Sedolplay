@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { KeyValue } from '../models/key-value.model';
 import { TimeZone } from '../models/timezone.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SedolpayStateManagerService {
@@ -10,6 +11,9 @@ export class SedolpayStateManagerService {
   private timeZone: Array<TimeZone> = [];
   private userName: string;
   private userId: string;
+  timeZoneLoaded = new BehaviorSubject<Array<TimeZone>>(undefined);
+  currenciesLoaded = new BehaviorSubject<Array<KeyValue>>(undefined);
+  countriesLoaded = new BehaviorSubject<Array<KeyValue>>(undefined);
 
   constructor() { }
 
@@ -51,5 +55,17 @@ export class SedolpayStateManagerService {
 
   setTimeZones(data: TimeZone[]) {
     this.timeZone = data;
+  }
+
+  countriesChanged() {
+    this.countriesLoaded.next(this.countries);
+  }
+
+  timeZonesChanged() {
+    this.timeZoneLoaded.next(this.timeZone);
+  }
+
+  currenciesChanged() {
+    this.currenciesLoaded.next(this.currencies);
   }
 }

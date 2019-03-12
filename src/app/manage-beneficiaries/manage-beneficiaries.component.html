@@ -26,13 +26,15 @@
         <div class="col-md-2 col-sm-6">
           <div class="form-group form-group-default">
             <label>Name</label>
-            <input type="text" class="form-control" required="" placeholder="Enter Name" (input)="filter()" [(ngModel)]="selectedName">
+            <input type="text" class="form-control" required="" placeholder="Enter Name" (input)="filter()"
+              [(ngModel)]="selectedName">
           </div>
         </div>
         <div class="col-md-2 col-sm-6">
           <div class="form-group form-group-default form-group-default-select2">
             <label>Type</label>
-            <pg-select style="width: 100%;" [PlaceHolder]="'SelectType'" (OpenChange)="filter()" [(ngModel)]="selectedType">
+            <pg-select style="width: 100%;" [PlaceHolder]="'SelectType'" (OpenChange)="filter()"
+              [(ngModel)]="selectedType">
               <pg-option *ngFor="let option of type" [Label]="option" [Value]="option">
               </pg-option>
             </pg-select>
@@ -48,7 +50,8 @@
         <div class="col-md-2 col-sm-6">
           <div class="form-group form-group form-group-default form-group-default-select2">
             <label>Country</label>
-            <pg-select style="width: 100%;" [ShowSearch]="'true'" [(ngModel)]="selecteCountry" [PlaceHolder]="'Select Option'" (OpenChange)="filter()">
+            <pg-select style="width: 100%;" [ShowSearch]="'true'" [(ngModel)]="selecteCountry"
+              [PlaceHolder]="'Select Option'" (OpenChange)="filter()">
               <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
               </pg-option>
             </pg-select>
@@ -84,7 +87,8 @@
                 </div>
               </div>
               <div class="col-md-4 col-sm-6">
-                <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('bankType')">
+                <div class="form-group form-group-default form-group-default-select2 required"
+                  [ngStyle]="getControlBorderColour('bankType')">
                   <label>Type</label>
                   <pg-select style="width: 100%;" formControlName="bankType" [PlaceHolder]="'SelectType'">
                     <pg-option *ngFor="let option of type" [Label]="option" [Value]="option">
@@ -101,9 +105,11 @@
                 </div>
               </div>
               <div class="col-md-3">
-                <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
+                <div class="form-group form-group-default form-group-default-select2 required"
+                  [ngStyle]="getControlBorderColour('country')">
                   <label>Country</label>
-                  <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="country" [PlaceHolder]="'Select Option'">
+                  <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="country"
+                    [PlaceHolder]="'Select Option'">
                     <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
                     </pg-option>
                   </pg-select>
@@ -112,15 +118,17 @@
             </div>
             <div class="row">
               <div class="col-md-3 col-sm-6">
-                <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('bankSwift')">
+                <div class="form-group form-group-default">
                   <label>Bank SWIFT BIC</label>
-                  <input type="text" class="form-control" formControlName="bankSwift" placeholder="Enter Bank SWIFT BIC">
+                  <input type="text" class="form-control" formControlName="bankSwift"
+                    placeholder="Enter Bank SWIFT BIC">
                 </div>
               </div>
               <div class="col-md-3 col-sm-6">
-                <div class="form-group form-group-default" [ngStyle]="getControlBorderColour('bankCode')">
+                <div class="form-group form-group-default">
                   <label>Bank Routing Code</label>
-                  <input type="text" class="form-control" formControlName="bankCode" placeholder="Enter Bank Routing Code">
+                  <input type="text" class="form-control" formControlName="bankCode"
+                    placeholder="Enter Bank Routing Code">
                 </div>
               </div>
               <div class="col-md-4 col-sm-6">
@@ -130,7 +138,8 @@
                 </div>
               </div>
               <div class="col-md-2 col-sm-6">
-                <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('curr')">
+                <div class="form-group form-group-default form-group-default-select2 required"
+                  [ngStyle]="getControlBorderColour('curr')">
                   <label>Currency</label>
                   <pg-select style="width: 100%;" formControlName="curr" [PlaceHolder]="'Select Currency'">
                     <pg-option *ngFor="let option of currency" [Label]="option.name" [Value]="option.code">
@@ -142,12 +151,13 @@
           </div>
           <div class="ab-footer">
             <ng-container *ngIf="mode === 'Add'; else update">
-              <button class="btn btn-primary mr-3" (click)="addbeneficiary()" [disabled]="validationForm.invalid || isLoading">Add
+              <button class="btn btn-primary mr-3" (click)="addbeneficiary()" [disabled]="isBeneficiaryInValid()">Add
                 Beneficiary
               </button>
             </ng-container>
             <ng-template #update>
-              <button class="btn btn-primary mr-3" (click)="updatebeneficiary()" [disabled]="validationForm.invalid || isLoading">Update
+              <button class="btn btn-primary mr-3" (click)="updatebeneficiary()"
+                [disabled]="isBeneficiaryInValid()">Update
                 Beneficiary
               </button>
             </ng-template>
@@ -206,7 +216,8 @@
 <ng-template #deleteBenef let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-title">Beneficiary deletion</h4>
-    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="dismissModal('Cross click')">
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="dismissModal('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>

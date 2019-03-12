@@ -189,6 +189,12 @@ export class ManageBeneficiariesComponent implements OnInit {
            this.validationForm.controls[control].invalid ? this.requiredBorder : this.optionalBorder;
   }
 
+  isBeneficiaryInValid() {
+    return this.validationForm.invalid || this.isLoading ||
+           (this.validationForm.controls['bankCode'].value.trim() === '' &&
+            this.validationForm.controls['bankSwift'].value.trim() === '');
+  }
+
   private loadBeneficiaryDetails() {
     const imsRequest = this.getImsRequestFormat('ACCOUNTS', 'VIEW');
     this.beneficiaryService.getBeneficiaryDetails(imsRequest).subscribe((data: Ims) => {
@@ -199,6 +205,20 @@ export class ManageBeneficiariesComponent implements OnInit {
     });
     this.currency = this.sedolpayStateManagerService.getCurrencies();
     this.countries = this.sedolpayStateManagerService.getCountries();
+    if (!this.currency.length) {
+      this.sedolpayStateManagerService.currenciesLoaded.subscribe((data: Array<KeyValue>) => {
+        if (data !== undefined) {
+          this.currency = data;
+        }
+      });
+    }
+    if (!this.countries.length) {
+      this.sedolpayStateManagerService.countriesLoaded.subscribe((data: Array<KeyValue>) => {
+        if (data !== undefined) {
+          this.countries = data;
+        }
+      });
+    }
   }
 
   private getCustomerId(): any {
@@ -239,7 +259,7 @@ export class ManageBeneficiariesComponent implements OnInit {
       name: ['', Validators.required],
       acNo: ['', Validators.required],
       addr: ['', Validators.required],
-      bankSwift: ['', Validators.required],
+      bankSwift: [''],
       bankCode: [''],
       bankName: ['', Validators.required],
       bankType: ['', Validators.required],
