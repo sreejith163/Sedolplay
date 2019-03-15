@@ -21,16 +21,17 @@
         <div class="col-md-3 col-sm-6">
           <div class="form-group form-group-default required ">
             <label>Account No</label>
-            <input type="text" class="form-control" (input)="filter($event.target.value)" required="" placeholder="Type Account Number">
+            <input type="text" class="form-control" (input)="filter(e)" [(ngModel)]="searchText" placeholder="Type Account Number">
           </div>
         </div>
         <div class="col-md-3 col-sm-6">
           <div class="form-group form-group form-group-default form-group-default-select2 required">
-            <label class="">Country</label>
-            <pg-select style="width: 100%;" [ShowSearch]="'true'" [PlaceHolder]="'Select Option'">
-              <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
-              </pg-option>
-            </pg-select>
+            <label class="">Type</label>
+              <pg-select style="width: 100%;" [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}"
+                (OpenChange)="filter()" [PlaceHolder]="'Select Option'">
+                <pg-option *ngFor="let option of type" [Label]="option" [Value]="option">
+                </pg-option>
+              </pg-select>
           </div>
         </div>
         <div class="col-md-4 col-sm-8">

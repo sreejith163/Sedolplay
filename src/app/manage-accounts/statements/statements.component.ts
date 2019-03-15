@@ -20,16 +20,14 @@ import { SedolpayStateManagerService } from '../../shared/services/sedolpay-stat
   styleUrls: ['./statements.component.scss']
 })
 export class StatementsComponent implements OnInit {
-  type = [
-    { value: 'All', label: 'All' },
-    { value: 'Transactions', label: 'Transactions' }
-  ];
-  countries: KeyValue[];
+  type = ['All', 'Transaction'];
   accounts: Array<any> = [];
   allAccounts: Array<any> = [];
   imsRequest: Ims;
   statements: Array<Statement> = [];
   selectedAccount: string;
+  selectedType: any;
+  searchText: string;
 
   _startDate = null;
   _endDate = null;
@@ -132,10 +130,14 @@ export class StatementsComponent implements OnInit {
     });
   }
 
-  filter(searchText: string) {
-    if (searchText !== undefined) {
+  filter() {
+    if (this.searchText !== undefined) {
       this.accounts = this.allAccounts.filter(i =>
-        i.accNo.toLowerCase().indexOf(searchText.toLowerCase()) > -1);
+        i.accNo.toLowerCase().indexOf(this.searchText.toLowerCase()) > -1);
+    }
+    if (this.selectedType !== undefined && this.selectedType !== 'All') {
+      this.accounts = this.accounts.filter(i =>
+        i.type.toLowerCase().indexOf(this.selectedType.toLowerCase()) > -1);
     }
   }
 
@@ -177,13 +179,5 @@ export class StatementsComponent implements OnInit {
       this.accounts = data.ims.content.data.accounts;
       this.allAccounts = Object.assign(this.allAccounts, this.accounts);
     });
-    this.countries  = this.sedolpayStateManagerService.getCountries();
-    if (!this.countries.length) {
-      this.sedolpayStateManagerService.countriesLoaded.subscribe((data: Array<KeyValue>) => {
-        if (data !== undefined) {
-          this.countries = data;
-        }
-      });
-    }
   }
 }
