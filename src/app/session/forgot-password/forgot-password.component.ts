@@ -209,7 +209,7 @@ export class ForgotPasswordComponent implements OnInit {
     let message = '';
     message += '<b>Password Reset Request</b> <br><br>';
     message += 'Hello, <br><br>';
-    message += 'Someone requested that your SedolPay password be reset. <br><br>';
+    message += 'Someone requested that your belight payments password be reset. <br><br>';
     message += 'If this was a mistake, just ignore this email and nothing will happen. <br><br>';
     message += 'To reset your password, please visit the following url: <br><br>';
     message +=  this.environmentService.environment['settings'].applicationUrl + '/forgotpass?showView=changePassword&changeKey=' + key;

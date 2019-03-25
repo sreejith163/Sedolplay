@@ -205,7 +205,7 @@ export class TransactionHistoryComponent implements OnInit {
     doc.setFontSize(8);
     doc.text('Generated at: ' + new Date().toUTCString(), 365, 90);
 
-    doc.save('SedolPay_Transaction History');
+    doc.save('Belight_Payments_Transaction History');
   }
 
   onAccountClicked(index: string, txnhistory: Array<TxnHistory>) {

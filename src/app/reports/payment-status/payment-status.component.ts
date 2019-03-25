@@ -202,7 +202,7 @@ export class PaymentStatusComponent implements OnInit {
     doc.setFontSize(8);
     doc.text('Generated at: ' + new Date().toUTCString(), 365, 90);
 
-    doc.save('SedolPay_Payment Status');
+    doc.save('Belight_Payment Status');
   }
 
   private loadPayments() {
