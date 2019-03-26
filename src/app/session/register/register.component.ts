@@ -213,7 +213,7 @@ export class RegisterPageComponent implements OnInit {
     message += 'Please click this <a href="';
     message += this.environmentService.environment['settings'].applicationUrl;
     message += '/login?key=' + key + '\">link</a> ';
-    message += 'to activate your SedolPay account.<br><br>';
+    message += 'to activate your Belight Payments account.<br><br>';
     message += 'Once your account is activated, please login using the Customer ID <b>' + userName + '</b>';
 
     return message;
