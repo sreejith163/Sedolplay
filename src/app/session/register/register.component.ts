@@ -197,7 +197,7 @@ export class RegisterPageComponent implements OnInit {
     emailRequest.template_id = this.environmentService.environment['email'].template_id;
     emailRequest.user_id = this.environmentService.environment['email'].user_id;
     emailRequest.template_params = new EmailTemplateParams();
-    emailRequest.template_params.subject = 'SedolPay Account Activation';
+    emailRequest.template_params.subject = 'Belight Payments Account Activation';
     emailRequest.template_params.content = this.getMailContent(userName);
     emailRequest.template_params.reply_email = this.validationForm.controls['regEmail'].value;
     return emailRequest;
