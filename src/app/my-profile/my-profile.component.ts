@@ -162,6 +162,9 @@ export class MyProfileComponent implements OnInit {
   private getImsRequestFormatForProfile(type: string, mode: string) {
     const imsRequest = new Ims();
     const header = new Header('2', type, mode);
+    if (mode === 'UPDATE') {
+      header.usertimezone = this.validationForm.controls['timezone'].value;
+    }
     const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.portalUserid = '';
     const dataContent = new DataContent();
