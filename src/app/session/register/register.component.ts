@@ -68,9 +68,11 @@ export class RegisterPageComponent implements OnInit {
       } else {
         this.toastr.errorToastr('Failed to create new account', 'Registration failed!');
       }
+      this.loading = false;
     }, error => {
       this.toastr.errorToastr('Failed to create new account', 'Registration failed!');
-    }, () => this.loading = false);
+      this.loading = false;
+    });
   }
 
   login() {

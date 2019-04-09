@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+import { CookiesStorageService } from 'ngx-store';
 
 @Injectable()
 export class AuthenticationService {
 
   private readonly custID_KEY = 'SedolPlayCustId';
 
-  constructor(private cookieService: CookieService) { }
+  constructor(
+    private cookieService: CookiesStorageService) { }
 
   isUserLogged() {
     const custId = this.cookieService.get(this.custID_KEY);
@@ -26,6 +27,6 @@ export class AuthenticationService {
   }
 
   logout() {
-    this.cookieService.delete(this.custID_KEY);
+    this.cookieService.remove(this.custID_KEY);
   }
 }

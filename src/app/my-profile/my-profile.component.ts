@@ -207,15 +207,6 @@ export class MyProfileComponent implements OnInit {
     return profile;
   }
 
-  private getCredential(): ProfileCredential {
-    const credential = new ProfileCredential();
-    credential.userName = '';
-    credential.password = this.passwordValidationForm.controls['newPass'].value;
-    credential.password = this.encrDecrService.encryptPassword(credential.password);
-
-    return credential;
-  }
-
   private getDobFormat(value) {
     const startDate = new Date(value.toString());
     const startYear = startDate.getFullYear();

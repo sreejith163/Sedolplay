@@ -150,6 +150,7 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.sedolpayStateManagerService.clearStateManagerData();
     this.router.navigate(['login']);
   }
 

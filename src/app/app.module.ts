@@ -77,12 +77,12 @@ import { EmailService } from './shared/services/email.service';
 import { ProfileService } from './shared/services/profile.service';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { AuthGuard } from './shared/guards/auth.guard';
-import { CookieService } from 'ngx-cookie-service';
 import { GenericService } from './shared/services/generic.service';
 import { SedolpayStateManagerService } from './shared/services/sedolpay-state-manager.service';
 import { EncrDecrService } from './shared/services/encr-decr.service';
 import { AccountService } from './manage-accounts/shared/services/account.service';
 import { AppConfigService } from './shared/services/app-config.service';
+import { CookiesStorageService, WebStorageModule } from 'ngx-store';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -156,9 +156,10 @@ export class AppHammerConfig extends HammerGestureConfig {
     pgSelectModule,
     pgSelectfx,
     pgDatePickerModule,
-    pgTimePickerModule
+    pgTimePickerModule,
+    WebStorageModule
   ],
-  providers: [AuthenticationService, GenericService, CookieService, SedolpayStateManagerService, AuthGuard, EncrDecrService,
+  providers: [AuthenticationService, GenericService, CookiesStorageService, SedolpayStateManagerService, AuthGuard, EncrDecrService,
     AccountService, BeneficiaryService, TrackPaymentService, EmailService, ProfileService, QuickviewService, AppConfigService,
     pagesToggleService,
     {

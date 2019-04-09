@@ -68,4 +68,12 @@ export class SedolpayStateManagerService {
   currenciesChanged() {
     this.currenciesLoaded.next(this.currencies);
   }
+
+  clearStateManagerData() {
+    this.currencies = [];
+    this.timeZone = [];
+    this.countries = [];
+    this.userId = undefined;
+    this.userName = undefined;
+  }
 }
