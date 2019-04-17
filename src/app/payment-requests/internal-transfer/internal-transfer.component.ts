@@ -203,7 +203,7 @@ export class InternalTransferComponent implements OnInit {
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'PAY', 'INT-VIEW');
+    const header = new Header('2', 'PAY', 'INT-VIEW', this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     const content = new Content(dataHeader, dataContent);

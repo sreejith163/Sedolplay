@@ -147,7 +147,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getImsRequestFormatForCustomerIdValidation(custId: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'VALIDATECUSTID ');
+    const header = new Header('2', 'USER', 'VALIDATECUSTID', '');
     const dataHeader = new DataHeader(custId);
 
     const content = new Content(dataHeader);
@@ -159,7 +159,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getImsRequestFormatForPasswordReset() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE');
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
     const dataHeader = new DataHeader(this.custId);
     const dataContent = new DataContent();
     dataContent.credential = this.getCredential();
@@ -173,7 +173,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   private getImsRequestFormatForEmailValidation() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE');
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE', '');
     const dataContent = new DataContent();
     dataContent.info = this.getProfileInfo();
 

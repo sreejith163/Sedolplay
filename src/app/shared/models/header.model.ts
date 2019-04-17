@@ -11,12 +11,12 @@ export class Header {
     from: String = 'SEDOLPAY';
     comment: String = '';
     to: String = 'ECS';
-    usertimezone: String = 'America/Boa_Vista';
+    usertimezone: string;
     userType: String = '';
     timestamp: Date = new Date();
     token: String = '';
 
-    constructor(clientid: string, type: string, mode: string) {
+    constructor(clientid: string, type: string, mode: string, usertimezone) {
         this.clientId = clientid;
         this.type = type;
         this.mode = mode;

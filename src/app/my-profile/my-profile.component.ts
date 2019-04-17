@@ -61,6 +61,7 @@ export class MyProfileComponent implements OnInit {
     const request = this.getImsRequestFormatForProfile('PROFILE', 'UPDATE');
     this.profileService.updateProfileDetails(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
+        this.sedolpayStateManagerService.setTimezone(data.ims.header.usertimezone);
         this.toastr.successToastr('Your profile was successfully updated.', 'Profile updation success!');
       } else {
         this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Profile updation failed!');
@@ -161,7 +162,7 @@ export class MyProfileComponent implements OnInit {
 
   private getImsRequestFormatForProfile(type: string, mode: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', type, mode);
+    const header = new Header('2', type, mode, this.sedolpayStateManagerService.getTimezone());
     if (mode === 'UPDATE') {
       header.usertimezone = this.validationForm.controls['timezone'].value;
     }
@@ -180,7 +181,7 @@ export class MyProfileComponent implements OnInit {
 
   private getImsRequestFormatForPasswordUpdate() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE');
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE', this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     dataContent.credential = new ProfileCredential();

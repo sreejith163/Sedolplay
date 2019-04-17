@@ -165,7 +165,7 @@ export class StatementsComponent implements OnInit {
 
   private getStatements() {
     this.imsRequest = new Ims();
-    const header = new Header('2', 'STMT', 'VIEW');
+    const header = new Header('2', 'STMT', 'VIEW', this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.stmtcnt = '30';
     dataHeader.fromDate = '';

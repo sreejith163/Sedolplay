@@ -9,6 +9,7 @@ import { Content } from '../../shared/models/content.model';
 import { RequestResponse } from '../../shared/models/request-response.model';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { Router } from '@angular/router';
+import { SedolpayStateManagerService } from '../../shared/services/sedolpay-state-manager.service';
 
 @Component({
   selector: 'app-account-portfolio',
@@ -28,6 +29,7 @@ export class AccountPortfolioComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
+    private sedolpayStateManagerService: SedolpayStateManagerService,
     private accountService: AccountService,
     private router: Router) { }
 
@@ -52,13 +54,17 @@ export class AccountPortfolioComponent implements OnInit {
   }
 
   getFixRate(account: Account): string {
-    const rate = account.otherCur[this.selectedViewcurrency].fxRate;
-    return rate;
+    const rate = account.otherCur[this.selectedViewcurrency];
+    if (rate !== undefined) {
+      return rate.fxRate;
+    }
   }
 
   getFixAmount(account: Account): string {
-    const amount = account.otherCur[this.selectedViewcurrency].amt;
-    return amount;
+    const amount = account.otherCur[this.selectedViewcurrency];
+    if (amount !== undefined) {
+      return amount.amt;
+    }
   }
 
   private getCustomerId(): any {
@@ -72,7 +78,7 @@ export class AccountPortfolioComponent implements OnInit {
 
   private loadCustomerAccounts() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'ACCOUNTS', 'VIEW');
+    const header = new Header('2', 'ACCOUNTS', 'VIEW', this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     dataContent.key = 'value';

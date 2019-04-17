@@ -10,6 +10,7 @@ import { Content } from '../shared/models/content.model';
 import { RequestResponse } from '../shared/models/request-response.model';
 import { AuthenticationService } from '../shared/services/authentication.service';
 import { Router } from '@angular/router';
+import { SedolpayStateManagerService } from '../shared/services/sedolpay-state-manager.service';
 
 
 @Component({
@@ -92,6 +93,7 @@ export class TrackPaymentsComponent implements OnInit {
 
   constructor(
     private trackPaymentService: TrackPaymentService,
+    private sedolpayStateManagerService: SedolpayStateManagerService,
     private authenticationService: AuthenticationService,
     private router: Router) { }
 
@@ -183,7 +185,7 @@ export class TrackPaymentsComponent implements OnInit {
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'TRACK_PAY', 'VIEW');
+    const header = new Header('2', 'TRACK_PAY', 'VIEW', this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.txnCnt = '30';
     dataHeader.fromDate = '';

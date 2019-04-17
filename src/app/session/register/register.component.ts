@@ -137,14 +137,14 @@ export class RegisterPageComponent implements OnInit {
   private getGenericImsRequestFormat( mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode);
+    imsRequest.ims.header = new Header('2', 'USER', mode, '');
 
     return imsRequest;
   }
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'SIGNUP');
+    const header = new Header('2', 'USER', 'SIGNUP', '');
     header.usertimezone = this.validationForm.controls['timezone'].value;
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();

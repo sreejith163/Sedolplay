@@ -234,14 +234,13 @@ export class ExternalTransferComponent implements OnInit {
   private getGenericImsRequestFormat( mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode);
 
     return imsRequest;
   }
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'PAY', 'EXT-VIEW');
+    const header = new Header('2', 'PAY', 'EXT-VIEW', this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     const content = new Content(dataHeader, dataContent);

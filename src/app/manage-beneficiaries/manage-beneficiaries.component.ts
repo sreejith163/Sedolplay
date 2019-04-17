@@ -232,7 +232,7 @@ export class ManageBeneficiariesComponent implements OnInit {
 
   private getImsRequestFormat(type: string, mode: string, benefId?: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', type, mode);
+    const header = new Header('2', type, mode, this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     if (mode === 'VIEW') {

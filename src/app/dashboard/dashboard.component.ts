@@ -56,7 +56,7 @@ export class CorporateDashboardComponent implements OnInit {
 
   private loadCustomerAccounts() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'ACCOUNTS', 'VIEW');
+    const header = new Header('2', 'ACCOUNTS', 'VIEW', this.sedolpayStateManagerService.getTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     dataContent.key = 'value';

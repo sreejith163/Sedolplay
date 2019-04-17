@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.authService.setloginCookies(data.ims.content.dataheader.custId);
         this.sedolpayStateManagerService.setUserId(this.validationForm.controls['userName'].value);
+        this.sedolpayStateManagerService.setTimezone(data.ims.header.usertimezone);
         this.router.navigate(['corporate/dashboard']);
       } else {
         this.toastr.errorToastr('Username or password entered is incorrect');
@@ -110,7 +111,7 @@ export class LoginComponent implements OnInit {
 
   private getImsRequestFormatForAuthentication() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'AUTH');
+    const header = new Header('2', 'USER', 'AUTH', '');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
     dataContent.credential = this.getCredentialForLogin();
@@ -124,7 +125,7 @@ export class LoginComponent implements OnInit {
 
   private getImsRequestFormatForUserIdValidation(userName: string, email: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'VALIDATEUSER');
+    const header = new Header('2', 'USER', 'VALIDATEUSER', '');
     const dataContent = new DataContent();
     dataContent.credential = new ProfileCredential();
     dataContent.credential.userName = userName;
@@ -141,7 +142,7 @@ export class LoginComponent implements OnInit {
 
   private getImsRequestFormatForUserActivation(userName: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'SIGNUP');
+    const header = new Header('2', 'USER', 'SIGNUP', '');
     const dataHeader = new DataHeader('');
     const dataContent = new DataContent();
     dataContent.credential = this.getCredentialForActivation(userName);
