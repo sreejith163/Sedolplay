@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
         this.authService.setloginCookies(data.ims.content.dataheader.custId);
         this.sedolpayStateManagerService.setUserId(this.validationForm.controls['userName'].value);
         this.sedolpayStateManagerService.setTimezone(data.ims.header.usertimezone);
+        this.removeHistoryAfterLogin();
         this.router.navigate(['corporate/dashboard']);
       } else {
         this.toastr.errorToastr('Username or password entered is incorrect');
@@ -187,5 +188,12 @@ export class LoginComponent implements OnInit {
       userName: ['', Validators.required],
       password: ['', Validators.required]
     });
+  }
+
+  private removeHistoryAfterLogin() {
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    };
   }
 }

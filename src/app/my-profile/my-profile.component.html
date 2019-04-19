@@ -63,19 +63,24 @@
           </div>
         </div>
         <div class="col-sm-4">
-          <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('country')">
+          <div class="form-group form-group-default form-group-default-select2 required"
+            [ngStyle]="getControlBorderColour('country')">
             <label>Country</label>
-            <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="country" [PlaceHolder]="'Select Country'">
+            <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="country"
+              [PlaceHolder]="'Select Country'">
               <pg-option *ngFor="let option of countries" [Label]="option.name" [Value]="option.code">
               </pg-option>
             </pg-select>
           </div>
         </div>
         <div class="col-sm-4">
-          <div class="form-group form-group-default form-group-default-select2 required" [ngStyle]="getControlBorderColour('timezone')">
+          <div class="form-group form-group-default form-group-default-select2 required"
+            [ngStyle]="getControlBorderColour('timezone')">
             <label class="">Timezone</label>
-            <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="timezone" [PlaceHolder]="'Select Timezone'">
-              <pg-option *ngFor="let option of timezone" [Label]="getTimezoneLabel(option.offset, option.id)" [Value]="option.id">
+            <pg-select style="width: 100%;" [ShowSearch]="'true'" formControlName="timezone"
+              [PlaceHolder]="'Select Timezone'">
+              <pg-option *ngFor="let option of timezone" [Label]="getTimezoneLabel(option.offset, option.id)"
+                [Value]="option.id">
               </pg-option>
             </pg-select>
           </div>
@@ -100,10 +105,8 @@
           <div class="form-group form-group-default input-group required" [ngStyle]="getControlBorderColour('dob')">
             <div class="form-input-group">
               <label>Date of Birth</label>
-              <pg-datepicker [DisabledDate]="_disabledDate"  Placeholder="Date of Birth" formControlName="dob" [Format]="'YYYY-MM-DD'"></pg-datepicker>
-            </div>
-            <div class="input-group-append ">
-              <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+              <pg-datepicker [DisabledDate]="_disabledDate" Placeholder="Date of Birth" formControlName="dob"
+                [Format]="'YYYY-MM-DD'"></pg-datepicker>
             </div>
           </div>
         </div>
@@ -114,7 +117,8 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-primary m-t-30" [disabled]="validationForm.invalid || loading" (click)="updateProfile()">Update
+      <button class="btn btn-primary m-t-30" [disabled]="validationForm.invalid || loading"
+        (click)="updateProfile()">Update
         Profile</button>
     </div>
   </form>
@@ -146,7 +150,8 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-primary m-t-30" [disabled]="passwordValidationForm.invalid || loading" (click)="updatePassword()">Update
+        <button class="btn btn-primary m-t-30" [disabled]="passwordValidationForm.invalid || loading"
+          (click)="updatePassword()">Update
           Password</button>
       </div>
     </div>
