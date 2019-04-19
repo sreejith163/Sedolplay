@@ -42,6 +42,13 @@ export class RegisterPageComponent implements OnInit {
     'border-color': 'rgba(0, 0, 0, 0.07)',
   };
 
+  _disabledDate = (endValue) => {
+    if (!endValue) {
+      return false;
+    }
+    return endValue.getTime() > new Date().getTime();
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private genericService: GenericService,

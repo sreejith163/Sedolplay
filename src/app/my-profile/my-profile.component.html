@@ -100,7 +100,7 @@
           <div class="form-group form-group-default input-group required" [ngStyle]="getControlBorderColour('dob')">
             <div class="form-input-group">
               <label>Date of Birth</label>
-              <pg-datepicker Placeholder="Date of Birth" formControlName="dob" [Format]="'YYYY-MM-DD'"></pg-datepicker>
+              <pg-datepicker [DisabledDate]="_disabledDate"  Placeholder="Date of Birth" formControlName="dob" [Format]="'YYYY-MM-DD'"></pg-datepicker>
             </div>
             <div class="input-group-append ">
               <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -110,7 +110,7 @@
         <div class="col-sm-6">
           <div class="form-group form-group-default required" [ngStyle]="getControlBorderColour('email')">
             <label>Email</label>
-            <input type="email" class="form-control" formControlName="email" placeholder="example@example.com">
+            <input type="email" readonly class="form-control" formControlName="email" placeholder="example@example.com">
           </div>
         </div>
       </div>

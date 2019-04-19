@@ -16,9 +16,10 @@ export class Header {
     timestamp: Date = new Date();
     token: String = '';
 
-    constructor(clientid: string, type: string, mode: string, usertimezone) {
+    constructor(clientid: string, type: string, mode: string, usertimezone: string) {
         this.clientId = clientid;
         this.type = type;
         this.mode = mode;
+        this.usertimezone = usertimezone;
     }
 }
