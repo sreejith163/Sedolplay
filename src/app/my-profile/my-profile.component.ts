@@ -45,7 +45,11 @@ export class MyProfileComponent implements OnInit {
     if (!endValue) {
       return false;
     }
-    return endValue.getTime() > new Date().getTime();
+    if (endValue instanceof Date) {
+      return endValue.getTime() > new Date().getTime();
+    } else {
+      return endValue.toDate().getTime() > new Date().getTime();
+    }
   }
 
   constructor(

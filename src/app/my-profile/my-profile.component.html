@@ -105,7 +105,7 @@
           <div class="form-group form-group-default input-group required" [ngStyle]="getControlBorderColour('dob')">
             <div class="form-input-group">
               <label>Date of Birth</label>
-              <pg-datepicker  Placeholder="Date of Birth" formControlName="dob"
+              <pg-datepicker [DisabledDate]="_disabledDate" Placeholder="Date of Birth" formControlName="dob"
                 [Format]="'YYYY-MM-DD'"></pg-datepicker>
             </div>
             <div class="input-group-append ">
