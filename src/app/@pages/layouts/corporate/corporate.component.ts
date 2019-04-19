@@ -229,14 +229,14 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
   private getImsRequestFormat( mode: string) {
     const imsRequest = new Ims();
     imsRequest.ims = new RequestResponse();
-    imsRequest.ims.header = new Header('2', 'USER', mode, this.sedolpayStateManagerService.getTimezone());
+    imsRequest.ims.header = new Header('2', 'USER', mode, this.getUserTimezone());
 
     return imsRequest;
   }
 
   private getImsRequestFormatForProfile(type: string, mode: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', type, mode, this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', type, mode, this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.portalUserid = '';
     const dataContent = new DataContent();
@@ -247,5 +247,14 @@ export class CorporateLayoutComponent extends RootLayout implements OnInit {
     imsRequest.ims = request;
 
     return imsRequest;
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

@@ -185,7 +185,7 @@ export class TrackPaymentsComponent implements OnInit {
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'TRACK_PAY', 'VIEW', this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', 'TRACK_PAY', 'VIEW', this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.txnCnt = '30';
     dataHeader.fromDate = '';
@@ -203,5 +203,14 @@ export class TrackPaymentsComponent implements OnInit {
     this.selectedRef = undefined;
     this.selectedAcNo = 'All';
     this.selectedBenef = 'All';
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authenticationService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

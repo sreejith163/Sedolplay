@@ -5,6 +5,7 @@ import { CookiesStorageService } from 'ngx-store';
 export class AuthenticationService {
 
   private readonly custID_KEY = 'SedolPlayCustId';
+  private readonly timeZone_KEY = 'SedolPlayCustId';
 
   constructor(
     private cookieService: CookiesStorageService) { }
@@ -22,8 +23,16 @@ export class AuthenticationService {
     return this.cookieService.get(this.custID_KEY);
   }
 
+  getUserTimezone() {
+    return this.cookieService.get(this.timeZone_KEY);
+  }
+
   setloginCookies(custId: string) {
     this.cookieService.set(this.custID_KEY, custId);
+  }
+
+  setUserTimezone(timezone: string) {
+    this.cookieService.set(this.timeZone_KEY, timezone);
   }
 
   logout() {

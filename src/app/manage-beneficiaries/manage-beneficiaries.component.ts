@@ -232,7 +232,7 @@ export class ManageBeneficiariesComponent implements OnInit {
 
   private getImsRequestFormat(type: string, mode: string, benefId?: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', type, mode, this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', type, mode, this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     if (mode === 'VIEW') {
@@ -313,6 +313,15 @@ export class ManageBeneficiariesComponent implements OnInit {
     const element = document.getElementById('benefElement');
     if (element !== undefined && element !== null) {
       window.scrollTo(0, element.offsetTop);
+    }
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authenticationService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
     }
   }
 }

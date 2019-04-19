@@ -165,7 +165,7 @@ export class StatementsComponent implements OnInit {
 
   private getStatements() {
     this.imsRequest = new Ims();
-    const header = new Header('2', 'STMT', 'VIEW', this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', 'STMT', 'VIEW', this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.stmtcnt = '30';
     dataHeader.fromDate = '';
@@ -179,5 +179,14 @@ export class StatementsComponent implements OnInit {
       this.accounts = data.ims.content.data.accounts;
       this.allAccounts = Object.assign(this.allAccounts, this.accounts);
     });
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authenticationService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

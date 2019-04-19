@@ -78,7 +78,7 @@ export class AccountPortfolioComponent implements OnInit {
 
   private loadCustomerAccounts() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'ACCOUNTS', 'VIEW', this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', 'ACCOUNTS', 'VIEW', this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     dataContent.key = 'value';
@@ -94,5 +94,14 @@ export class AccountPortfolioComponent implements OnInit {
         this.allAccounts = Object.assign(this.allAccounts, this.accounts);
       }
     });
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authenticationService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

@@ -203,7 +203,7 @@ export class InternalTransferComponent implements OnInit {
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'PAY', 'INT-VIEW', this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', 'PAY', 'INT-VIEW', this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     const content = new Content(dataHeader, dataContent);
@@ -234,5 +234,14 @@ export class InternalTransferComponent implements OnInit {
 
   private resetValues() {
     this.validationForm.reset();
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authenticationService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

@@ -242,7 +242,7 @@ export class PaymentStatusComponent implements OnInit {
 
   private getImsRequestFormat() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'PAY_STATUS', 'VIEW', this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', 'PAY_STATUS', 'VIEW', this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     dataHeader.txnCnt = '30';
     dataHeader.fromDate = '';
@@ -290,7 +290,16 @@ export class PaymentStatusComponent implements OnInit {
   }
 
   private clientTimezone(): string {
-    const offset = this.sedolpayStateManagerService.getTimezone();
+    const offset = this.getUserTimezone();
     return new Date().toLocaleString('en-US', { timeZone: offset });
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authenticationService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

@@ -47,7 +47,7 @@ export class MyProfileComponent implements OnInit {
     }
     return endValue.getTime() > new Date().getTime();
   }
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private authenticationService: AuthenticationService,
@@ -68,7 +68,7 @@ export class MyProfileComponent implements OnInit {
     const request = this.getImsRequestFormatForProfile('PROFILE', 'UPDATE');
     this.profileService.updateProfileDetails(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
-        this.sedolpayStateManagerService.setTimezone(data.ims.header.usertimezone);
+        this.authenticationService.setUserTimezone(data.ims.header.usertimezone);
         this.toastr.successToastr('Your profile was successfully updated.', 'Profile updation success!');
       } else {
         this.toastr.errorToastr('Internal account updation failed due to missing account details.', 'Profile updation failed!');
@@ -161,7 +161,7 @@ export class MyProfileComponent implements OnInit {
     this.validationForm.controls['telephone'].updateValueAndValidity();
     this.validationForm.controls['dob'].setValue(moment(profile.dob, 'MMDDYYYY'));
     this.validationForm.controls['dob'].updateValueAndValidity();
-    this.validationForm.controls['timezone'].setValue(response.header.usertimezone);
+    this.validationForm.controls['timezone'].setValue(this.getUserTimezone());
     this.validationForm.controls['timezone'].updateValueAndValidity();
     this.validationForm.controls['email'].setValue(profile.email);
     this.validationForm.controls['email'].updateValueAndValidity();
@@ -169,7 +169,7 @@ export class MyProfileComponent implements OnInit {
 
   private getImsRequestFormatForProfile(type: string, mode: string) {
     const imsRequest = new Ims();
-    const header = new Header('2', type, mode, this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', type, mode, this.getUserTimezone());
     if (mode === 'UPDATE') {
       header.usertimezone = this.validationForm.controls['timezone'].value;
     }
@@ -188,7 +188,7 @@ export class MyProfileComponent implements OnInit {
 
   private getImsRequestFormatForPasswordUpdate() {
     const imsRequest = new Ims();
-    const header = new Header('2', 'USER', 'PASSWORDUPDATE', this.sedolpayStateManagerService.getTimezone());
+    const header = new Header('2', 'USER', 'PASSWORDUPDATE', this.getUserTimezone());
     const dataHeader = new DataHeader(this.getCustomerId());
     const dataContent = new DataContent();
     dataContent.credential = new ProfileCredential();
@@ -259,5 +259,14 @@ export class MyProfileComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       email: ['', Validators.compose([Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)])],
     });
+  }
+
+  private getUserTimezone(): any {
+    const usertimeZone = this.authenticationService.getUserTimezone();
+    if (usertimeZone !== null && usertimeZone !== undefined && usertimeZone !== '') {
+      return usertimeZone;
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

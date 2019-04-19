@@ -11,7 +11,6 @@ export class SedolpayStateManagerService {
   private timeZones: Array<TimeZone> = [];
   private userName: string;
   private userId: string;
-  private userTimezone: string;
   timeZoneLoaded = new BehaviorSubject<Array<TimeZone>>(undefined);
   currenciesLoaded = new BehaviorSubject<Array<KeyValue>>(undefined);
   countriesLoaded = new BehaviorSubject<Array<KeyValue>>(undefined);
@@ -24,10 +23,6 @@ export class SedolpayStateManagerService {
 
   getUserId() {
     return this.userId;
-  }
-
-  getTimezone() {
-    return this.userTimezone;
   }
 
   getCurrencies(): KeyValue[] {
@@ -48,10 +43,6 @@ export class SedolpayStateManagerService {
 
   setUserId(id: string) {
     this.userId = id;
-  }
-
-  setTimezone(zone: string) {
-    this.userTimezone = zone;
   }
 
   setCurrencies(data: KeyValue[]) {

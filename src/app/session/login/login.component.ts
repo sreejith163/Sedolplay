@@ -53,8 +53,8 @@ export class LoginComponent implements OnInit {
     this.userService.login(request).subscribe((data: Ims) => {
       if (data.ims !== undefined && data.ims.content.dataheader.status === 'SUCCESS') {
         this.authService.setloginCookies(data.ims.content.dataheader.custId);
+        this.authService.setUserTimezone(data.ims.header.usertimezone);
         this.sedolpayStateManagerService.setUserId(this.validationForm.controls['userName'].value);
-        this.sedolpayStateManagerService.setTimezone(data.ims.header.usertimezone);
         this.removeHistoryAfterLogin();
         this.router.navigate(['corporate/dashboard']);
       } else {
